@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "869412384263",
+    "project_id": "rpg-manager-fb2a1",
+    "storage_bucket": "rpg-manager-fb2a1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:869412384263:android:4cfa92a02cae57fb9ec4a2",
+        "android_client_info": {
+          "package_name": "com.example.rpg_manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "869412384263-si6p5po6a4i71tbnvr71qfpa40u7gdge.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-Tcfu_dyfftIDtjaS4qAZtVyJ-d-jedw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "869412384263-si6p5po6a4i71tbnvr71qfpa40u7gdge.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

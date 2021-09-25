@@ -1,157 +1,150 @@
-import 'dart:math';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:rpg_manager/features/firebase/config.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-final kHintTextStyle = TextStyle(
-  color: Colors.white54,
-  fontFamily: 'OpenSans',
-);
-
-final kLabelStyle = TextStyle(
-  color: Colors.white,
-  fontWeight: FontWeight.bold,
-  fontFamily: 'OpenSans',
-);
-
-final kBoxDecorationStyle = BoxDecoration(
-  color: Colors.transparent,
-  borderRadius: BorderRadius.circular(10.0),
-  boxShadow: [
-    BoxShadow(
-      color: Colors.black12,
-      blurRadius: 6.0,
-      offset: Offset(0, 2),
-    ),
-  ],
-);
-
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  bool _rememberMe = false;
-
-  Widget _buildEmailTF() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Email',
-          style: kLabelStyle,
-        ),
-        SizedBox(height: 10.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
-          height: 60.0,
-          child: TextField(
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'OpenSans',
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.email,
-                color: Colors.white,
-              ),
-              hintText: 'Enter your Email',
-              hintStyle: kHintTextStyle,
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Container(
+          height: double.infinity,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 40.0),
+                  child: Image.asset(
+                    'lib/app_assets/images/logo.png',
+                    width: 180,
+                    height: 180,
+                    color: Color.fromARGB(255, 247, 241, 227),
+                  ),
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  child: _loginForm(),
+                ),
+              ],
             ),
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPasswordTF() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Password',
-          style: kLabelStyle,
-        ),
-        SizedBox(height: 10.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
-          height: 60.0,
-          child: TextField(
-            obscureText: true,
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'OpenSans',
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.lock,
-                color: Colors.white,
-              ),
-              hintText: 'Enter your Password',
-              hintStyle: kHintTextStyle,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildForgotPasswordBtn() {
-    return Container(
-      alignment: Alignment.centerRight,
-      child: TextButton(
-        onPressed: () => print('Forgot Password Button Pressed'),
-        child: Text(
-          'Forgot Password?',
-          style: kLabelStyle,
         ),
       ),
     );
   }
 
-  Widget _buildRememberMeCheckbox() {
-    return Container(
-      height: 20.0,
-      child: Row(
-        children: <Widget>[
-          Theme(
-            data: ThemeData(unselectedWidgetColor: Colors.white),
-            child: Checkbox(
-              value: _rememberMe,
-              checkColor: Colors.black,
-              activeColor: Colors.white,
-              onChanged: (value) {
-                setState(() {
-                  _rememberMe = value!;
-                });
-              },
-            ),
+  Widget _loginForm() {
+    return Form(
+      child: Column(
+        children: [
+          _emailFormField(),
+          SizedBox(
+            height: 20,
           ),
-          Text(
-            'Remember me',
-            style: kLabelStyle,
+          _passwordFormField(),
+          SizedBox(
+            height: 30,
           ),
+          _loginButton(),
+          SizedBox(
+            height: 20,
+          ),
+          _registerButton(),
         ],
       ),
     );
   }
 
-  Widget _buildLoginBtn() {
+  Widget _emailFormField() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 25.0),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 247, 241, 227),
+        borderRadius: BorderRadius.circular(15.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black,
+            blurRadius: 5.0,
+          ),
+        ],
+      ),
+      height: 60.0,
+      child: TextField(
+        cursorColor: Colors.black,
+        keyboardType: TextInputType.emailAddress,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 24,
+        ),
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          prefixIcon: Icon(
+            Icons.email,
+            color: Colors.black45,
+            size: 28,
+          ),
+          hintText: 'e-mail',
+          hintStyle: GoogleFonts.rubik(
+            textStyle: TextStyle(
+              color: Colors.black45,
+              fontSize: 24,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _passwordFormField() {
+    return Container(
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 247, 241, 227),
+        borderRadius: BorderRadius.circular(15.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black,
+            blurRadius: 5.0,
+          ),
+        ],
+      ),
+      height: 60.0,
+      child: TextField(
+        obscureText: true,
+        cursorColor: Colors.black,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 24,
+        ),
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          prefixIcon: Icon(
+            Icons.lock,
+            color: Colors.black45,
+            size: 28,
+          ),
+          hintText: 'hasło',
+          hintStyle: GoogleFonts.rubik(
+            textStyle: TextStyle(
+              color: Colors.black45,
+              fontSize: 24,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _loginButton() {
+    return Container(
       width: double.infinity,
       child: ElevatedButton(
         style: ButtonStyle(
-          elevation: MaterialStateProperty.all<double>(5.0),
           padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
               EdgeInsets.all(15.0)),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -159,115 +152,57 @@ class _LoginScreenState extends State<LoginScreen> {
               borderRadius: BorderRadius.circular(30.0),
             ),
           ),
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+          backgroundColor: MaterialStateProperty.all<Color>(
+            Color.fromARGB(255, 168, 128, 92),
+          ),
         ),
         onPressed: () {},
         child: Text(
-          'LOGIN',
-          style: TextStyle(
-            color: Colors.black,
-            letterSpacing: 1.5,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
+          'ZALOGUJ SIĘ',
+          style: GoogleFonts.rubik(
+            textStyle: TextStyle(
+              color: Color.fromARGB(255, 247, 241, 227),
+              letterSpacing: 1.5,
+              fontSize: 22.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildSignInWithText() {
-    return Column(
-      children: <Widget>[
-        Text(
-          '- OR -',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w400,
-          ),
+  Widget _registerButton() {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Color.fromARGB(255, 247, 241, 227),
+          width: 2,
         ),
-        SizedBox(height: 20.0),
-        Text(
-          'Sign in with',
-          style: kLabelStyle,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSignupBtn() {
-    return GestureDetector(
-      onTap: () => print('Sign Up Button Pressed'),
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'Don\'t have an Account? ',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            TextSpan(
-              text: 'Sign Up',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
+        borderRadius: BorderRadius.circular(30.0),
       ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.dark,
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                height: double.infinity,
-                child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 40.0,
-                    vertical: 120.0,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'Sign In',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 30.0),
-                      _buildEmailTF(),
-                      SizedBox(
-                        height: 30.0,
-                      ),
-                      _buildPasswordTF(),
-                      _buildForgotPasswordBtn(),
-                      _buildRememberMeCheckbox(),
-                      _buildLoginBtn(),
-                      _buildSignInWithText(),
-                      _buildSignupBtn(),
-                    ],
-                  ),
-                ),
-              )
-            ],
+      child: ElevatedButton(
+        style: ButtonStyle(
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+              EdgeInsets.all(15.0)),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+          ),
+          backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+        ),
+        onPressed: () {},
+        child: Text(
+          'REJESTRACJA',
+          style: GoogleFonts.rubik(
+            textStyle: TextStyle(
+              color: Color.fromARGB(255, 247, 241, 227),
+              letterSpacing: 1.5,
+              fontSize: 22.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rpg_manager/app.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
 
@@ -290,11 +289,7 @@ class RegisterScreen extends StatelessWidget {
           backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
         ),
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => StartPage(),
-            ),
-          );
+          Navigator.of(context).pushNamed('/');
         },
         child: Text(
           'LOGOWANIE',

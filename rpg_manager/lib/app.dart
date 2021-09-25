@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/authorization/login/login.dart';
+import 'package:rpg_manager/setup/routes_setup.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
 
 class App extends StatelessWidget {
@@ -20,7 +21,8 @@ class App extends StatelessWidget {
         Locale('en', 'US'),
         Locale('pl', 'PL'),
       ],
-      home: StartPage(),
+      initialRoute: '/',
+      onGenerateRoute: RoutesSetup.routesSetup,
     );
   }
 }

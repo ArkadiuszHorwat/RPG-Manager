@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:rpg_manager/features/firebase/config.dart';
 
 final kHintTextStyle = TextStyle(
   color: Colors.white54,
@@ -158,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
         ),
-        onPressed: () => print('Login Button Pressed'),
+        onPressed: () {},
         child: Text(
           'LOGIN',
           style: TextStyle(

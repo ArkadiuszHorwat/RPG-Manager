@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rpg_manager/features/authorization/register/register.dart';
+import 'package:rpg_manager/app.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
+import 'package:rpg_manager/widgets/app_nav_bar.dart';
 
-class LoginScreen extends StatelessWidget {
+class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      appBar: AppNavBar(
+        title: 'REJESTRACJA',
+      ),
       body: AppBackground(
         child: GestureDetector(
           behavior: HitTestBehavior.translucent,
@@ -22,8 +25,8 @@ class LoginScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 40.0),
                     child: Image.asset(
                       'lib/app_assets/images/logo.png',
-                      width: 180,
-                      height: 180,
+                      width: 100,
+                      height: 100,
                       color: Color.fromARGB(255, 247, 241, 227),
                     ),
                   ),
@@ -32,7 +35,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: _loginForm(context),
+                    child: _registerForm(context),
                   ),
                 ],
               ),
@@ -43,24 +46,72 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _loginForm(BuildContext context) {
+  Widget _registerForm(BuildContext context) {
     return Form(
       child: Column(
         children: [
+          _userNameFormField(),
+          SizedBox(
+            height: 20,
+          ),
           _emailFormField(),
           SizedBox(
             height: 20,
           ),
           _passwordFormField(),
           SizedBox(
+            height: 20,
+          ),
+          _passwordAgainFormField(),
+          SizedBox(
             height: 30,
           ),
-          _loginButton(),
+          _registerButton(),
           SizedBox(
             height: 20,
           ),
-          _registerButton(context),
+          _loginButton(context),
         ],
+      ),
+    );
+  }
+
+  Widget _userNameFormField() {
+    return Container(
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 247, 241, 227),
+        borderRadius: BorderRadius.circular(15.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black,
+            blurRadius: 5.0,
+          ),
+        ],
+      ),
+      height: 60.0,
+      child: TextField(
+        cursorColor: Colors.black,
+        keyboardType: TextInputType.name,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 24,
+        ),
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          prefixIcon: Icon(
+            Icons.face_outlined,
+            color: Colors.black45,
+            size: 28,
+          ),
+          hintText: 'Nazwa użytkownika',
+          hintStyle: GoogleFonts.rubik(
+            textStyle: TextStyle(
+              color: Colors.black45,
+              fontSize: 24,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -145,7 +196,47 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _loginButton() {
+  Widget _passwordAgainFormField() {
+    return Container(
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 247, 241, 227),
+        borderRadius: BorderRadius.circular(15.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black,
+            blurRadius: 5.0,
+          ),
+        ],
+      ),
+      height: 60.0,
+      child: TextField(
+        obscureText: true,
+        cursorColor: Colors.black,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 24,
+        ),
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          prefixIcon: Icon(
+            Icons.lock,
+            color: Colors.black45,
+            size: 28,
+          ),
+          hintText: 'Potwierdź hasło',
+          hintStyle: GoogleFonts.rubik(
+            textStyle: TextStyle(
+              color: Colors.black45,
+              fontSize: 24,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _registerButton() {
     return Container(
       width: double.infinity,
       child: ElevatedButton(
@@ -163,7 +254,7 @@ class LoginScreen extends StatelessWidget {
         ),
         onPressed: () {},
         child: Text(
-          'ZALOGUJ SIĘ',
+          'ZAREJESTRUJ SIĘ',
           style: GoogleFonts.rubik(
             textStyle: TextStyle(
               color: Color.fromARGB(255, 247, 241, 227),
@@ -177,7 +268,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _registerButton(BuildContext context) {
+  Widget _loginButton(BuildContext context) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -201,12 +292,12 @@ class LoginScreen extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => RegisterScreen(),
+              builder: (context) => StartPage(),
             ),
           );
         },
         child: Text(
-          'REJESTRACJA',
+          'LOGOWANIE',
           style: GoogleFonts.rubik(
             textStyle: TextStyle(
               color: Color.fromARGB(255, 247, 241, 227),

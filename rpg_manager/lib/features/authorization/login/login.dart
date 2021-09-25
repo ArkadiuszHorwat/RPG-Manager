@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:rpg_manager/features/firebase/config.dart';
 
 final kHintTextStyle = TextStyle(
   color: Colors.white54,
@@ -145,16 +145,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _firebaseTestSet() async {
-    final _fireTest = FirebaseDatabase(
-            databaseURL:
-                'https://rpg-manager-fb2a1-default-rtdb.europe-west1.firebasedatabase.app')
-        .reference()
-        .child('test');
-    _fireTest.set('test ${Random().nextInt(100)}');
-    _fireTest.get().then((value) => print(value.value));
-  }
-
   Widget _buildLoginBtn() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
@@ -171,10 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
         ),
-        onPressed: () {
-          _firebaseTestSet();
-          print('Login Button Pressed');
-        },
+        onPressed: () {},
         child: Text(
           'LOGIN',
           style: TextStyle(

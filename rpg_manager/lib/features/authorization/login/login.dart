@@ -1,36 +1,41 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rpg_manager/features/authorization/register/register.dart';
+import 'package:rpg_manager/widgets/app_background.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Container(
-          height: double.infinity,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 40.0),
-                  child: Image.asset(
-                    'lib/app_assets/images/logo.png',
-                    width: 180,
-                    height: 180,
-                    color: Color.fromARGB(255, 247, 241, 227),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: AppBackground(
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Container(
+            height: double.infinity,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 40.0),
+                    child: Image.asset(
+                      'lib/app_assets/images/logo.png',
+                      width: 180,
+                      height: 180,
+                      color: Color.fromARGB(255, 247, 241, 227),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  child: _loginForm(),
-                ),
-              ],
+                  SizedBox(
+                    height: 40,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    child: _loginForm(context),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -38,7 +43,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _loginForm() {
+  Widget _loginForm(BuildContext context) {
     return Form(
       child: Column(
         children: [
@@ -54,7 +59,7 @@ class LoginScreen extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          _registerButton(),
+          _registerButton(context),
         ],
       ),
     );
@@ -88,7 +93,7 @@ class LoginScreen extends StatelessWidget {
             color: Colors.black45,
             size: 28,
           ),
-          hintText: 'e-mail',
+          hintText: 'E-mail',
           hintStyle: GoogleFonts.rubik(
             textStyle: TextStyle(
               color: Colors.black45,
@@ -128,7 +133,7 @@ class LoginScreen extends StatelessWidget {
             color: Colors.black45,
             size: 28,
           ),
-          hintText: 'hasło',
+          hintText: 'Hasło',
           hintStyle: GoogleFonts.rubik(
             textStyle: TextStyle(
               color: Colors.black45,
@@ -172,7 +177,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _registerButton() {
+  Widget _registerButton(BuildContext context) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -193,7 +198,13 @@ class LoginScreen extends StatelessWidget {
           ),
           backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => RegisterScreen(),
+            ),
+          );
+        },
         child: Text(
           'REJESTRACJA',
           style: GoogleFonts.rubik(

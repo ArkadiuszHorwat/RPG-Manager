@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/authorization/login/login.dart';
+import 'package:rpg_manager/widgets/app_nav_bar.dart';
 
 class App extends StatelessWidget {
   @override
@@ -20,15 +20,7 @@ class App extends StatelessWidget {
         Locale('en', 'US'),
         Locale('pl', 'PL'),
       ],
-      home: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("lib/app_assets/images/background-img.jpeg"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: StartPage(),
-      ),
+      home: StartPage(),
     );
   }
 }
@@ -38,24 +30,11 @@ class StartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        elevation: 5,
-        backgroundColor: Colors.transparent,
-        title: Text(
-          AppLocal.titleStartPage,
-          style: GoogleFonts.rubik(
-            textStyle: TextStyle(
-              fontSize: 36,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 247, 241, 227),
-            ),
-          ),
-        ),
-        centerTitle: true,
-        leading: IconButton(
+      appBar: AppNavBar(
+        title: AppLocal.titleStartPage,
+        icon: IconButton(
             icon: Icon(
               Icons.close_outlined,
-              color: Color.fromARGB(255, 247, 241, 227),
             ),
             onPressed: () {
               exitAlert(context);

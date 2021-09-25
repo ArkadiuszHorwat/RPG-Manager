@@ -11,6 +11,15 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: AppLocal.titleApp,
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: Colors.grey,
+        primarySwatch: Colors.grey,
+        platform: TargetPlatform.android,
+      ),
+      supportedLocales: [
+        Locale('en', 'US'),
+        Locale('pl', 'PL'),
+      ],
       home: Container(
         decoration: BoxDecoration(
           image: DecorationImage(

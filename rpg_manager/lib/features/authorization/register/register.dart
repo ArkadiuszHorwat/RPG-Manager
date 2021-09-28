@@ -1,10 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rpg_manager/features/firebase/authentication.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatelessWidget {
+  final _userNameController = TextEditingController();
+  final _userEmailController = TextEditingController();
+  final _userPasswordController = TextEditingController();
+  final _userConfirmPasswordController = TextEditingController();
+  //TODO: add method which push user data to database after sign up
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +55,7 @@ class RegisterScreen extends StatelessWidget {
 
   Widget _registerForm(BuildContext context) {
     return Form(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
           _userNameFormField(),
@@ -61,11 +70,11 @@ class RegisterScreen extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          _passwordAgainFormField(),
+          _confirmPasswordFormField(),
           SizedBox(
             height: 30,
           ),
-          _registerButton(),
+          _registerButton(context: context),
           SizedBox(
             height: 20,
           ),
@@ -90,6 +99,7 @@ class RegisterScreen extends StatelessWidget {
       ),
       height: 60.0,
       child: TextField(
+        controller: _userNameController,
         cursorColor: Colors.black,
         keyboardType: TextInputType.name,
         style: TextStyle(
@@ -130,6 +140,7 @@ class RegisterScreen extends StatelessWidget {
       ),
       height: 60.0,
       child: TextField(
+        controller: _userEmailController,
         cursorColor: Colors.black,
         keyboardType: TextInputType.emailAddress,
         style: TextStyle(
@@ -170,6 +181,7 @@ class RegisterScreen extends StatelessWidget {
       ),
       height: 60.0,
       child: TextField(
+        controller: _userPasswordController,
         obscureText: true,
         cursorColor: Colors.black,
         style: TextStyle(
@@ -195,7 +207,7 @@ class RegisterScreen extends StatelessWidget {
     );
   }
 
-  Widget _passwordAgainFormField() {
+  Widget _confirmPasswordFormField() {
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
@@ -210,6 +222,7 @@ class RegisterScreen extends StatelessWidget {
       ),
       height: 60.0,
       child: TextField(
+        controller: _userConfirmPasswordController,
         obscureText: true,
         cursorColor: Colors.black,
         style: TextStyle(
@@ -235,7 +248,7 @@ class RegisterScreen extends StatelessWidget {
     );
   }
 
-  Widget _registerButton() {
+  Widget _registerButton({required BuildContext context}) {
     return Container(
       width: double.infinity,
       child: ElevatedButton(
@@ -251,7 +264,7 @@ class RegisterScreen extends StatelessWidget {
             Color.fromARGB(255, 168, 128, 92),
           ),
         ),
-        onPressed: () {},
+        onPressed: () => _onRegisterButtonPressed(context: context),
         child: Text(
           'ZAREJESTRUJ SIĘ',
           style: GoogleFonts.rubik(
@@ -304,5 +317,12 @@ class RegisterScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _onRegisterButtonPressed({required BuildContext context}) {
+    context.read<FirebaseAuthentication>().register(
+          _userEmailController.text,
+          _userPasswordController.text,
+        );
   }
 }

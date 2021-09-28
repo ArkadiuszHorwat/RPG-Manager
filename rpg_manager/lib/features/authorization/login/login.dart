@@ -1,9 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rpg_manager/features/firebase/authentication.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
+  final _userEmailController = TextEditingController();
+  final _userPasswordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,6 +49,7 @@ class LoginScreen extends StatelessWidget {
 
   Widget _loginForm(BuildContext context) {
     return Form(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
           _emailFormField(),
@@ -54,7 +60,7 @@ class LoginScreen extends StatelessWidget {
           SizedBox(
             height: 30,
           ),
-          _loginButton(),
+          _loginButton(context: context),
           SizedBox(
             height: 20,
           ),
@@ -79,6 +85,7 @@ class LoginScreen extends StatelessWidget {
       ),
       height: 60.0,
       child: TextField(
+        controller: _userEmailController,
         cursorColor: Colors.black,
         keyboardType: TextInputType.emailAddress,
         style: TextStyle(
@@ -119,6 +126,7 @@ class LoginScreen extends StatelessWidget {
       ),
       height: 60.0,
       child: TextField(
+        controller: _userPasswordController,
         obscureText: true,
         cursorColor: Colors.black,
         style: TextStyle(
@@ -144,7 +152,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _loginButton() {
+  Widget _loginButton({required BuildContext context}) {
     return Container(
       width: double.infinity,
       child: ElevatedButton(
@@ -160,7 +168,7 @@ class LoginScreen extends StatelessWidget {
             Color.fromARGB(255, 168, 128, 92),
           ),
         ),
-        onPressed: () {},
+        onPressed: () => _onLoginButtonPressed(context: context),
         child: Text(
           'ZALOGUJ SIĘ',
           style: GoogleFonts.rubik(
@@ -213,5 +221,12 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _onLoginButtonPressed({required BuildContext context}) {
+    context.read<FirebaseAuthentication>().login(
+          _userEmailController.text,
+          _userPasswordController.text,
+        );
   }
 }

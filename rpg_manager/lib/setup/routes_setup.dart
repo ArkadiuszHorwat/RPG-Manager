@@ -11,9 +11,9 @@ class RoutesSetup {
     final args = settings.arguments;
 
     switch (settings.name) {
-      case '/':
+      case RoutePageName.startPage:
         return MaterialPageRoute(builder: (_) => StartPage());
-      case '/register':
+      case RoutePageName.register:
         return MaterialPageRoute(builder: (_) => RegisterScreen());
       default:
         return _errorRoute();
@@ -42,4 +42,10 @@ class RoutesSetup {
       );
     });
   }
+}
+
+class RoutePageName {
+  static const String register = '/register';
+  static const String startPage = '/';
+  static const String home = '/home';
 }

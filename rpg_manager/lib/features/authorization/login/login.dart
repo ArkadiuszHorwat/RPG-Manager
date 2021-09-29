@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/features/firebase/authentication.dart';
+import 'package:rpg_manager/setup/routes_setup.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:provider/provider.dart';
 
@@ -206,7 +207,7 @@ class LoginScreen extends StatelessWidget {
           backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
         ),
         onPressed: () {
-          Navigator.of(context).pushNamed('/register');
+          Navigator.of(context).pushNamed(RoutePageName.register);
         },
         child: Text(
           'REJESTRACJA',

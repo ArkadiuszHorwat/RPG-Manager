@@ -36,7 +36,7 @@ class App extends StatelessWidget {
           Locale('en', 'US'),
           Locale('pl', 'PL'),
         ],
-        initialRoute: '/',
+        initialRoute: RoutePageName.startPage,
         onGenerateRoute: RoutesSetup.routesSetup,
       ),
     );
@@ -66,7 +66,7 @@ class StartPage extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'User logged in',
+                  'hello',
                 ),
                 ElevatedButton(
                   onPressed: () =>

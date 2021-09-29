@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/features/firebase/authentication.dart';
+import 'package:rpg_manager/setup/routes_setup.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
 import 'package:provider/provider.dart';
@@ -302,7 +304,7 @@ class RegisterScreen extends StatelessWidget {
           backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
         ),
         onPressed: () {
-          Navigator.of(context).pushNamed('/');
+          Navigator.of(context).pushNamed(RoutePageName.startPage);
         },
         child: Text(
           'LOGOWANIE',
@@ -319,10 +321,21 @@ class RegisterScreen extends StatelessWidget {
     );
   }
 
-  void _onRegisterButtonPressed({required BuildContext context}) {
-    context.read<FirebaseAuthentication>().register(
-          _userEmailController.text,
-          _userPasswordController.text,
-        );
+  void _onRegisterButtonPressed({required BuildContext context}) async {
+    try {
+      await context.read<FirebaseAuthentication>().register(
+            _userNameController.text,
+            _userEmailController.text,
+            _userPasswordController.text,
+          );
+
+      Navigator.of(context).pushNamed(RoutePageName.startPage);
+    } catch (e) {
+      print(e);
+      _userNameController.text = '';
+      _userEmailController.text = '';
+      _userPasswordController.text = '';
+      _userConfirmPasswordController.text = '';
+    }
   }
 }

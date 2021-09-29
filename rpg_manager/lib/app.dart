@@ -1,28 +1,44 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/authorization/login/login.dart';
+import 'package:rpg_manager/features/firebase/authentication.dart';
 import 'package:rpg_manager/setup/routes_setup.dart';
+import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
 
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: AppLocal.titleApp,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Colors.grey,
-        primarySwatch: Colors.grey,
-        platform: TargetPlatform.android,
-      ),
-      supportedLocales: [
-        Locale('en', 'US'),
-        Locale('pl', 'PL'),
+    return MultiProvider(
+      providers: [
+        Provider<FirebaseAuthentication>(
+          create: (_) => FirebaseAuthentication(FirebaseAuth.instance),
+        ),
+        StreamProvider(
+          create: (context) =>
+              context.read<FirebaseAuthentication>().authStateChanges,
+          initialData: null,
+        ),
       ],
-      initialRoute: '/',
-      onGenerateRoute: RoutesSetup.routesSetup,
+      child: MaterialApp(
+        title: AppLocal.titleApp,
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primaryColor: Colors.grey,
+          primarySwatch: Colors.grey,
+          platform: TargetPlatform.android,
+        ),
+        supportedLocales: [
+          Locale('en', 'US'),
+          Locale('pl', 'PL'),
+        ],
+        initialRoute: RoutePageName.startPage,
+        onGenerateRoute: RoutesSetup.routesSetup,
+      ),
     );
   }
 }
@@ -30,20 +46,54 @@ class App extends StatelessWidget {
 class StartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppNavBar(
-        title: AppLocal.titleStartPage,
-        icon: IconButton(
-            icon: Icon(
-              Icons.close_outlined,
+    final user = context.watch<User?>();
+
+    if (user != null) {
+      return Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppNavBar(
+          title: AppLocal.titleStartPage,
+          icon: IconButton(
+              icon: Icon(
+                Icons.close_outlined,
+              ),
+              onPressed: () {
+                exitAlert(context);
+              }),
+        ),
+        body: AppBackground(
+          child: Center(
+            child: Column(
+              children: [
+                Text(
+                  'hello',
+                ),
+                ElevatedButton(
+                  onPressed: () =>
+                      context.read<FirebaseAuthentication>().signOut(),
+                  child: Text('log out'),
+                ),
+              ],
             ),
-            onPressed: () {
-              exitAlert(context);
-            }),
-      ),
-      body: LoginScreen(),
-    );
+          ),
+        ),
+      );
+    } else {
+      return Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppNavBar(
+          title: AppLocal.titleStartPage,
+          icon: IconButton(
+              icon: Icon(
+                Icons.close_outlined,
+              ),
+              onPressed: () {
+                exitAlert(context);
+              }),
+        ),
+        body: LoginScreen(),
+      );
+    }
   }
 }
 

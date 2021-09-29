@@ -13,10 +13,10 @@ class FlutterFirebaseConfig {
     final _databaseURL =
         'https://rpg-manager-fb2a1-default-rtdb.europe-west1.firebasedatabase.app';
 
-    final _fireTest = await FirebaseDatabase(
+    final _fireDatabase = await FirebaseDatabase(
       databaseURL: _databaseURL,
     ).reference().child(path);
 
-    return _fireTest;
+    return _fireDatabase;
   }
 }

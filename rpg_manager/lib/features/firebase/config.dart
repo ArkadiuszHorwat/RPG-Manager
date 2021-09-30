@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -18,5 +19,10 @@ class FlutterFirebaseConfig {
     ).reference().child(path);
 
     return _fireDatabase;
+  }
+
+  static FirebaseFirestore getFirestoreConnect() {
+    final firestore = FirebaseFirestore.instance;
+    return firestore;
   }
 }

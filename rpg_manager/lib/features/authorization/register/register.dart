@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,7 +12,6 @@ class RegisterScreen extends StatelessWidget {
   final _userEmailController = TextEditingController();
   final _userPasswordController = TextEditingController();
   final _userConfirmPasswordController = TextEditingController();
-  //TODO: add method which push user data to database after sign up
 
   @override
   Widget build(BuildContext context) {

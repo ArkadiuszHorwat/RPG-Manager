@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rpg_manager/features/firebase/config.dart';
 
 class FirebaseAuthentication {
   FirebaseAuthentication(this._auth);
@@ -26,11 +29,30 @@ class FirebaseAuthentication {
 
   Future<void> register(String userName, String email, String password) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      final users =
+          FlutterFirebaseConfig.getFirestoreConnect().collection('users');
+
+      await _auth
+          .createUserWithEmailAndPassword(
         email: email,
         password: password,
-      );
-      print('Successfully Sign Up :)');
+      )
+          .then((userCredential) async {
+        final userData = userCredential.user;
+        print('$userData - user data');
+        await users
+            .doc(userData!.uid)
+            .set({
+              'name': userName,
+              'email': email,
+            })
+            .then(
+              (_) => print('Successfully Sign Up :)'),
+            )
+            .catchError(
+              (e) => print('$e - error'),
+            );
+      });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');

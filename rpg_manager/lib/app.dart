@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/authorization/login/login.dart';
 import 'package:rpg_manager/features/firebase/authentication.dart';
+import 'package:rpg_manager/features/firebase/config.dart';
 import 'package:rpg_manager/setup/routes_setup.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
@@ -49,6 +51,10 @@ class StartPage extends StatelessWidget {
     final user = context.watch<User?>();
 
     if (user != null) {
+      final userName = FlutterFirebaseConfig.getFirestoreConnect()
+          .collection('users')
+          .doc(user.uid)
+          .get();
       return Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppNavBar(
@@ -62,19 +68,36 @@ class StartPage extends StatelessWidget {
               }),
         ),
         body: AppBackground(
-          child: Center(
-            child: Column(
-              children: [
-                Text(
-                  'hello',
-                ),
-                ElevatedButton(
-                  onPressed: () =>
-                      context.read<FirebaseAuthentication>().signOut(),
-                  child: Text('log out'),
-                ),
-              ],
-            ),
+          child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+            future: userName,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text("Something went wrong");
+              }
+
+              if (snapshot.hasData && !snapshot.data!.exists) {
+                return Text("Document does not exist");
+              }
+
+              if (snapshot.connectionState == ConnectionState.done) {
+                Map<String, dynamic> data =
+                    snapshot.data!.data() as Map<String, dynamic>;
+                return Center(
+                  child: Column(
+                    children: [
+                      Text("Hello ${data['name']}"),
+                      ElevatedButton(
+                        onPressed: () =>
+                            context.read<FirebaseAuthentication>().signOut(),
+                        child: Text('log out'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              return Text("loading");
+            },
           ),
         ),
       );

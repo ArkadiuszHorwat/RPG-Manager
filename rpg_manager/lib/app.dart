@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,9 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/authorization/login/login.dart';
 import 'package:rpg_manager/features/firebase/authentication.dart';
-import 'package:rpg_manager/features/firebase/config.dart';
+import 'package:rpg_manager/features/home/home.dart';
 import 'package:rpg_manager/setup/routes_setup.dart';
-import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
 
 class App extends StatelessWidget {
@@ -51,56 +49,7 @@ class StartPage extends StatelessWidget {
     final user = context.watch<User?>();
 
     if (user != null) {
-      final userName = FlutterFirebaseConfig.getFirestoreConnect()
-          .collection('users')
-          .doc(user.uid)
-          .get();
-      return Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppNavBar(
-          title: AppLocal.titleStartPage,
-          icon: IconButton(
-              icon: Icon(
-                Icons.close_outlined,
-              ),
-              onPressed: () {
-                exitAlert(context);
-              }),
-        ),
-        body: AppBackground(
-          child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-            future: userName,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Text("Something went wrong");
-              }
-
-              if (snapshot.hasData && !snapshot.data!.exists) {
-                return Text("Document does not exist");
-              }
-
-              if (snapshot.connectionState == ConnectionState.done) {
-                Map<String, dynamic> data =
-                    snapshot.data!.data() as Map<String, dynamic>;
-                return Center(
-                  child: Column(
-                    children: [
-                      Text("Hello ${data['name']}"),
-                      ElevatedButton(
-                        onPressed: () =>
-                            context.read<FirebaseAuthentication>().signOut(),
-                        child: Text('log out'),
-                      ),
-                    ],
-                  ),
-                );
-              }
-
-              return Text("loading");
-            },
-          ),
-        ),
-      );
+      return HomeScreen();
     } else {
       return Scaffold(
         backgroundColor: Colors.transparent,
@@ -111,7 +60,7 @@ class StartPage extends StatelessWidget {
                 Icons.close_outlined,
               ),
               onPressed: () {
-                exitAlert(context);
+                _exitAlert(context);
               }),
         ),
         body: LoginScreen(),
@@ -120,7 +69,7 @@ class StartPage extends StatelessWidget {
   }
 }
 
-void exitAlert(BuildContext context) {
+void _exitAlert(BuildContext context) {
   showDialog(
       context: context,
       builder: (BuildContext context) {

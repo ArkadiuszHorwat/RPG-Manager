@@ -5,10 +5,27 @@ import 'package:rpg_manager/features/firebase/authentication.dart';
 import 'package:rpg_manager/setup/routes_setup.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final _userEmailController = TextEditingController();
   final _userPasswordController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+  var _emailIsValid = false;
+  var _passwordIsValid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailIsValid = true;
+    _passwordIsValid = true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +67,7 @@ class LoginScreen extends StatelessWidget {
 
   Widget _loginForm(BuildContext context) {
     return Form(
+      key: _formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
@@ -85,12 +103,12 @@ class LoginScreen extends StatelessWidget {
         ],
       ),
       height: 60.0,
-      child: TextField(
+      child: TextFormField(
         controller: _userEmailController,
         cursorColor: Colors.black,
         keyboardType: TextInputType.emailAddress,
         style: TextStyle(
-          color: Colors.black,
+          color: _emailIsValid ? Colors.black : Colors.red,
           fontSize: 24,
         ),
         decoration: InputDecoration(
@@ -103,11 +121,36 @@ class LoginScreen extends StatelessWidget {
           hintText: 'E-mail',
           hintStyle: GoogleFonts.rubik(
             textStyle: TextStyle(
-              color: Colors.black45,
+              color: _emailIsValid ? Colors.black45 : Colors.red,
               fontSize: 24,
             ),
           ),
+          errorStyle: TextStyle(
+            height: 0,
+          ),
         ),
+        validator: (userEmail) {
+          String pattern =
+              r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+              r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+              r"{0,253}[a-zA-Z0-9])?)*$";
+          RegExp regex = new RegExp(pattern);
+
+          if (userEmail != null && regex.hasMatch(userEmail)) {
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
+              setState(() {
+                _emailIsValid = true;
+              });
+            });
+          } else {
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
+              setState(() {
+                _emailIsValid = false;
+              });
+            });
+            return '';
+          }
+        },
       ),
     );
   }
@@ -126,12 +169,12 @@ class LoginScreen extends StatelessWidget {
         ],
       ),
       height: 60.0,
-      child: TextField(
+      child: TextFormField(
         controller: _userPasswordController,
         obscureText: true,
         cursorColor: Colors.black,
         style: TextStyle(
-          color: Colors.black,
+          color: _passwordIsValid ? Colors.black : Colors.red,
           fontSize: 24,
         ),
         decoration: InputDecoration(
@@ -144,11 +187,30 @@ class LoginScreen extends StatelessWidget {
           hintText: 'Hasło',
           hintStyle: GoogleFonts.rubik(
             textStyle: TextStyle(
-              color: Colors.black45,
+              color: _passwordIsValid ? Colors.black45 : Colors.red,
               fontSize: 24,
             ),
           ),
+          errorStyle: TextStyle(
+            height: 0,
+          ),
         ),
+        validator: (userPassword) {
+          if (userPassword!.length < 6) {
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
+              setState(() {
+                _passwordIsValid = false;
+              });
+            });
+            return '';
+          } else {
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
+              setState(() {
+                _passwordIsValid = true;
+              });
+            });
+          }
+        },
       ),
     );
   }
@@ -225,9 +287,38 @@ class LoginScreen extends StatelessWidget {
   }
 
   void _onLoginButtonPressed({required BuildContext context}) {
-    context.read<FirebaseAuthentication>().login(
-          _userEmailController.text,
-          _userPasswordController.text,
+    try {
+      if (_formKey.currentState!.validate()) {
+        context.read<FirebaseAuthentication>().login(
+              _userEmailController.text,
+              _userPasswordController.text,
+            );
+
+        Navigator.of(context).pushNamed(RoutePageName.startPage);
+        Fluttertoast.showToast(
+          msg: "Logowanie powiodło się",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color.fromARGB(255, 247, 241, 227),
+          textColor: Colors.black,
+          fontSize: 16.0,
         );
+      } else {
+        Fluttertoast.showToast(
+          msg: "Logowanie nie powiodło się",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Color.fromARGB(255, 247, 241, 227),
+          fontSize: 16.0,
+        );
+      }
+    } catch (e) {
+      print(e);
+      _userEmailController.text = '';
+      _userPasswordController.text = '';
+    }
   }
 }

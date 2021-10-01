@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/features/firebase/authentication.dart';
 import 'package:rpg_manager/setup/routes_setup.dart';
@@ -7,11 +8,33 @@ import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
 import 'package:provider/provider.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
+
+  @override
+  _RegisterScreenState createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   final _userNameController = TextEditingController();
   final _userEmailController = TextEditingController();
   final _userPasswordController = TextEditingController();
   final _userConfirmPasswordController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+  var _nameIsValid = false;
+  var _emailIsValid = false;
+  var _passwordIsValid = false;
+  var _confirmPasswordIsValid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameIsValid = true;
+    _emailIsValid = true;
+    _passwordIsValid = true;
+    _confirmPasswordIsValid = true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +78,7 @@ class RegisterScreen extends StatelessWidget {
 
   Widget _registerForm(BuildContext context) {
     return Form(
+      key: _formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
@@ -78,7 +102,7 @@ class RegisterScreen extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          _loginButton(context),
+          _loginButton(context: context),
         ],
       ),
     );
@@ -98,12 +122,12 @@ class RegisterScreen extends StatelessWidget {
         ],
       ),
       height: 60.0,
-      child: TextField(
+      child: TextFormField(
         controller: _userNameController,
         cursorColor: Colors.black,
         keyboardType: TextInputType.name,
         style: TextStyle(
-          color: Colors.black,
+          color: _nameIsValid ? Colors.black : Colors.red,
           fontSize: 24,
         ),
         decoration: InputDecoration(
@@ -116,11 +140,30 @@ class RegisterScreen extends StatelessWidget {
           hintText: 'Nazwa użytkownika',
           hintStyle: GoogleFonts.rubik(
             textStyle: TextStyle(
-              color: Colors.black45,
+              color: _nameIsValid ? Colors.black45 : Colors.red,
               fontSize: 24,
             ),
           ),
+          errorStyle: TextStyle(
+            height: 0,
+          ),
         ),
+        validator: (userName) {
+          if (userName!.isEmpty) {
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
+              setState(() {
+                _nameIsValid = false;
+              });
+            });
+            return '';
+          } else {
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
+              setState(() {
+                _nameIsValid = true;
+              });
+            });
+          }
+        },
       ),
     );
   }
@@ -139,12 +182,12 @@ class RegisterScreen extends StatelessWidget {
         ],
       ),
       height: 60.0,
-      child: TextField(
+      child: TextFormField(
         controller: _userEmailController,
         cursorColor: Colors.black,
         keyboardType: TextInputType.emailAddress,
         style: TextStyle(
-          color: Colors.black,
+          color: _emailIsValid ? Colors.black : Colors.red,
           fontSize: 24,
         ),
         decoration: InputDecoration(
@@ -157,11 +200,36 @@ class RegisterScreen extends StatelessWidget {
           hintText: 'E-mail',
           hintStyle: GoogleFonts.rubik(
             textStyle: TextStyle(
-              color: Colors.black45,
+              color: _emailIsValid ? Colors.black45 : Colors.red,
               fontSize: 24,
             ),
           ),
+          errorStyle: TextStyle(
+            height: 0,
+          ),
         ),
+        validator: (userEmail) {
+          String pattern =
+              r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+              r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+              r"{0,253}[a-zA-Z0-9])?)*$";
+          RegExp regex = new RegExp(pattern);
+
+          if (userEmail != null && regex.hasMatch(userEmail)) {
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
+              setState(() {
+                _emailIsValid = true;
+              });
+            });
+          } else {
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
+              setState(() {
+                _emailIsValid = false;
+              });
+            });
+            return '';
+          }
+        },
       ),
     );
   }
@@ -180,12 +248,12 @@ class RegisterScreen extends StatelessWidget {
         ],
       ),
       height: 60.0,
-      child: TextField(
+      child: TextFormField(
         controller: _userPasswordController,
         obscureText: true,
         cursorColor: Colors.black,
         style: TextStyle(
-          color: Colors.black,
+          color: _passwordIsValid ? Colors.black : Colors.red,
           fontSize: 24,
         ),
         decoration: InputDecoration(
@@ -198,11 +266,30 @@ class RegisterScreen extends StatelessWidget {
           hintText: 'Hasło',
           hintStyle: GoogleFonts.rubik(
             textStyle: TextStyle(
-              color: Colors.black45,
+              color: _passwordIsValid ? Colors.black45 : Colors.red,
               fontSize: 24,
             ),
           ),
+          errorStyle: TextStyle(
+            height: 0,
+          ),
         ),
+        validator: (userPassword) {
+          if (userPassword!.length < 6) {
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
+              setState(() {
+                _passwordIsValid = false;
+              });
+            });
+            return '';
+          } else {
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
+              setState(() {
+                _passwordIsValid = true;
+              });
+            });
+          }
+        },
       ),
     );
   }
@@ -221,12 +308,12 @@ class RegisterScreen extends StatelessWidget {
         ],
       ),
       height: 60.0,
-      child: TextField(
+      child: TextFormField(
         controller: _userConfirmPasswordController,
         obscureText: true,
         cursorColor: Colors.black,
         style: TextStyle(
-          color: Colors.black,
+          color: _confirmPasswordIsValid ? Colors.black : Colors.red,
           fontSize: 24,
         ),
         decoration: InputDecoration(
@@ -239,11 +326,30 @@ class RegisterScreen extends StatelessWidget {
           hintText: 'Potwierdź hasło',
           hintStyle: GoogleFonts.rubik(
             textStyle: TextStyle(
-              color: Colors.black45,
+              color: _confirmPasswordIsValid ? Colors.black45 : Colors.red,
               fontSize: 24,
             ),
           ),
+          errorStyle: TextStyle(
+            height: 0,
+          ),
         ),
+        validator: (userConfirmPassword) {
+          if (userConfirmPassword!.isEmpty || userConfirmPassword.length < 6) {
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
+              setState(() {
+                _confirmPasswordIsValid = false;
+              });
+            });
+            return '';
+          } else {
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
+              setState(() {
+                _confirmPasswordIsValid = true;
+              });
+            });
+          }
+        },
       ),
     );
   }
@@ -280,7 +386,7 @@ class RegisterScreen extends StatelessWidget {
     );
   }
 
-  Widget _loginButton(BuildContext context) {
+  Widget _loginButton({required BuildContext context}) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -321,13 +427,35 @@ class RegisterScreen extends StatelessWidget {
 
   void _onRegisterButtonPressed({required BuildContext context}) async {
     try {
-      await context.read<FirebaseAuthentication>().register(
-            _userNameController.text,
-            _userEmailController.text,
-            _userPasswordController.text,
-          );
+      if (_formKey.currentState!.validate() &&
+          _userPasswordController.text == _userConfirmPasswordController.text) {
+        await context.read<FirebaseAuthentication>().register(
+              _userNameController.text,
+              _userEmailController.text,
+              _userPasswordController.text,
+            );
 
-      Navigator.of(context).pushNamed(RoutePageName.startPage);
+        Navigator.of(context).pushNamed(RoutePageName.startPage);
+        Fluttertoast.showToast(
+          msg: "Rejestracja powiodła się",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color.fromARGB(255, 247, 241, 227),
+          textColor: Colors.black,
+          fontSize: 16.0,
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: "Rejestracja nie powiodła się",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Color.fromARGB(255, 247, 241, 227),
+          fontSize: 16.0,
+        );
+      }
     } catch (e) {
       print(e);
       _userNameController.text = '';

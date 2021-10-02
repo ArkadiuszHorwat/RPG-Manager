@@ -38,12 +38,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppNavBar(
-        title: 'REJESTRACJA',
-      ),
-      body: AppBackground(
-        child: GestureDetector(
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppNavBar(
+          title: 'Rejestracja',
+        ),
+        body: GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () => FocusScope.of(context).unfocus(),
           child: Container(
@@ -367,7 +368,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
           ),
           backgroundColor: MaterialStateProperty.all<Color>(
-            Color.fromARGB(255, 168, 128, 92),
+            Color.fromARGB(255, 150, 115, 80),
+          ),
+          shadowColor: MaterialStateProperty.all<Color>(
+            Colors.black,
+          ),
+          elevation: MaterialStateProperty.all<double>(
+            10,
           ),
         ),
         onPressed: () => _onRegisterButtonPressed(context: context),

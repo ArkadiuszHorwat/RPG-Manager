@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:rpg_manager/features/home/widgets/home_choice_item.dart';
 
 class HomeChoice extends StatelessWidget {
   HomeChoice({Key? key}) : super(key: key);
@@ -13,64 +13,18 @@ class HomeChoice extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            GestureDetector(
-              onTap: () {
-                print('MG');
-              },
-              child: Card(
-                child: Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: [
-                    Image.asset(
-                      "lib/app_assets/images/mistrz-gry-img.jpg",
-                      height: 400,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-                    Text(
-                      'PANEL MISTRZA GRY',
-                      style: GoogleFonts.rubik(
-                        textStyle: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 247, 241, 227),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            HomeChoiceItem(
+              title: 'PANEL MISTRZA GRY',
+              imagePath: 'lib/app_assets/images/mistrz-gry-img.jpg',
+              actionRoute: () => print('MG'),
             ),
             SizedBox(
-              height: 20,
+              height: 10,
             ),
-            GestureDetector(
-              onTap: () {
-                print('gracz');
-              },
-              child: Card(
-                child: Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: [
-                    Image.asset(
-                      "lib/app_assets/images/gracz-img.jpg",
-                      height: 400,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-                    Text(
-                      'PANEL GRACZA',
-                      style: GoogleFonts.rubik(
-                        textStyle: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 247, 241, 227),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            HomeChoiceItem(
+              title: 'PANEL GRACZA',
+              imagePath: 'lib/app_assets/images/gracz-img.jpg',
+              actionRoute: () => print('GRACZ'),
             ),
           ],
         ),

@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/firebase/authentication.dart';
 import 'package:rpg_manager/setup/routes_setup.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:rpg_manager/widgets/app_nav_bar.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -29,10 +32,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: AppBackground(
-        child: GestureDetector(
+    return AppBackground(
+      child: Scaffold(
+        appBar: AppNavBar(
+          title: AppLocal.titleStartPage,
+          icon: IconButton(
+              icon: Icon(
+                Icons.close_outlined,
+              ),
+              onPressed: () {
+                _exitAlert(context);
+              }),
+        ),
+        backgroundColor: Colors.transparent,
+        body: GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () => FocusScope.of(context).unfocus(),
           child: Container(
@@ -228,7 +241,13 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           backgroundColor: MaterialStateProperty.all<Color>(
-            Color.fromARGB(255, 168, 128, 92),
+            Color.fromARGB(255, 150, 115, 80),
+          ),
+          shadowColor: MaterialStateProperty.all<Color>(
+            Colors.black,
+          ),
+          elevation: MaterialStateProperty.all<double>(
+            10,
           ),
         ),
         onPressed: () => _onLoginButtonPressed(context: context),
@@ -310,4 +329,38 @@ void _showErrorLogin({required String text}) {
     textColor: Color.fromARGB(255, 247, 241, 227),
     fontSize: 16.0,
   );
+}
+
+void _exitAlert(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Color.fromARGB(255, 247, 241, 227),
+          title: Text("Napewno chcesz wyjść?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Nie',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () =>
+                  SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
+              child: Text(
+                'Tak',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ],
+        );
+      });
 }

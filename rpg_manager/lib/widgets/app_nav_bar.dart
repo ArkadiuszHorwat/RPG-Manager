@@ -14,8 +14,8 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      elevation: 10,
-      backgroundColor: Color.fromARGB(255, 168, 128, 92),
+      //backgroundColor: Color.fromARGB(255, 90, 60, 35),
+      backgroundColor: Colors.transparent,
       title: Text(
         title,
         style: GoogleFonts.rubik(

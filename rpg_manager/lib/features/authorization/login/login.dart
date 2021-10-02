@@ -287,38 +287,27 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onLoginButtonPressed({required BuildContext context}) {
-    try {
-      if (_formKey.currentState!.validate()) {
-        context.read<FirebaseAuthentication>().login(
-              _userEmailController.text,
-              _userPasswordController.text,
-            );
+    if (_formKey.currentState!.validate()) {
+      context.read<FirebaseAuthentication>().login(
+            _userEmailController.text,
+            _userPasswordController.text,
+          );
 
-        Navigator.of(context).pushNamed(RoutePageName.startPage);
-        Fluttertoast.showToast(
-          msg: "Logowanie powiodło się",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Color.fromARGB(255, 247, 241, 227),
-          textColor: Colors.black,
-          fontSize: 16.0,
-        );
-      } else {
-        Fluttertoast.showToast(
-          msg: "Logowanie nie powiodło się",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Color.fromARGB(255, 247, 241, 227),
-          fontSize: 16.0,
-        );
-      }
-    } catch (e) {
-      print(e);
-      _userEmailController.text = '';
-      _userPasswordController.text = '';
+      Navigator.of(context).pushNamed(RoutePageName.startPage);
+    } else {
+      _showErrorLogin(text: "Logowanie nie powiodło się");
     }
   }
+}
+
+void _showErrorLogin({required String text}) {
+  Fluttertoast.showToast(
+    msg: text,
+    toastLength: Toast.LENGTH_LONG,
+    gravity: ToastGravity.BOTTOM,
+    timeInSecForIosWeb: 1,
+    backgroundColor: Colors.red,
+    textColor: Color.fromARGB(255, 247, 241, 227),
+    fontSize: 16.0,
+  );
 }

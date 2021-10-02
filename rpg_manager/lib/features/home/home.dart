@@ -39,7 +39,7 @@ class HomeScreen extends StatelessWidget {
             return Scaffold(
               backgroundColor: Colors.transparent,
               appBar: AppNavBar(
-                title: "Hello ${data['name']}",
+                title: "${data['name']}",
                 icon: IconButton(
                     icon: Icon(
                       Icons.door_back_outlined,

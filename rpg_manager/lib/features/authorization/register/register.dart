@@ -426,42 +426,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _onRegisterButtonPressed({required BuildContext context}) async {
-    try {
-      if (_formKey.currentState!.validate() &&
-          _userPasswordController.text == _userConfirmPasswordController.text) {
-        await context.read<FirebaseAuthentication>().register(
-              _userNameController.text,
-              _userEmailController.text,
-              _userPasswordController.text,
-            );
+    if (_formKey.currentState!.validate() &&
+        _userPasswordController.text == _userConfirmPasswordController.text) {
+      await context.read<FirebaseAuthentication>().register(
+            _userNameController.text,
+            _userEmailController.text,
+            _userPasswordController.text,
+          );
 
-        Navigator.of(context).pushNamed(RoutePageName.startPage);
-        Fluttertoast.showToast(
-          msg: "Rejestracja powiodła się",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Color.fromARGB(255, 247, 241, 227),
-          textColor: Colors.black,
-          fontSize: 16.0,
-        );
-      } else {
-        Fluttertoast.showToast(
-          msg: "Rejestracja nie powiodła się",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Color.fromARGB(255, 247, 241, 227),
-          fontSize: 16.0,
-        );
-      }
-    } catch (e) {
-      print(e);
-      _userNameController.text = '';
-      _userEmailController.text = '';
-      _userPasswordController.text = '';
-      _userConfirmPasswordController.text = '';
+      Navigator.of(context).pushNamed(RoutePageName.startPage);
+    } else {
+      _showErrorRegister(text: "Rejestracja nie powiodła się");
     }
   }
+}
+
+void _showErrorRegister({required String text}) {
+  Fluttertoast.showToast(
+    msg: text,
+    toastLength: Toast.LENGTH_LONG,
+    gravity: ToastGravity.BOTTOM,
+    timeInSecForIosWeb: 1,
+    backgroundColor: Colors.red,
+    textColor: Color.fromARGB(255, 247, 241, 227),
+    fontSize: 16.0,
+  );
 }

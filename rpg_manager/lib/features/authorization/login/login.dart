@@ -311,8 +311,6 @@ class _LoginScreenState extends State<LoginScreen> {
             _userEmailController.text,
             _userPasswordController.text,
           );
-
-      Navigator.of(context).pushNamed(RoutePageName.startPage);
     } else {
       _showErrorLogin(text: "Logowanie nie powiodło się");
     }

@@ -17,7 +17,7 @@ class FirebaseAuthentication {
         password: password,
       );
       print('Successfully Logged In :)');
-      _showInfo(text: 'Siedzicie w karczmie..');
+      _showInfo(text: 'Siedzicie w karczmie...');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');

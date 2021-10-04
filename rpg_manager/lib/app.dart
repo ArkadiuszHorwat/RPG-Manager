@@ -47,7 +47,7 @@ class StartPage extends StatelessWidget {
     final user = context.watch<User?>();
 
     if (user != null) {
-      return HomeScreen();
+      return HomeScreen(userData: user);
     } else {
       return LoginScreen();
     }

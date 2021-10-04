@@ -1,8 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app.dart';
 import 'package:rpg_manager/features/authorization/register/register.dart';
+import 'package:rpg_manager/features/calendar/calendar.dart';
+import 'package:rpg_manager/features/campaigns/campaigns.dart';
+import 'package:rpg_manager/features/characters/characters_list.dart';
+import 'package:rpg_manager/features/home/home.dart';
+import 'package:rpg_manager/features/main_menu/main_menu.dart';
+import 'package:rpg_manager/features/players_list/players_list.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
 
@@ -15,6 +22,28 @@ class RoutesSetup {
         return MaterialPageRoute(builder: (_) => StartPage());
       case RoutePageName.register:
         return MaterialPageRoute(builder: (_) => RegisterScreen());
+      case RoutePageName.home:
+        return MaterialPageRoute(builder: (_) {
+          args as HomeScreen;
+          return HomeScreen(
+            userData: args.userData,
+          );
+        });
+      case RoutePageName.menu:
+        return MaterialPageRoute(builder: (_) {
+          args as DocumentReference<Map<String, dynamic>>;
+          return MainMenu(
+            userData: args,
+          );
+        });
+      case RoutePageName.calendarPage:
+        return MaterialPageRoute(builder: (_) => CalendarScreen());
+      case RoutePageName.campaignsPage:
+        return MaterialPageRoute(builder: (_) => CampaignsScreen());
+      case RoutePageName.playersListPage:
+        return MaterialPageRoute(builder: (_) => PlayersListScreen());
+      case RoutePageName.charactersListPage:
+        return MaterialPageRoute(builder: (_) => CharactersListScreen());
       default:
         return _errorRoute();
     }
@@ -48,4 +77,9 @@ class RoutePageName {
   static const String register = '/register';
   static const String startPage = '/';
   static const String home = '/home';
+  static const String menu = '/menu';
+  static const String calendarPage = '/calendar';
+  static const String campaignsPage = '/campaigns';
+  static const String playersListPage = '/playersList';
+  static const String charactersListPage = '/charactersList';
 }

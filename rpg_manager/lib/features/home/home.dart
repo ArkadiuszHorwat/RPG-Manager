@@ -10,7 +10,12 @@ import 'package:rpg_manager/widgets/app_nav_bar.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({
+    Key? key,
+    required this.userData,
+  }) : super(key: key);
+
+  final User userData;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +53,9 @@ class HomeScreen extends StatelessWidget {
                       _exitLogOutAlert(context);
                     }),
               ),
-              body: HomeChoice(),
+              body: HomeChoice(
+                data: userData,
+              ),
             );
           }
 

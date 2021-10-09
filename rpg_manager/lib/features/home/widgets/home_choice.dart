@@ -1,26 +1,25 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:rpg_manager/features/firebase/config.dart';
+import 'package:rpg_manager/app_assets/localizations/app_local.dart';
+import 'package:rpg_manager/features/home/home_controller.dart';
 import 'package:rpg_manager/features/home/widgets/home_choice_item.dart';
-import 'package:rpg_manager/setup/routes_setup.dart';
 
 class HomeChoice extends StatefulWidget {
   HomeChoice({
     Key? key,
     required this.data,
+    required this.controller,
   }) : super(key: key);
 
   final User data;
+  final HomeScreenController controller;
 
   @override
   _HomeChoiceState createState() => _HomeChoiceState();
 }
 
 class _HomeChoiceState extends State<HomeChoice> {
-  final _users =
-      FlutterFirebaseConfig.getFirestoreConnect().collection('users');
-
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -30,39 +29,29 @@ class _HomeChoiceState extends State<HomeChoice> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             HomeChoiceItem(
-              title: 'PANEL MISTRZA GRY',
+              title: AppLocal.homeGameMasterTitle,
               imagePath: 'lib/app_assets/images/mistrz-gry-img.jpg',
-              actionRoute: () => _onChoicePanelSelected(1),
+              actionRoute: () => widget.controller.onChoicePanelSelected(
+                1,
+                context,
+                widget.data,
+              ),
             ),
             SizedBox(
               height: 10,
             ),
             HomeChoiceItem(
-              title: 'PANEL GRACZA',
+              title: AppLocal.homePlayerTitle,
               imagePath: 'lib/app_assets/images/gracz-img.jpg',
-              actionRoute: () => _onChoicePanelSelected(2),
+              actionRoute: () => widget.controller.onChoicePanelSelected(
+                2,
+                context,
+                widget.data,
+              ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  void _onChoicePanelSelected(int choice) async {
-    var _userSessionType = 'unknown';
-
-    switch (choice) {
-      case 1:
-        _userSessionType = 'game master';
-        break;
-      case 2:
-        _userSessionType = 'player';
-        break;
-    }
-    await _users
-        .doc(widget.data.uid)
-        .update({'userSessionType': _userSessionType});
-    final _userData = await _users.doc(widget.data.uid);
-    Navigator.of(context).pushNamed(RoutePageName.menu, arguments: _userData);
   }
 }

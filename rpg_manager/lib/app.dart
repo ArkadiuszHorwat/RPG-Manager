@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
-import 'package:rpg_manager/features/authorization/login/login.dart';
+import 'package:rpg_manager/features/authorization/login/login_screen.dart';
 import 'package:rpg_manager/features/firebase/authentication.dart';
-import 'package:rpg_manager/features/home/home.dart';
+import 'package:rpg_manager/features/home/home_screen.dart';
 import 'package:rpg_manager/setup/routes_setup.dart';
 
 class App extends StatelessWidget {

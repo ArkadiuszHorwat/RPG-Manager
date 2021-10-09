@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/authorization/register/register_screen.dart';
-import 'package:rpg_manager/features/calendar/calendar.dart';
+import 'package:rpg_manager/features/calendar/calendar_screen.dart';
 import 'package:rpg_manager/features/campaigns/campaigns.dart';
 import 'package:rpg_manager/features/characters/characters_list.dart';
 import 'package:rpg_manager/features/home/home_screen.dart';

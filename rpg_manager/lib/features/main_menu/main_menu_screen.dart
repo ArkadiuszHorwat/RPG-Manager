@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/calendar/calendar_screen.dart';
-import 'package:rpg_manager/features/campaigns/campaigns.dart';
+import 'package:rpg_manager/features/campaigns/campaigns_screen.dart';
 import 'package:rpg_manager/features/characters/characters_list.dart';
 import 'package:rpg_manager/features/players_list/players_list.dart';
 import 'package:rpg_manager/widgets/app_background.dart';

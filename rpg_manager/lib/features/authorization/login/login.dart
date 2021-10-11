@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
-import 'package:rpg_manager/features/authorization/login/login_controller.dart';
+import 'package:rpg_manager/features/firebase/authentication.dart';
+import 'package:rpg_manager/setup/routes_setup.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
+import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,8 +16,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _controller = LoginScreenController();
+  final _userEmailController = TextEditingController();
+  final _userPasswordController = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
   var _emailIsValid = false;
   var _passwordIsValid = false;
 
@@ -36,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Icons.close_outlined,
               ),
               onPressed: () {
-                _controller.exitAlert(context);
+                _exitAlert(context);
               }),
         ),
         backgroundColor: Colors.transparent,
@@ -75,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _loginForm(BuildContext context) {
     return Form(
-      key: _controller.formKey,
+      key: _formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
@@ -112,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       height: 60.0,
       child: TextFormField(
-        controller: _controller.userEmailController,
+        controller: _userEmailController,
         cursorColor: Colors.black,
         keyboardType: TextInputType.emailAddress,
         style: TextStyle(
@@ -126,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
             color: Colors.black45,
             size: 28,
           ),
-          hintText: AppLocal.loginEmailHintText,
+          hintText: 'E-mail',
           hintStyle: GoogleFonts.rubik(
             textStyle: TextStyle(
               color: _emailIsValid ? Colors.black45 : Colors.red,
@@ -178,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       height: 60.0,
       child: TextFormField(
-        controller: _controller.userPasswordController,
+        controller: _userPasswordController,
         obscureText: true,
         cursorColor: Colors.black,
         style: TextStyle(
@@ -192,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
             color: Colors.black45,
             size: 28,
           ),
-          hintText: AppLocal.loginPasswordHintText,
+          hintText: 'Hasło',
           hintStyle: GoogleFonts.rubik(
             textStyle: TextStyle(
               color: _passwordIsValid ? Colors.black45 : Colors.red,
@@ -245,9 +250,9 @@ class _LoginScreenState extends State<LoginScreen> {
             10,
           ),
         ),
-        onPressed: () => _controller.onLoginButtonPressed(context: context),
+        onPressed: () => _onLoginButtonPressed(context: context),
         child: Text(
-          AppLocal.loginSignInButtonText,
+          'ZALOGUJ SIĘ',
           style: GoogleFonts.rubik(
             textStyle: TextStyle(
               color: Color.fromARGB(255, 247, 241, 227),
@@ -283,10 +288,10 @@ class _LoginScreenState extends State<LoginScreen> {
           backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
         ),
         onPressed: () {
-          _controller.routeToRegistration(context);
+          Navigator.of(context).pushNamed(RoutePageName.register);
         },
         child: Text(
-          AppLocal.loginSignUpButtonText,
+          'REJESTRACJA',
           style: GoogleFonts.rubik(
             textStyle: TextStyle(
               color: Color.fromARGB(255, 247, 241, 227),
@@ -299,4 +304,61 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+  void _onLoginButtonPressed({required BuildContext context}) {
+    if (_formKey.currentState!.validate()) {
+      context.read<FirebaseAuthentication>().login(
+            _userEmailController.text,
+            _userPasswordController.text,
+          );
+    } else {
+      _showErrorLogin(text: "Logowanie nie powiodło się");
+    }
+  }
+}
+
+void _showErrorLogin({required String text}) {
+  Fluttertoast.showToast(
+    msg: text,
+    toastLength: Toast.LENGTH_LONG,
+    gravity: ToastGravity.BOTTOM,
+    timeInSecForIosWeb: 1,
+    backgroundColor: Colors.red,
+    textColor: Color.fromARGB(255, 247, 241, 227),
+    fontSize: 16.0,
+  );
+}
+
+void _exitAlert(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Color.fromARGB(255, 247, 241, 227),
+          title: Text("Napewno chcesz wyjść?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Nie',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () =>
+                  SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
+              child: Text(
+                'Tak',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ],
+        );
+      });
 }

@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rpg_manager/features/firebase/authentication.dart';
 import 'package:rpg_manager/features/firebase/config.dart';
-import 'package:rpg_manager/features/home/home_controller.dart';
 import 'package:rpg_manager/features/home/widgets/home_choice.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
@@ -16,8 +16,6 @@ class HomeScreen extends StatelessWidget {
   }) : super(key: key);
 
   final User userData;
-
-  final _controller = HomeScreenController();
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +50,11 @@ class HomeScreen extends StatelessWidget {
                       Icons.door_back_outlined,
                     ),
                     onPressed: () {
-                      _controller.exitLogOutAlert(context);
+                      _exitLogOutAlert(context);
                     }),
               ),
               body: HomeChoice(
                 data: userData,
-                controller: _controller,
               ),
             );
           }
@@ -73,5 +70,41 @@ class HomeScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  void _exitLogOutAlert(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Color.fromARGB(255, 247, 241, 227),
+            title: Text("Napewno chcesz się wylogować?"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Nie',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  context.read<FirebaseAuthentication>().signOut();
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Tak',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
   }
 }

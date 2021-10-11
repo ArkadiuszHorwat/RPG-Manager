@@ -21,7 +21,7 @@ class HomeChoiceItem extends StatelessWidget {
       onTap: actionRoute,
       child: Container(
         margin: EdgeInsets.all(10),
-        height: 300,
+        height: 400,
         width: double.infinity,
         decoration: BoxDecoration(
           boxShadow: [

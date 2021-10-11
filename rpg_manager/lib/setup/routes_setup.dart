@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app.dart';
-import 'package:rpg_manager/app_assets/localizations/app_local.dart';
-import 'package:rpg_manager/features/authorization/register/register_screen.dart';
-import 'package:rpg_manager/features/calendar/calendar_screen.dart';
+import 'package:rpg_manager/features/authorization/register/register.dart';
+import 'package:rpg_manager/features/calendar/calendar.dart';
 import 'package:rpg_manager/features/campaigns/campaigns.dart';
 import 'package:rpg_manager/features/characters/characters_list.dart';
-import 'package:rpg_manager/features/home/home_screen.dart';
-import 'package:rpg_manager/features/main_menu/main_menu_screen.dart';
+import 'package:rpg_manager/features/home/home.dart';
+import 'package:rpg_manager/features/main_menu/main_menu.dart';
 import 'package:rpg_manager/features/players_list/players_list.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
@@ -54,12 +53,12 @@ class RoutesSetup {
     return MaterialPageRoute(builder: (_) {
       return Scaffold(
         appBar: AppNavBar(
-          title: AppLocal.errorRouteTitle,
+          title: 'Kraniec świata',
         ),
         body: AppBackground(
           child: Center(
             child: Text(
-              AppLocal.errorRouteText,
+              'Tam gdzie diabeł mówi dobranoc',
               style: GoogleFonts.rubik(
                 textStyle: TextStyle(
                   fontSize: 28,

@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rpg_manager/app_assets/localizations/app_local.dart';
-import 'package:rpg_manager/features/authorization/register/register_controller.dart';
+import 'package:rpg_manager/features/firebase/authentication.dart';
+import 'package:rpg_manager/setup/routes_setup.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -14,8 +16,12 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final _controller = RegisterScreenController();
+  final _userNameController = TextEditingController();
+  final _userEmailController = TextEditingController();
+  final _userPasswordController = TextEditingController();
+  final _userConfirmPasswordController = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
   var _nameIsValid = false;
   var _emailIsValid = false;
   var _passwordIsValid = false;
@@ -36,7 +42,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppNavBar(
-          title: AppLocal.registerTitle,
+          title: 'Rejestracja',
         ),
         body: GestureDetector(
           behavior: HitTestBehavior.translucent,
@@ -73,7 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget _registerForm(BuildContext context) {
     return Form(
-      key: _controller.formKey,
+      key: _formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
@@ -118,7 +124,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       height: 60.0,
       child: TextFormField(
-        controller: _controller.userNameController,
+        controller: _userNameController,
         cursorColor: Colors.black,
         keyboardType: TextInputType.name,
         style: TextStyle(
@@ -132,7 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             color: Colors.black45,
             size: 28,
           ),
-          hintText: AppLocal.registerNameHintText,
+          hintText: 'Nazwa użytkownika',
           hintStyle: GoogleFonts.rubik(
             textStyle: TextStyle(
               color: _nameIsValid ? Colors.black45 : Colors.red,
@@ -178,7 +184,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       height: 60.0,
       child: TextFormField(
-        controller: _controller.userEmailController,
+        controller: _userEmailController,
         cursorColor: Colors.black,
         keyboardType: TextInputType.emailAddress,
         style: TextStyle(
@@ -192,7 +198,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             color: Colors.black45,
             size: 28,
           ),
-          hintText: AppLocal.registerEmailHintText,
+          hintText: 'E-mail',
           hintStyle: GoogleFonts.rubik(
             textStyle: TextStyle(
               color: _emailIsValid ? Colors.black45 : Colors.red,
@@ -244,7 +250,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       height: 60.0,
       child: TextFormField(
-        controller: _controller.userPasswordController,
+        controller: _userPasswordController,
         obscureText: true,
         cursorColor: Colors.black,
         style: TextStyle(
@@ -258,7 +264,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             color: Colors.black45,
             size: 28,
           ),
-          hintText: AppLocal.registerPasswordHintText,
+          hintText: 'Hasło',
           hintStyle: GoogleFonts.rubik(
             textStyle: TextStyle(
               color: _passwordIsValid ? Colors.black45 : Colors.red,
@@ -304,7 +310,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       height: 60.0,
       child: TextFormField(
-        controller: _controller.userConfirmPasswordController,
+        controller: _userConfirmPasswordController,
         obscureText: true,
         cursorColor: Colors.black,
         style: TextStyle(
@@ -318,7 +324,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             color: Colors.black45,
             size: 28,
           ),
-          hintText: AppLocal.registerConfirmHintText,
+          hintText: 'Potwierdź hasło',
           hintStyle: GoogleFonts.rubik(
             textStyle: TextStyle(
               color: _confirmPasswordIsValid ? Colors.black45 : Colors.red,
@@ -371,9 +377,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             10,
           ),
         ),
-        onPressed: () => _controller.onRegisterButtonPressed(context: context),
+        onPressed: () => _onRegisterButtonPressed(context: context),
         child: Text(
-          AppLocal.registerSignUpButtonText,
+          'ZAREJESTRUJ SIĘ',
           style: GoogleFonts.rubik(
             textStyle: TextStyle(
               color: Color.fromARGB(255, 247, 241, 227),
@@ -409,10 +415,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
           backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
         ),
         onPressed: () {
-          _controller.routeToLoginScreen(context);
+          Navigator.of(context).pushNamed(RoutePageName.startPage);
         },
         child: Text(
-          AppLocal.registerSignInButtonText,
+          'LOGOWANIE',
           style: GoogleFonts.rubik(
             textStyle: TextStyle(
               color: Color.fromARGB(255, 247, 241, 227),
@@ -425,4 +431,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
+
+  void _onRegisterButtonPressed({required BuildContext context}) async {
+    if (_formKey.currentState!.validate() &&
+        _userPasswordController.text == _userConfirmPasswordController.text) {
+      await context.read<FirebaseAuthentication>().register(
+            _userNameController.text,
+            _userEmailController.text,
+            _userPasswordController.text,
+          );
+
+      Navigator.of(context).pushNamed(RoutePageName.startPage);
+    } else {
+      _showErrorRegister(text: "Rejestracja nie powiodła się");
+    }
+  }
+}
+
+void _showErrorRegister({required String text}) {
+  Fluttertoast.showToast(
+    msg: text,
+    toastLength: Toast.LENGTH_LONG,
+    gravity: ToastGravity.BOTTOM,
+    timeInSecForIosWeb: 1,
+    backgroundColor: Colors.red,
+    textColor: Color.fromARGB(255, 247, 241, 227),
+    fontSize: 16.0,
+  );
 }

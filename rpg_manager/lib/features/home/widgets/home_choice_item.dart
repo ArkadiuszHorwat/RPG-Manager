@@ -46,7 +46,7 @@ class HomeChoiceItem extends StatelessWidget {
             title,
             style: GoogleFonts.rubik(
               textStyle: TextStyle(
-                fontSize: 32,
+                fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: Color.fromARGB(255, 247, 241, 227),
               ),

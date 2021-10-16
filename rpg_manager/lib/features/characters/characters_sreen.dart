@@ -2,48 +2,37 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
-import 'package:rpg_manager/features/players/widgets/players_list.dart';
+import 'package:rpg_manager/features/characters/widgets/characters_list.dart';
 
-final testPlayersData = [
-  'tawroh',
-  'kaio sakalena',
-  'grunfeld',
-  'slearoo',
-  'nicky3',
-  'michax',
-  'Natergall21',
-  'gruby123',
-  'łysy321',
-  'łysy321',
-  'łysy321',
-  'łysy321',
-  'łysy321',
-  'łysy321',
-  'łysy321',
-  'łysy321',
+final testCharactersData = [
+  'Tawroh Huiwart',
+  'Kaio Sakalena',
+  'Grunfeld',
+  'Almerit',
+  'Kerri',
+  'Knypcio',
+  'Palpuch',
 ];
 
-class PlayersScreen extends StatefulWidget {
+class CharactersScreen extends StatefulWidget {
   @override
-  _PlayersScreenState createState() => _PlayersScreenState();
+  _CharactersScreenState createState() => _CharactersScreenState();
 }
 
-class _PlayersScreenState extends State<PlayersScreen> {
+class _CharactersScreenState extends State<CharactersScreen> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _addPlayer(),
+        _addCharacter(),
         Expanded(
-          child: SingleChildScrollView(
-            child: PlayersList(data: testPlayersData),
-          ),
+          child: CharacterList(data: testCharactersData),
         ),
       ],
     );
   }
 
-  Widget _addPlayer() {
+  Widget _addCharacter() {
     return Material(
       color: Colors.transparent,
       elevation: 2.5,
@@ -57,7 +46,7 @@ class _PlayersScreenState extends State<PlayersScreen> {
               Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Text(
-                  AppLocal.playersAddButton,
+                  AppLocal.charactersAddButton,
                   style: GoogleFonts.rubik(
                     textStyle: TextStyle(
                       fontWeight: FontWeight.bold,

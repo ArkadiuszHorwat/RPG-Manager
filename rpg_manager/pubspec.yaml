@@ -61,6 +61,7 @@ flutter:
     - lib/app_assets/images/logo.png
     - lib/app_assets/images/mistrz-gry-img.jpg
     - lib/app_assets/images/gracz-img.jpg
+    - lib/app_assets/images/character-img.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

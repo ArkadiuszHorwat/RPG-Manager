@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/calendar/calendar_screen.dart';
 import 'package:rpg_manager/features/campaigns/campaigns_screen.dart';
-import 'package:rpg_manager/features/characters/characters_list.dart';
+import 'package:rpg_manager/features/characters/characters_sreen.dart';
 import 'package:rpg_manager/features/players/players_screen.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
@@ -41,7 +41,7 @@ class _MainMenuState extends State<MainMenu> {
                 sessionType: data['userSessionType'],
               ),
               data['userSessionType'] == 'player'
-                  ? CharactersListScreen()
+                  ? CharactersScreen()
                   : PlayersScreen(),
             ];
 

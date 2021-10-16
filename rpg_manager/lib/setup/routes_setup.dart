@@ -40,7 +40,12 @@ class RoutesSetup {
       case RoutePageName.calendarPage:
         return MaterialPageRoute(builder: (_) => CalendarScreen());
       case RoutePageName.campaignsPage:
-        return MaterialPageRoute(builder: (_) => CampaignsScreen());
+        return MaterialPageRoute(builder: (_) {
+          args as String;
+          return CampaignsScreen(
+            sessionType: args,
+          );
+        });
       case RoutePageName.playersListPage:
         return MaterialPageRoute(builder: (_) => PlayersListScreen());
       case RoutePageName.charactersListPage:

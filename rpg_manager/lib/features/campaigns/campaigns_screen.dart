@@ -7,13 +7,18 @@ final testCampaignsList = [
   'Zapomniana kopalnia Phandelvera',
   'Język smoka',
   'Wrota Baldura',
-  'Wrota Baldura',
-  'Wrota Baldura',
-  'Wrota Baldura',
-  'Wrota Baldura',
+  'Artefakt demona',
+  'Cienie Amn',
+  'Zaginiony kupiec',
 ];
 
 class CampaignsScreen extends StatefulWidget {
+  CampaignsScreen({
+    required this.sessionType,
+  });
+
+  final String sessionType;
+
   @override
   _CampaignsScreenState createState() => _CampaignsScreenState();
 }
@@ -23,7 +28,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _addCampaign(),
+        widget.sessionType == 'player' ? SizedBox.shrink() : _addCampaign(),
         Expanded(
           child: SingleChildScrollView(
             child: CampaignsList(data: testCampaignsList),

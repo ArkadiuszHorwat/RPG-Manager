@@ -37,7 +37,9 @@ class _MainMenuState extends State<MainMenu> {
 
             final _pages = <Widget>[
               CalendarScreen(),
-              CampaignsScreen(),
+              CampaignsScreen(
+                sessionType: data['userSessionType'],
+              ),
               data['userSessionType'] == 'player'
                   ? CharactersListScreen()
                   : PlayersListScreen(),

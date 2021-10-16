@@ -10,7 +10,7 @@ import 'package:rpg_manager/features/campaigns/campaigns_screen.dart';
 import 'package:rpg_manager/features/characters/characters_list.dart';
 import 'package:rpg_manager/features/home/home_screen.dart';
 import 'package:rpg_manager/features/main_menu/main_menu_screen.dart';
-import 'package:rpg_manager/features/players_list/players_list.dart';
+import 'package:rpg_manager/features/players/players_screen.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
 
@@ -47,7 +47,7 @@ class RoutesSetup {
           );
         });
       case RoutePageName.playersListPage:
-        return MaterialPageRoute(builder: (_) => PlayersListScreen());
+        return MaterialPageRoute(builder: (_) => PlayersScreen());
       case RoutePageName.charactersListPage:
         return MaterialPageRoute(builder: (_) => CharactersListScreen());
       default:

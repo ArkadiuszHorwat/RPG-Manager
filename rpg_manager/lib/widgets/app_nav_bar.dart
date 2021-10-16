@@ -19,7 +19,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
         title ?? '',
         style: GoogleFonts.rubik(
           textStyle: TextStyle(
-            fontSize: 28,
+            fontSize: 22,
             fontWeight: FontWeight.bold,
             color: Color.fromARGB(255, 247, 241, 227),
           ),

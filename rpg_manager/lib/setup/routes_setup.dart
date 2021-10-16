@@ -6,7 +6,7 @@ import 'package:rpg_manager/app.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/authorization/register/register_screen.dart';
 import 'package:rpg_manager/features/calendar/calendar_screen.dart';
-import 'package:rpg_manager/features/campaigns/campaigns.dart';
+import 'package:rpg_manager/features/campaigns/campaigns_screen.dart';
 import 'package:rpg_manager/features/characters/characters_list.dart';
 import 'package:rpg_manager/features/home/home_screen.dart';
 import 'package:rpg_manager/features/main_menu/main_menu_screen.dart';
@@ -40,7 +40,12 @@ class RoutesSetup {
       case RoutePageName.calendarPage:
         return MaterialPageRoute(builder: (_) => CalendarScreen());
       case RoutePageName.campaignsPage:
-        return MaterialPageRoute(builder: (_) => CampaignsScreen());
+        return MaterialPageRoute(builder: (_) {
+          args as String;
+          return CampaignsScreen(
+            sessionType: args,
+          );
+        });
       case RoutePageName.playersListPage:
         return MaterialPageRoute(builder: (_) => PlayersListScreen());
       case RoutePageName.charactersListPage:

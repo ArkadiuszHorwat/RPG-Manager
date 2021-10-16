@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/characters/widgets/characters_list.dart';
 
 final testCharactersData = [
-  'Tawroh',
+  'Tawroh Huiwart',
   'Kaio Sakalena',
   'Grunfeld',
   'Almerit',
@@ -25,9 +26,7 @@ class _CharactersScreenState extends State<CharactersScreen> {
       children: [
         _addCharacter(),
         Expanded(
-          child: SingleChildScrollView(
-            child: CharacterList(data: testCharactersData),
-          ),
+          child: CharacterList(data: testCharactersData),
         ),
       ],
     );
@@ -47,7 +46,7 @@ class _CharactersScreenState extends State<CharactersScreen> {
               Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Text(
-                  'Dodaj postać',
+                  AppLocal.charactersAddButton,
                   style: GoogleFonts.rubik(
                     textStyle: TextStyle(
                       fontWeight: FontWeight.bold,

@@ -33,4 +33,10 @@ class AppLocal {
   static const homeExitTitle = 'Napewno chcesz się wylogować?';
   static const homeGameMasterTitle = 'PANEL MISTRZA GRY';
   static const homePlayerTitle = 'PANEL GRACZA';
+
+  static const campaignsAddButton = 'Dodaj kampanie';
+
+  static const charactersAddButton = 'Dodaj postać';
+
+  static const playersAddButton = 'Dodaj gracza';
 }

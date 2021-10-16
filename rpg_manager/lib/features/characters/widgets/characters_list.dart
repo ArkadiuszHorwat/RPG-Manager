@@ -16,7 +16,12 @@ class CharacterList extends StatelessWidget {
       generalCharacterList.add(CharacterListItem(characterName: player));
     }
 
-    return Column(
+    return GridView.count(
+      crossAxisCount: 2,
+      padding: EdgeInsets.all(10),
+      mainAxisSpacing: 5,
+      crossAxisSpacing: 5,
+      childAspectRatio: 0.8,
       children: generalCharacterList,
     );
   }

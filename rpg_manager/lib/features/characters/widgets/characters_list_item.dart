@@ -17,10 +17,7 @@ class CharacterListItem extends StatelessWidget {
         behavior: HitTestBehavior.translucent,
         onTap: () {},
         child: Container(
-          margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
-          alignment: AlignmentDirectional.centerStart,
-          height: 50,
-          width: double.infinity,
+          alignment: AlignmentDirectional.bottomCenter,
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -29,40 +26,38 @@ class CharacterListItem extends StatelessWidget {
                 spreadRadius: 1,
               ),
             ],
-            borderRadius: BorderRadiusDirectional.only(
-              topStart: Radius.circular(10),
-              bottomStart: Radius.circular(10),
-            ),
+            borderRadius: BorderRadiusDirectional.all(Radius.circular(20)),
             image: new DecorationImage(
               fit: BoxFit.cover,
               colorFilter: new ColorFilter.mode(
-                  Colors.black.withOpacity(0.3), BlendMode.dstATop),
+                  Colors.black.withOpacity(0.6), BlendMode.dstATop),
               image: new AssetImage(
-                'lib/app_assets/images/gracz-img.jpg',
+                'lib/app_assets/images/character-img.jpg',
               ),
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  characterName,
-                  textAlign: TextAlign.start,
-                  style: GoogleFonts.rubik(
-                    textStyle: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 247, 241, 227),
-                    ),
-                  ),
-                ),
-                Icon(
-                  Icons.arrow_forward_ios_outlined,
+          child: Container(
+            width: double.infinity,
+            height: 50,
+            alignment: AlignmentDirectional.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadiusDirectional.only(
+                bottomStart: Radius.circular(20),
+                bottomEnd: Radius.circular(20),
+              ),
+              color: Color.fromARGB(255, 168, 128, 92).withOpacity(0.8),
+            ),
+            child: Text(
+              characterName,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.rubik(
+                textStyle: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                   color: Color.fromARGB(255, 247, 241, 227),
                 ),
-              ],
+              ),
             ),
           ),
         ),

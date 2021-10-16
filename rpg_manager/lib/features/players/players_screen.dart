@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/players/widgets/players_list.dart';
 
 final testPlayersData = [
@@ -56,7 +57,7 @@ class _PlayersScreenState extends State<PlayersScreen> {
               Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Text(
-                  'Dodaj gracza',
+                  AppLocal.playersAddButton,
                   style: GoogleFonts.rubik(
                     textStyle: TextStyle(
                       fontWeight: FontWeight.bold,

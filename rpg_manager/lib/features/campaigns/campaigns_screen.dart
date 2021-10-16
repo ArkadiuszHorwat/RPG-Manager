@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/campaigns/widgets/campaigns_list.dart';
 
 final testCampaignsList = [
@@ -52,7 +53,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
               Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Text(
-                  'Dodaj kampanie',
+                  AppLocal.campaignsAddButton,
                   style: GoogleFonts.rubik(
                     textStyle: TextStyle(
                       fontWeight: FontWeight.bold,

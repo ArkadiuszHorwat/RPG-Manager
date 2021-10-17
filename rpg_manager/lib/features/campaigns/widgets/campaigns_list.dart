@@ -13,7 +13,9 @@ class CampaignsList extends StatelessWidget {
     final generalCampaignsList = <Widget>[];
 
     for (String campaign in data) {
-      generalCampaignsList.add(CampaignsCardItem(title: campaign));
+      generalCampaignsList.add(CampaignsCardItem(
+        title: campaign,
+      ));
     }
 
     return Column(

@@ -50,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                 title: "${data['name']}",
                 icon: IconButton(
                     icon: Icon(
-                      Icons.door_back_outlined,
+                      Icons.door_back_door_outlined,
                     ),
                     onPressed: () {
                       _controller.exitLogOutAlert(context);

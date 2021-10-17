@@ -30,11 +30,11 @@ class CampaignsCardItem extends StatelessWidget {
             ),
           ],
           borderRadius: BorderRadiusDirectional.all(Radius.circular(30)),
-          image: new DecorationImage(
+          image: DecorationImage(
             fit: BoxFit.cover,
             colorFilter: new ColorFilter.mode(
                 Colors.black.withOpacity(0.3), BlendMode.dstATop),
-            image: new AssetImage(
+            image: AssetImage(
               'lib/app_assets/images/gracz-img.jpg',
             ),
           ),

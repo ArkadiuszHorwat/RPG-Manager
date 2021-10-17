@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/features/firebase/config.dart';
 
 class FirebaseAuthentication {
@@ -78,7 +79,7 @@ void _showError({required String text}) {
     gravity: ToastGravity.BOTTOM,
     timeInSecForIosWeb: 1,
     backgroundColor: Colors.red,
-    textColor: Color.fromARGB(255, 247, 241, 227),
+    textColor: AppColors.appLight,
     fontSize: 16.0,
   );
 }
@@ -90,7 +91,7 @@ void _showInfo({required String text}) {
     gravity: ToastGravity.BOTTOM,
     timeInSecForIosWeb: 1,
     backgroundColor: Colors.greenAccent,
-    textColor: Color.fromARGB(255, 247, 241, 227),
+    textColor: AppColors.appLight,
     fontSize: 16.0,
   );
 }

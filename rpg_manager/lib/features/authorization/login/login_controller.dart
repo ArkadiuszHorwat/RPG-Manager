@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/firebase/authentication.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +32,7 @@ class LoginScreenController {
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
       backgroundColor: Colors.red,
-      textColor: Color.fromARGB(255, 247, 241, 227),
+      textColor: AppColors.appLight,
       fontSize: 16.0,
     );
   }
@@ -41,7 +42,7 @@ class LoginScreenController {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            backgroundColor: Color.fromARGB(255, 247, 241, 227),
+            backgroundColor: AppColors.appLight,
             title: Text(AppLocal.loginExitTitle),
             actions: [
               TextButton(

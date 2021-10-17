@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rpg_manager/app_assets/colors/colors.dart';
 
 class CharacterListItem extends StatelessWidget {
   CharacterListItem({
@@ -45,7 +46,7 @@ class CharacterListItem extends StatelessWidget {
                 bottomStart: Radius.circular(20),
                 bottomEnd: Radius.circular(20),
               ),
-              color: Color.fromARGB(255, 168, 128, 92).withOpacity(0.8),
+              color: AppColors.appDark.withOpacity(0.8),
             ),
             child: Text(
               characterName,
@@ -55,7 +56,7 @@ class CharacterListItem extends StatelessWidget {
                 textStyle: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 247, 241, 227),
+                  color: AppColors.appLight,
                 ),
               ),
             ),

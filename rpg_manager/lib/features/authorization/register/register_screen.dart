@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/authorization/register/register_controller.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
@@ -52,7 +53,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       'lib/app_assets/images/logo.png',
                       width: 100,
                       height: 100,
-                      color: Color.fromARGB(255, 247, 241, 227),
+                      color: AppColors.appLight,
                     ),
                   ),
                   SizedBox(
@@ -107,7 +108,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 247, 241, 227),
+        color: AppColors.appLight,
         borderRadius: BorderRadius.circular(15.0),
         boxShadow: [
           BoxShadow(
@@ -167,7 +168,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 247, 241, 227),
+        color: AppColors.appLight,
         borderRadius: BorderRadius.circular(15.0),
         boxShadow: [
           BoxShadow(
@@ -233,7 +234,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 247, 241, 227),
+        color: AppColors.appLight,
         borderRadius: BorderRadius.circular(15.0),
         boxShadow: [
           BoxShadow(
@@ -293,7 +294,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 247, 241, 227),
+        color: AppColors.appLight,
         borderRadius: BorderRadius.circular(15.0),
         boxShadow: [
           BoxShadow(
@@ -376,7 +377,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           AppLocal.registerSignUpButtonText,
           style: GoogleFonts.rubik(
             textStyle: TextStyle(
-              color: Color.fromARGB(255, 247, 241, 227),
+              color: AppColors.appLight,
               letterSpacing: 1.5,
               fontSize: 22.0,
               fontWeight: FontWeight.bold,
@@ -392,7 +393,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       width: double.infinity,
       decoration: BoxDecoration(
         border: Border.all(
-          color: Color.fromARGB(255, 247, 241, 227),
+          color: AppColors.appLight,
           width: 2,
         ),
         borderRadius: BorderRadius.circular(30.0),
@@ -415,7 +416,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           AppLocal.registerSignInButtonText,
           style: GoogleFonts.rubik(
             textStyle: TextStyle(
-              color: Color.fromARGB(255, 247, 241, 227),
+              color: AppColors.appLight,
               letterSpacing: 1.5,
               fontSize: 22.0,
               fontWeight: FontWeight.bold,

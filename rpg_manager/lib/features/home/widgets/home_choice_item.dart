@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rpg_manager/app_assets/colors/colors.dart';
 
 class HomeChoiceItem extends StatelessWidget {
   const HomeChoiceItem({
@@ -48,7 +49,7 @@ class HomeChoiceItem extends StatelessWidget {
               textStyle: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 247, 241, 227),
+                color: AppColors.appLight,
               ),
             ),
           ),

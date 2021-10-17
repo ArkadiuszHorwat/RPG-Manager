@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rpg_manager/app_assets/colors/colors.dart';
 
 class CampaignsCardItem extends StatelessWidget {
   const CampaignsCardItem({
@@ -45,7 +46,7 @@ class CampaignsCardItem extends StatelessWidget {
             textStyle: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 247, 241, 227),
+              color: AppColors.appLight,
             ),
           ),
         ),

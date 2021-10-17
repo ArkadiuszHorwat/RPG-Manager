@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/features/firebase/config.dart';
 import 'package:rpg_manager/features/home/home_controller.dart';
 import 'package:rpg_manager/features/home/widgets/home_choice.dart';
@@ -64,8 +65,8 @@ class HomeScreen extends StatelessWidget {
 
           return Center(
             child: CircularProgressIndicator(
-              backgroundColor: Color.fromARGB(255, 247, 241, 227),
-              color: Color.fromARGB(255, 168, 128, 92),
+              backgroundColor: AppColors.appLight,
+              color: AppColors.appDark,
               value: 0.5,
               strokeWidth: 4.0,
             ),

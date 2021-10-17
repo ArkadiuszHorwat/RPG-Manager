@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/calendar/calendar_screen.dart';
 import 'package:rpg_manager/features/campaigns/campaigns_screen.dart';
@@ -52,8 +53,8 @@ class _MainMenuState extends State<MainMenu> {
               bottomNavigationBar: BottomNavigationBar(
                 backgroundColor: Colors.transparent,
                 type: BottomNavigationBarType.fixed,
-                fixedColor: Color.fromARGB(255, 247, 241, 227),
-                unselectedItemColor: Color.fromARGB(255, 168, 128, 92),
+                fixedColor: AppColors.appLight,
+                unselectedItemColor: AppColors.appDark,
                 elevation: 0.1,
                 unselectedFontSize: 14,
                 selectedFontSize: 16,

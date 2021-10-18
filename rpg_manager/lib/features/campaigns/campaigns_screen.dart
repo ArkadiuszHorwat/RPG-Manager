@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,6 @@ import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/campaigns/campaigns_controller.dart';
 import 'package:rpg_manager/features/campaigns/widgets/campaigns_list.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 
 final testCampaignsList = [
   'Zapomniana kopalnia Phandelvera',
@@ -33,7 +32,8 @@ class CampaignsScreen extends StatefulWidget {
 
 class _CampaignsScreenState extends State<CampaignsScreen> {
   final _controller = CampaignsScreenController();
-  File? image;
+  int _selectedValue = 1;
+  File? _imageFile;
 
   @override
   Widget build(BuildContext context) {
@@ -92,26 +92,17 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
     showModalBottomSheet(
         context: context,
         isDismissible: false,
+        elevation: 10,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            top: Radius.circular(25.0),
+            top: Radius.circular(30.0),
           ),
         ),
         isScrollControlled: true,
-        backgroundColor: AppColors.appLight,
+        backgroundColor: AppColors.appLight.withOpacity(0.9),
         builder: (context) {
-          int _selectedValue = 1;
-
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setModalState) {
-            // Future<File> saveImagePermanently(String imagePath) async {
-            //   final directiory = await getApplicationDocumentsDirectory();
-            //   final name = basename(imagePath);
-            //   final image = File('${directiory.path}/$name');
-
-            //   return File(imagePath).copy(image.path);
-            // }
-
             Future<dynamic> pickImage() async {
               try {
                 final image =
@@ -120,7 +111,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
 
                 final imageFromGallery = await File(image.path);
                 setModalState(() {
-                  this.image = imageFromGallery;
+                  _imageFile = imageFromGallery;
                 });
               } on Exception catch (e) {
                 print('Coś poszło nie tak: $e');
@@ -139,6 +130,10 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                       TextButton(
                         onPressed: () {
                           Navigator.pop(context);
+                          setState(() {
+                            _selectedValue = 1;
+                            _imageFile = null;
+                          });
                         },
                         child: Text(
                           'ZATWIERDŹ',
@@ -205,43 +200,60 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                       ),
                     ),
                   ),
+                  Text(
+                    'Dodaj obraz:',
+                    style: GoogleFonts.rubik(
+                      textStyle: TextStyle(
+                        color: AppColors.appDark,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Dodaj obraz:',
-                        style: GoogleFonts.rubik(
-                          textStyle: TextStyle(
-                            color: AppColors.appDark,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
+                      TextButton.icon(
+                        onPressed: () => pickImage(),
+                        icon: Icon(
+                          Icons.image_outlined,
+                          color: AppColors.appDark,
+                        ),
+                        label: Text(
+                          'Dodaj obraz',
+                          style: GoogleFonts.rubik(
+                            textStyle: TextStyle(
+                              color: AppColors.appDark,
+                              fontSize: 16.0,
+                            ),
                           ),
                         ),
                       ),
-                      image != null
-                          ? Image.file(
-                              image!,
-                              width: 50,
+                      _imageFile != null
+                          ? Container(
+                              alignment: AlignmentDirectional.center,
+                              margin: EdgeInsets.all(10),
                               height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black,
+                                    blurRadius: 3,
+                                    spreadRadius: 1,
+                                  ),
+                                ],
+                                borderRadius: BorderRadiusDirectional.all(
+                                    Radius.circular(5)),
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: FileImage(
+                                      _imageFile!,
+                                    )),
+                              ),
                             )
                           : SizedBox.shrink(),
                     ],
-                  ),
-                  TextButton.icon(
-                    onPressed: () => pickImage(),
-                    icon: Icon(
-                      Icons.image_outlined,
-                      color: AppColors.appDark,
-                    ),
-                    label: Text(
-                      'Dodaj obraz',
-                      style: GoogleFonts.rubik(
-                        textStyle: TextStyle(
-                          color: AppColors.appDark,
-                          fontSize: 16.0,
-                        ),
-                      ),
-                    ),
                   ),
                   Text(
                     'Nazwa kampanii:',

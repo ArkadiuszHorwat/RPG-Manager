@@ -54,12 +54,20 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                   child: Column(
                     children:
                         snapshot.data!.docs.map((DocumentSnapshot document) {
-                      Map<String, dynamic> data =
-                          document.data()! as Map<String, dynamic>;
-                      return CampaignsCardItem(
-                        title: data['title'],
-                        image: data['image'],
-                      );
+                      Map<dynamic, dynamic> data =
+                          document.data()! as Map<dynamic, dynamic>;
+
+                      for (String id in data['usersId']) {
+                        if (id == widget.userId) {
+                          return CampaignsCardItem(
+                            title: data['title'],
+                            image: data['image'],
+                          );
+                        } else
+                          return SizedBox.shrink();
+                      }
+
+                      return SizedBox.shrink();
                     }).toList(),
                   ),
                 ),

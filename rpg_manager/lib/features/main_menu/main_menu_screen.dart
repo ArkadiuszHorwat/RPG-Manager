@@ -40,6 +40,7 @@ class _MainMenuState extends State<MainMenu> {
               CalendarScreen(),
               CampaignsScreen(
                 sessionType: data['userSessionType'],
+                userId: widget.userData.id,
               ),
               data['userSessionType'] == 'player'
                   ? CharactersScreen()

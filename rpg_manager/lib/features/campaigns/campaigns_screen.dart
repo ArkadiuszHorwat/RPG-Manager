@@ -1,56 +1,72 @@
 import 'dart:io';
-import 'dart:typed_data';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
-import 'package:rpg_manager/features/campaigns/campaigns_controller.dart';
-import 'package:rpg_manager/features/campaigns/widgets/campaigns_list.dart';
-
-final testCampaignsList = [
-  'Zapomniana kopalnia Phandelvera',
-  'Język smoka',
-  'Wrota Baldura',
-  'Artefakt demona',
-  'Cienie Amn',
-  'Zaginiony kupiec',
-];
+import 'package:rpg_manager/features/campaigns/widgets/camaigns_card_item.dart';
 
 class CampaignsScreen extends StatefulWidget {
   CampaignsScreen({
     required this.sessionType,
+    required this.userId,
   });
 
   final String sessionType;
+  final String userId;
 
   @override
   _CampaignsScreenState createState() => _CampaignsScreenState();
 }
 
 class _CampaignsScreenState extends State<CampaignsScreen> {
-  final _controller = CampaignsScreenController();
   int _selectedValue = 1;
   File? _imageFile;
+  final _textController = TextEditingController();
+
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        widget.sessionType == 'player'
-            ? SizedBox.shrink()
-            : _addCampaign(context),
-        Expanded(
-          child: SingleChildScrollView(
-            child: CampaignsList(
-              data: testCampaignsList,
-            ),
-          ),
-        ),
-      ],
-    );
+    final campaigns =
+        FirebaseFirestore.instance.collection('campaigns').snapshots();
+
+    return StreamBuilder<QuerySnapshot>(
+        stream: campaigns,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('Something went wrong');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Text("Loading");
+          }
+
+          return Column(
+            children: [
+              widget.sessionType == 'player'
+                  ? SizedBox.shrink()
+                  : _addCampaign(context),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children:
+                        snapshot.data!.docs.map((DocumentSnapshot document) {
+                      Map<String, dynamic> data =
+                          document.data()! as Map<String, dynamic>;
+                      return CampaignsCardItem(
+                        title: data['title'],
+                        image: data['image'],
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   Widget _addCampaign(BuildContext context) {
@@ -99,7 +115,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
           ),
         ),
         isScrollControlled: true,
-        backgroundColor: AppColors.appLight.withOpacity(0.9),
+        backgroundColor: AppColors.appLight,
         builder: (context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setModalState) {
@@ -118,167 +134,234 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
               }
             }
 
-            return Padding(
-              padding: const EdgeInsets.all(20),
+            CollectionReference campaigns =
+                FirebaseFirestore.instance.collection('campaigns');
+
+            Future<void> addCampaigns({
+              required String title,
+              required String system,
+              required String? image,
+            }) {
+              return campaigns
+                  .add({
+                    'title': title,
+                    'system': system,
+                    'usersId': [widget.userId],
+                    'image': image,
+                  })
+                  .then((value) => print("Campaing Added"))
+                  .catchError(
+                      (error) => print("Failed to add campaign: $error"));
+            }
+
+            return Form(
+              key: formKey,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          setState(() {
-                            _selectedValue = 1;
-                            _imageFile = null;
-                          });
-                        },
-                        child: Text(
-                          'ZATWIERDŹ',
-                          style: GoogleFonts.rubik(
-                            textStyle: TextStyle(
-                              color: AppColors.appDark,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    'Wybierz system:',
-                    style: GoogleFonts.rubik(
-                      textStyle: TextStyle(
+                  Container(
+                    padding: EdgeInsets.zero,
+                    margin: EdgeInsets.zero,
+                    alignment: AlignmentDirectional.topCenter,
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(
+                        Icons.keyboard_arrow_down_outlined,
                         color: AppColors.appDark,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  RadioListTile(
-                    contentPadding: EdgeInsets.all(0),
-                    activeColor: AppColors.appDark,
-                    value: 1,
-                    groupValue: _selectedValue,
-                    onChanged: (_) {
-                      setModalState(() {
-                        _selectedValue = 1;
-                      });
-                    },
-                    controlAffinity: ListTileControlAffinity.leading,
-                    title: Text(
-                      'Warhammer 2ed.',
-                      style: GoogleFonts.rubik(
-                        textStyle: TextStyle(
-                          color: AppColors.appDark,
-                          fontSize: 16.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                  RadioListTile(
-                    contentPadding: EdgeInsets.all(0),
-                    activeColor: AppColors.appDark,
-                    value: 2,
-                    groupValue: _selectedValue,
-                    onChanged: (_) {
-                      setModalState(() {
-                        _selectedValue = 2;
-                      });
-                    },
-                    controlAffinity: ListTileControlAffinity.leading,
-                    title: Text(
-                      'Dungeons and Dragons 5ed.',
-                      style: GoogleFonts.rubik(
-                        textStyle: TextStyle(
-                          color: AppColors.appDark,
-                          fontSize: 16.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Text(
-                    'Dodaj obraz:',
-                    style: GoogleFonts.rubik(
-                      textStyle: TextStyle(
-                        color: AppColors.appDark,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton.icon(
-                        onPressed: () => pickImage(),
-                        icon: Icon(
-                          Icons.image_outlined,
-                          color: AppColors.appDark,
-                        ),
-                        label: Text(
-                          'Dodaj obraz',
-                          style: GoogleFonts.rubik(
-                            textStyle: TextStyle(
-                              color: AppColors.appDark,
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        ),
-                      ),
-                      _imageFile != null
-                          ? Container(
-                              alignment: AlignmentDirectional.center,
-                              margin: EdgeInsets.all(10),
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black,
-                                    blurRadius: 3,
-                                    spreadRadius: 1,
-                                  ),
-                                ],
-                                borderRadius: BorderRadiusDirectional.all(
-                                    Radius.circular(5)),
-                                image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: FileImage(
-                                      _imageFile!,
-                                    )),
-                              ),
-                            )
-                          : SizedBox.shrink(),
-                    ],
-                  ),
-                  Text(
-                    'Nazwa kampanii:',
-                    style: GoogleFonts.rubik(
-                      textStyle: TextStyle(
-                        color: AppColors.appDark,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
+                        size: 44,
                       ),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'nazwa kampanii...',
-                        hintStyle: GoogleFonts.rubik(
-                          textStyle: TextStyle(
-                            color: Colors.black45,
-                            fontSize: 14,
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  print('OK');
+                                  print(_imageFile);
+                                  addCampaigns(
+                                    title: _textController.text,
+                                    system: _selectedValue == 1
+                                        ? 'Warhammer 2ed.'
+                                        : 'Dungeons and Dragons 5ed.',
+                                    image: _imageFile != null
+                                        ? _imageFile!.path
+                                        : null,
+                                  );
+                                  Navigator.pop(context);
+                                  setState(() {
+                                    _selectedValue = 1;
+                                    _imageFile = null;
+                                    _textController.text = '';
+                                  });
+                                } else {
+                                  print('błąd');
+                                }
+                              },
+                              child: Text(
+                                'ZATWIERDŹ',
+                                style: GoogleFonts.rubik(
+                                  textStyle: TextStyle(
+                                    color: AppColors.appDark,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          'Wybierz system:',
+                          style: GoogleFonts.rubik(
+                            textStyle: TextStyle(
+                              color: AppColors.appDark,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                      autofocus: false,
+                        RadioListTile(
+                          contentPadding: EdgeInsets.all(0),
+                          activeColor: AppColors.appDark,
+                          value: 1,
+                          groupValue: _selectedValue,
+                          onChanged: (_) {
+                            setModalState(() {
+                              _selectedValue = 1;
+                            });
+                          },
+                          controlAffinity: ListTileControlAffinity.leading,
+                          title: Text(
+                            'Warhammer 2ed.',
+                            style: GoogleFonts.rubik(
+                              textStyle: TextStyle(
+                                color: AppColors.appDark,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                        RadioListTile(
+                          contentPadding: EdgeInsets.all(0),
+                          activeColor: AppColors.appDark,
+                          value: 2,
+                          groupValue: _selectedValue,
+                          onChanged: (_) {
+                            setModalState(() {
+                              _selectedValue = 2;
+                            });
+                          },
+                          controlAffinity: ListTileControlAffinity.leading,
+                          title: Text(
+                            'Dungeons and Dragons 5ed.',
+                            style: GoogleFonts.rubik(
+                              textStyle: TextStyle(
+                                color: AppColors.appDark,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          'Dodaj obraz:',
+                          style: GoogleFonts.rubik(
+                            textStyle: TextStyle(
+                              color: AppColors.appDark,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton.icon(
+                              onPressed: () => pickImage(),
+                              icon: Icon(
+                                Icons.image_outlined,
+                                color: AppColors.appDark,
+                              ),
+                              label: Text(
+                                'Dodaj obraz',
+                                style: GoogleFonts.rubik(
+                                  textStyle: TextStyle(
+                                    color: AppColors.appDark,
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            _imageFile != null
+                                ? Container(
+                                    alignment: AlignmentDirectional.center,
+                                    margin: EdgeInsets.all(10),
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black,
+                                          blurRadius: 3,
+                                          spreadRadius: 1,
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadiusDirectional.all(
+                                          Radius.circular(5)),
+                                      image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: FileImage(
+                                            File(_imageFile!.path),
+                                          )),
+                                    ),
+                                  )
+                                : SizedBox.shrink(),
+                          ],
+                        ),
+                        Text(
+                          'Nazwa kampanii:',
+                          style: GoogleFonts.rubik(
+                            textStyle: TextStyle(
+                              color: AppColors.appDark,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                          child: TextFormField(
+                            controller: _textController,
+                            decoration: InputDecoration(
+                              hintText: 'nazwa kampanii...',
+                              hintStyle: GoogleFonts.rubik(
+                                textStyle: TextStyle(
+                                  color: Colors.black45,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                            autofocus: false,
+                            validator: (text) {
+                              if (text!.isEmpty) {
+                                print('niefajen');
+                                return '';
+                              } else {
+                                print('fajen');
+                              }
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

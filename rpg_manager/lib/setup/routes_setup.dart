@@ -45,6 +45,7 @@ class RoutesSetup {
           args as String;
           return CampaignsScreen(
             sessionType: args,
+            userId: args,
           );
         });
       case RoutePageName.playersListPage:

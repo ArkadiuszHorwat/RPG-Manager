@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -39,11 +40,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
             titleTextStyle: _calendarTitleTextStyle,
             rightChevronIcon: Icon(
               Icons.arrow_forward_ios_outlined,
-              color: Color.fromARGB(255, 247, 241, 227),
+              color: AppColors.appLight,
             ),
             leftChevronIcon: Icon(
               Icons.arrow_back_ios_outlined,
-              color: Color.fromARGB(255, 247, 241, 227),
+              color: AppColors.appLight,
             ),
             formatButtonVisible: false,
           ),
@@ -57,18 +58,18 @@ class _CalendarScreenState extends State<CalendarScreen> {
             selectedTextStyle: _calendarLightTextStyle,
             todayTextStyle: _calendarTodayTextStyle,
             selectedDecoration: BoxDecoration(
-              color: Color.fromARGB(255, 168, 128, 92),
+              color: AppColors.appDark,
               shape: BoxShape.circle,
             ),
             todayDecoration: BoxDecoration(
-              color: Color.fromARGB(255, 247, 241, 227),
+              color: AppColors.appLight,
             ),
             rowDecoration: BoxDecoration(
-              color: Color.fromARGB(255, 247, 241, 227),
+              color: AppColors.appLight,
               borderRadius: BorderRadiusDirectional.all(Radius.circular(5.0)),
               boxShadow: [
                 BoxShadow(
-                  color: Color.fromARGB(255, 168, 128, 92),
+                  color: AppColors.appDark,
                   blurRadius: 1.0,
                   spreadRadius: 1,
                 ),
@@ -84,21 +85,21 @@ class _CalendarScreenState extends State<CalendarScreen> {
     textStyle: TextStyle(
       fontSize: 22,
       fontWeight: FontWeight.bold,
-      color: Color.fromARGB(255, 247, 241, 227),
+      color: AppColors.appLight,
     ),
   );
 
   final _calendarLightTextStyle = GoogleFonts.rubik(
     textStyle: TextStyle(
       fontSize: 16,
-      color: Color.fromARGB(255, 247, 241, 227),
+      color: AppColors.appLight,
     ),
   );
 
   final _calendarDarkTextStyle = GoogleFonts.rubik(
     textStyle: TextStyle(
       fontSize: 16,
-      color: Color.fromARGB(255, 168, 128, 92),
+      color: AppColors.appDark,
     ),
   );
 
@@ -106,7 +107,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     textStyle: TextStyle(
       fontSize: 18,
       fontWeight: FontWeight.bold,
-      color: Color.fromARGB(255, 168, 128, 92),
+      color: AppColors.appDark,
     ),
   );
 }

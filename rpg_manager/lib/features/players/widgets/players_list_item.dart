@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rpg_manager/app_assets/colors/colors.dart';
 
 class PlayersListItem extends StatelessWidget {
   PlayersListItem({
@@ -54,13 +55,13 @@ class PlayersListItem extends StatelessWidget {
                     textStyle: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 247, 241, 227),
+                      color: AppColors.appLight,
                     ),
                   ),
                 ),
                 Icon(
                   Icons.arrow_forward_ios_outlined,
-                  color: Color.fromARGB(255, 247, 241, 227),
+                  color: AppColors.appLight,
                 ),
               ],
             ),

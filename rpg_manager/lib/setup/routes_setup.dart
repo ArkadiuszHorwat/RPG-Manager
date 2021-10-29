@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app.dart';
+import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/authorization/register/register_screen.dart';
 import 'package:rpg_manager/features/calendar/calendar_screen.dart';
@@ -44,6 +45,7 @@ class RoutesSetup {
           args as String;
           return CampaignsScreen(
             sessionType: args,
+            userId: args,
           );
         });
       case RoutePageName.playersListPage:
@@ -68,7 +70,7 @@ class RoutesSetup {
               style: GoogleFonts.rubik(
                 textStyle: TextStyle(
                   fontSize: 28,
-                  color: Color.fromARGB(255, 247, 241, 227),
+                  color: AppColors.appLight,
                 ),
               ),
             ),

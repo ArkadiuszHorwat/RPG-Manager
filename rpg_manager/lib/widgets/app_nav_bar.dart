@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rpg_manager/app_assets/colors/colors.dart';
 
 class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   AppNavBar({
@@ -21,14 +22,14 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
           textStyle: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
-            color: Color.fromARGB(255, 247, 241, 227),
+            color: AppColors.appLight,
           ),
         ),
       ),
       centerTitle: true,
       leading: icon,
       iconTheme: IconThemeData(
-        color: Color.fromARGB(255, 247, 241, 227),
+        color: AppColors.appLight,
       ),
     );
   }

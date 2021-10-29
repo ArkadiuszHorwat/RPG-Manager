@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/authorization/login/login_controller.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
@@ -54,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       'lib/app_assets/images/logo.png',
                       width: 180,
                       height: 180,
-                      color: Color.fromARGB(255, 247, 241, 227),
+                      color: AppColors.appLight,
                     ),
                   ),
                   SizedBox(
@@ -101,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 247, 241, 227),
+        color: AppColors.appLight,
         borderRadius: BorderRadius.circular(15.0),
         boxShadow: [
           BoxShadow(
@@ -167,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 247, 241, 227),
+        color: AppColors.appLight,
         borderRadius: BorderRadius.circular(15.0),
         boxShadow: [
           BoxShadow(
@@ -250,7 +251,7 @@ class _LoginScreenState extends State<LoginScreen> {
           AppLocal.loginSignInButtonText,
           style: GoogleFonts.rubik(
             textStyle: TextStyle(
-              color: Color.fromARGB(255, 247, 241, 227),
+              color: AppColors.appLight,
               letterSpacing: 1.5,
               fontSize: 22.0,
               fontWeight: FontWeight.bold,
@@ -266,7 +267,7 @@ class _LoginScreenState extends State<LoginScreen> {
       width: double.infinity,
       decoration: BoxDecoration(
         border: Border.all(
-          color: Color.fromARGB(255, 247, 241, 227),
+          color: AppColors.appLight,
           width: 2,
         ),
         borderRadius: BorderRadius.circular(30.0),
@@ -289,7 +290,7 @@ class _LoginScreenState extends State<LoginScreen> {
           AppLocal.loginSignUpButtonText,
           style: GoogleFonts.rubik(
             textStyle: TextStyle(
-              color: Color.fromARGB(255, 247, 241, 227),
+              color: AppColors.appLight,
               letterSpacing: 1.5,
               fontSize: 22.0,
               fontWeight: FontWeight.bold,

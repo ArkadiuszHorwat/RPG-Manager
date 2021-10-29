@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/characters/widgets/characters_list.dart';
 
@@ -51,14 +52,14 @@ class _CharactersScreenState extends State<CharactersScreen> {
                     textStyle: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
-                      color: Color.fromARGB(255, 247, 241, 227),
+                      color: AppColors.appLight,
                     ),
                   ),
                 ),
               ),
               Icon(
                 CupertinoIcons.plus_app_fill,
-                color: Color.fromARGB(255, 247, 241, 227),
+                color: AppColors.appLight,
               ),
             ],
           ),

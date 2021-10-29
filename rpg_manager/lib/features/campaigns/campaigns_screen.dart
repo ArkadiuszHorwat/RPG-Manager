@@ -59,10 +59,12 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
 
                       for (String id in data['usersId']) {
                         if (id == widget.userId) {
-                          return CampaignsCardItem(
-                            title: data['title'],
-                            image: data['image'],
-                          );
+                          return data['sessionType'] == widget.sessionType
+                              ? CampaignsCardItem(
+                                  title: data['title'],
+                                  image: data['image'],
+                                )
+                              : SizedBox.shrink();
                         } else
                           return SizedBox.shrink();
                       }
@@ -149,6 +151,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
               required String title,
               required String system,
               required String? image,
+              required String sessionType,
             }) {
               return campaigns
                   .add({
@@ -156,6 +159,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                     'system': system,
                     'usersId': [widget.userId],
                     'image': image,
+                    'sessionType': sessionType
                   })
                   .then((value) => print("Campaing Added"))
                   .catchError(
@@ -203,6 +207,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                                     image: _imageFile != null
                                         ? _imageFile!.path
                                         : null,
+                                    sessionType: widget.sessionType,
                                   );
                                   Navigator.pop(context);
                                   setState(() {

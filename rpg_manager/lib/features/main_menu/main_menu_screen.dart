@@ -43,7 +43,9 @@ class _MainMenuState extends State<MainMenu> {
                 userId: widget.userData.id,
               ),
               data['userSessionType'] == 'player'
-                  ? CharactersScreen()
+                  ? CharactersScreen(
+                      userId: widget.userData.id,
+                    )
                   : PlayersScreen(),
             ];
 

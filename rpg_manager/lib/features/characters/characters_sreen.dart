@@ -92,11 +92,11 @@ class _CharactersScreenState extends State<CharactersScreen> {
         isScrollControlled: true,
         backgroundColor: AppColors.appLight,
         builder: (context) {
-          return _addCampaignBuilder();
+          return _addCharacterBuilder();
         });
   }
 
-  Widget _addCampaignBuilder() {
+  Widget _addCharacterBuilder() {
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setModalState) {
       Future<dynamic> pickImage() async {
@@ -147,8 +147,8 @@ class _CharactersScreenState extends State<CharactersScreen> {
                           if (formKey.currentState!.validate()) {
                             print('OK');
                             print(_imageFile);
-                            _controller.addCampaigns(
-                              title: _textController.text,
+                            _controller.addCharacter(
+                              name: _textController.text,
                               system: _selectedValue == 1
                                   ? 'Warhammer 2ed.'
                                   : 'Dungeons and Dragons 5ed.',
@@ -288,7 +288,7 @@ class _CharactersScreenState extends State<CharactersScreen> {
                     ],
                   ),
                   Text(
-                    'Nazwa kampanii:',
+                    'Nazwa postaci:',
                     style: GoogleFonts.rubik(
                       textStyle: TextStyle(
                         color: AppColors.appDark,
@@ -303,7 +303,7 @@ class _CharactersScreenState extends State<CharactersScreen> {
                     child: TextFormField(
                       controller: _textController,
                       decoration: InputDecoration(
-                        hintText: 'nazwa kampanii...',
+                        hintText: 'nazwa postaci...',
                         hintStyle: GoogleFonts.rubik(
                           textStyle: TextStyle(
                             color: Colors.black45,

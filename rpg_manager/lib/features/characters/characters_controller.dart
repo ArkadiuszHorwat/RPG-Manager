@@ -2,13 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CharactersScreenController {
   final campaignsSnapshot = FirebaseFirestore.instance
-      .collection('campaigns')
+      .collection('characters')
       .orderBy('createdAt', descending: true)
       .snapshots();
-  final campaigns = FirebaseFirestore.instance.collection('campaigns');
+  final campaigns = FirebaseFirestore.instance.collection('characters');
 
-  Future<void> addCampaigns({
-    required String title,
+  Future<void> addCharacter({
+    required String name,
     required String system,
     required String? image,
     required String userId,
@@ -16,13 +16,13 @@ class CharactersScreenController {
   }) {
     return campaigns
         .add({
-          'title': title,
+          'name': name,
           'system': system,
-          'usersId': [userId],
+          'userId': userId,
           'image': image,
           'createdAt': timestamp,
         })
-        .then((value) => print("Campaing Added"))
-        .catchError((error) => print("Failed to add campaign: $error"));
+        .then((value) => print("Character Added"))
+        .catchError((error) => print("Failed to add character: $error"));
   }
 }

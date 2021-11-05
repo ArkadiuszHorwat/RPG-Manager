@@ -51,7 +51,12 @@ class RoutesSetup {
       case RoutePageName.playersListPage:
         return MaterialPageRoute(builder: (_) => PlayersScreen());
       case RoutePageName.charactersListPage:
-        return MaterialPageRoute(builder: (_) => CharactersScreen());
+        return MaterialPageRoute(builder: (_) {
+          args as String;
+          return CharactersScreen(
+            userId: args,
+          );
+        });
       default:
         return _errorRoute();
     }

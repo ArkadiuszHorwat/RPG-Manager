@@ -7,6 +7,7 @@ import 'package:rpg_manager/app_assets/colors/colors.dart';
 
 class CharacterListItem extends StatelessWidget {
   CharacterListItem({
+    Key? key,
     required this.characterName,
     this.image,
   });

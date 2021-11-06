@@ -31,19 +31,19 @@ class CharacterListItem extends StatelessWidget {
             ),
           ],
           borderRadius: BorderRadiusDirectional.all(Radius.circular(20)),
-          image: image == null
+          image: image == null || !File(image!).existsSync()
               ? DecorationImage(
                   fit: BoxFit.cover,
                   colorFilter: new ColorFilter.mode(
-                      Colors.black.withOpacity(0.3), BlendMode.dstATop),
+                      Colors.black.withOpacity(0.6), BlendMode.dstATop),
                   image: AssetImage(
-                    'lib/app_assets/images/gracz-img.jpg',
+                    'lib/app_assets/images/character-img.jpg',
                   ),
                 )
               : DecorationImage(
                   fit: BoxFit.cover,
                   colorFilter: new ColorFilter.mode(
-                      Colors.black.withOpacity(0.3), BlendMode.dstATop),
+                      Colors.black.withOpacity(0.5), BlendMode.dstATop),
                   image: FileImage(File(image!)),
                 ),
         ),

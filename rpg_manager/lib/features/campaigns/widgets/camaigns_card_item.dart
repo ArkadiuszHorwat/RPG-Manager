@@ -34,13 +34,13 @@ class CampaignsCardItem extends StatelessWidget {
             ),
           ],
           borderRadius: BorderRadiusDirectional.all(Radius.circular(30)),
-          image: image == null
+          image: image == null || !File(image!).existsSync()
               ? DecorationImage(
                   fit: BoxFit.cover,
                   colorFilter: new ColorFilter.mode(
                       Colors.black.withOpacity(0.3), BlendMode.dstATop),
                   image: AssetImage(
-                    'lib/app_assets/images/gracz-img.jpg',
+                    'lib/app_assets/images/campaigns-img.jpg',
                   ),
                 )
               : DecorationImage(

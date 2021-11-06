@@ -1,17 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
 import 'package:rpg_manager/features/characters/models/character_model.dart';
+import 'package:rpg_manager/setup/routes_setup.dart';
 
 class CharactersScreenController {
-  final campaignsSnapshot = FirebaseFirestore.instance
+  final charactersSnapshot = FirebaseFirestore.instance
       .collection('characters')
       .orderBy('createdAt', descending: true)
       .snapshots();
-  final campaigns = FirebaseFirestore.instance.collection('characters');
+  final characters = FirebaseFirestore.instance.collection('characters');
 
   Future<void> addCharacter({
     required CharacterModel characterModel,
   }) {
-    return campaigns
+    return characters
         .add({
           'name': characterModel.name,
           'system': characterModel.system,
@@ -21,5 +23,12 @@ class CharactersScreenController {
         })
         .then((value) => print("Character Added"))
         .catchError((error) => print("Failed to add character: $error"));
+  }
+
+  void routeToCharacterDetails(BuildContext context, String characterId) {
+    Navigator.of(context).pushNamed(
+      RoutePageName.characterDetailsPage,
+      arguments: characterId,
+    );
   }
 }

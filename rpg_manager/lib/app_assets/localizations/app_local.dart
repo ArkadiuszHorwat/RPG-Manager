@@ -35,8 +35,20 @@ class AppLocal {
   static const homePlayerTitle = 'PANEL GRACZA';
 
   static const campaignsAddButton = 'Dodaj kampanie';
+  static const campaignsConfirmButton = 'ZATWIERDŹ';
+  static const campaignsChooseSystem = 'Wybierz system:';
+  static const campaignsAddImage = 'Dodaj obraz:';
+  static const campaignsAddImageInput = 'Dodaj obraz';
+  static const campaignsSetName = 'Nazwa kampanii:';
+  static const campaignsSetNameInput = 'Nazwa kampanii...';
 
   static const charactersAddButton = 'Dodaj postać';
+  static const charactersConfirmButton = 'ZATWIERDŹ';
+  static const charactersChooseSystem = 'Wybierz system:';
+  static const charactersAddImage = 'Dodaj obraz:';
+  static const charactersAddImageInput = 'Dodaj obraz';
+  static const charactersSetName = 'Nazwa postaci:';
+  static const charactersSetNameInput = 'Nazwa postaci...';
 
   static const playersAddButton = 'Dodaj gracza';
 }

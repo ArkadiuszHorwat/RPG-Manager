@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/characters/characters_controller.dart';
+import 'package:rpg_manager/features/characters/models/character_model.dart';
 import 'package:rpg_manager/features/characters/widgets/characters_list.dart';
 
 class CharactersScreen extends StatefulWidget {
@@ -147,7 +148,8 @@ class _CharactersScreenState extends State<CharactersScreen> {
                           if (formKey.currentState!.validate()) {
                             print('OK');
                             print(_imageFile);
-                            _controller.addCharacter(
+
+                            final character = CharacterModel(
                               name: _textController.text,
                               system: _selectedValue == 1
                                   ? 'Warhammer 2ed.'
@@ -157,6 +159,11 @@ class _CharactersScreenState extends State<CharactersScreen> {
                               userId: widget.userId,
                               timestamp: Timestamp.now(),
                             );
+
+                            _controller.addCharacter(
+                              characterModel: character,
+                            );
+
                             Navigator.pop(context);
                             setState(() {
                               _selectedValue = 1;
@@ -168,7 +175,7 @@ class _CharactersScreenState extends State<CharactersScreen> {
                           }
                         },
                         child: Text(
-                          'ZATWIERDŹ',
+                          AppLocal.charactersConfirmButton,
                           style: GoogleFonts.rubik(
                             textStyle: TextStyle(
                               color: AppColors.appDark,
@@ -181,7 +188,7 @@ class _CharactersScreenState extends State<CharactersScreen> {
                     ],
                   ),
                   Text(
-                    'Wybierz system:',
+                    AppLocal.charactersChooseSystem,
                     style: GoogleFonts.rubik(
                       textStyle: TextStyle(
                         color: AppColors.appDark,
@@ -233,7 +240,7 @@ class _CharactersScreenState extends State<CharactersScreen> {
                     ),
                   ),
                   Text(
-                    'Dodaj obraz:',
+                    AppLocal.charactersAddImage,
                     style: GoogleFonts.rubik(
                       textStyle: TextStyle(
                         color: AppColors.appDark,
@@ -252,7 +259,7 @@ class _CharactersScreenState extends State<CharactersScreen> {
                           color: AppColors.appDark,
                         ),
                         label: Text(
-                          'Dodaj obraz',
+                          AppLocal.charactersAddImageInput,
                           style: GoogleFonts.rubik(
                             textStyle: TextStyle(
                               color: AppColors.appDark,
@@ -288,7 +295,7 @@ class _CharactersScreenState extends State<CharactersScreen> {
                     ],
                   ),
                   Text(
-                    'Nazwa postaci:',
+                    AppLocal.charactersSetName,
                     style: GoogleFonts.rubik(
                       textStyle: TextStyle(
                         color: AppColors.appDark,
@@ -303,7 +310,7 @@ class _CharactersScreenState extends State<CharactersScreen> {
                     child: TextFormField(
                       controller: _textController,
                       decoration: InputDecoration(
-                        hintText: 'nazwa postaci...',
+                        hintText: AppLocal.charactersSetNameInput,
                         hintStyle: GoogleFonts.rubik(
                           textStyle: TextStyle(
                             color: Colors.black45,

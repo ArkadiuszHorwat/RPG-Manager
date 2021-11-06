@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/campaigns/campaigns_controller.dart';
+import 'package:rpg_manager/features/campaigns/models/campaign_model.dart';
 import 'package:rpg_manager/features/campaigns/widgets/camaigns_card_item.dart';
 
 class CampaignsScreen extends StatefulWidget {
@@ -181,7 +182,8 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                           if (formKey.currentState!.validate()) {
                             print('OK');
                             print(_imageFile);
-                            _controller.addCampaigns(
+
+                            final campaign = CampaignModel(
                               title: _textController.text,
                               system: _selectedValue == 1
                                   ? 'Warhammer 2ed.'
@@ -192,6 +194,11 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                               userId: widget.userId,
                               timestamp: Timestamp.now(),
                             );
+
+                            _controller.addCampaigns(
+                              campaignModel: campaign,
+                            );
+
                             Navigator.pop(context);
                             setState(() {
                               _selectedValue = 1;
@@ -203,7 +210,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                           }
                         },
                         child: Text(
-                          'ZATWIERDŹ',
+                          AppLocal.campaignsConfirmButton,
                           style: GoogleFonts.rubik(
                             textStyle: TextStyle(
                               color: AppColors.appDark,
@@ -216,7 +223,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                     ],
                   ),
                   Text(
-                    'Wybierz system:',
+                    AppLocal.campaignsChooseSystem,
                     style: GoogleFonts.rubik(
                       textStyle: TextStyle(
                         color: AppColors.appDark,
@@ -268,7 +275,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                     ),
                   ),
                   Text(
-                    'Dodaj obraz:',
+                    AppLocal.campaignsAddImage,
                     style: GoogleFonts.rubik(
                       textStyle: TextStyle(
                         color: AppColors.appDark,
@@ -287,7 +294,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                           color: AppColors.appDark,
                         ),
                         label: Text(
-                          'Dodaj obraz',
+                          AppLocal.campaignsAddImageInput,
                           style: GoogleFonts.rubik(
                             textStyle: TextStyle(
                               color: AppColors.appDark,
@@ -323,7 +330,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                     ],
                   ),
                   Text(
-                    'Nazwa kampanii:',
+                    AppLocal.campaignsSetName,
                     style: GoogleFonts.rubik(
                       textStyle: TextStyle(
                         color: AppColors.appDark,
@@ -338,7 +345,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                     child: TextFormField(
                       controller: _textController,
                       decoration: InputDecoration(
-                        hintText: 'nazwa kampanii...',
+                        hintText: AppLocal.campaignsSetNameInput,
                         hintStyle: GoogleFonts.rubik(
                           textStyle: TextStyle(
                             color: Colors.black45,

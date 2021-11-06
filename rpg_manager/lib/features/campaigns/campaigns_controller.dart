@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rpg_manager/features/campaigns/models/campaign_model.dart';
 
 class CampaignsScreenController {
   final campaignsSnapshot = FirebaseFirestore.instance
@@ -8,21 +9,16 @@ class CampaignsScreenController {
   final campaigns = FirebaseFirestore.instance.collection('campaigns');
 
   Future<void> addCampaigns({
-    required String title,
-    required String system,
-    required String? image,
-    required String sessionType,
-    required String userId,
-    required Timestamp timestamp,
+    required CampaignModel campaignModel,
   }) {
     return campaigns
         .add({
-          'title': title,
-          'system': system,
-          'usersId': [userId],
-          'image': image,
-          'sessionType': sessionType,
-          'createdAt': timestamp,
+          'title': campaignModel.title,
+          'system': campaignModel.system,
+          'usersId': [campaignModel.userId],
+          'image': campaignModel.image,
+          'sessionType': campaignModel.sessionType,
+          'createdAt': campaignModel.timestamp,
         })
         .then((value) => print("Campaing Added"))
         .catchError((error) => print("Failed to add campaign: $error"));

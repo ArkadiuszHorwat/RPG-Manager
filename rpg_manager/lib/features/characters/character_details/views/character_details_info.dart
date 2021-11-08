@@ -5,8 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
+import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 
-class CharacterDetailsInfo extends StatelessWidget {
+class CharacterDetailsInfo extends StatefulWidget {
   CharacterDetailsInfo({
     required this.image,
     required this.system,
@@ -14,6 +15,14 @@ class CharacterDetailsInfo extends StatelessWidget {
 
   final String image;
   final String system;
+
+  @override
+  State<CharacterDetailsInfo> createState() => _CharacterDetailsInfoState();
+}
+
+class _CharacterDetailsInfoState extends State<CharacterDetailsInfo> {
+  var _deathCheck = 0;
+  var _lifeCheck = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +39,11 @@ class CharacterDetailsInfo extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _characterInfo(system),
+                  _characterInfo(widget.system),
                   SizedBox(
                     width: 10,
                   ),
-                  _characterImage(image, context),
+                  _characterImage(widget.image, context),
                 ],
               ),
             ),
@@ -44,7 +53,7 @@ class CharacterDetailsInfo extends StatelessWidget {
             ),
             Container(
               alignment: AlignmentDirectional.centerEnd,
-              height: 150,
+              height: 110,
               width: double.infinity,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -59,6 +68,7 @@ class CharacterDetailsInfo extends StatelessWidget {
                 ],
               ),
             ),
+            _characterThrowsAgainstDeath(context),
             // Container(
             //   alignment: AlignmentDirectional.centerEnd,
             //   height: 150,
@@ -92,6 +102,168 @@ class CharacterDetailsInfo extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _throwAgainstDeathChoose(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: AppColors.appLight,
+            title: Column(
+              children: [
+                Divider(
+                  color: AppColors.appDark,
+                ),
+                Text(
+                  'Znów uciekniesz śmierci?',
+                  style: GoogleFonts.rubik(
+                    textStyle: TextStyle(
+                      color: AppColors.appDark,
+                      fontSize: 14.0,
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: AppColors.appDark,
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  setState(() => _deathCheck--);
+                  if (_deathCheck == -3) {
+                    setState(() => _deathCheck = 0);
+                    setState(() => _lifeCheck = 0);
+                  }
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  AppLocal.commonNoText,
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() => _lifeCheck++);
+                  if (_lifeCheck == 3) {
+                    setState(() => _lifeCheck = 0);
+                    setState(() => _deathCheck = 0);
+                  }
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  AppLocal.commonYesText,
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  Widget _characterThrowsAgainstDeath(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 10,
+        ),
+        GestureDetector(
+          onTap: () => _throwAgainstDeathChoose(context),
+          child: Container(
+            height: 100,
+            decoration: BoxDecoration(
+              color: AppColors.appLight,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black,
+                  blurRadius: 1,
+                  spreadRadius: 1,
+                ),
+              ],
+              borderRadius: BorderRadiusDirectional.all(Radius.circular(20)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Rzuty przeciw śmierci',
+                    style: GoogleFonts.rubik(
+                      textStyle: TextStyle(
+                        color: AppColors.appDark,
+                        fontSize: 14.0,
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: AppColors.appDark,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.favorite_outline_outlined,
+                            color: _lifeCheck >= 1
+                                ? AppColors.appDark
+                                : Colors.grey,
+                          ),
+                          Icon(
+                            Icons.favorite_outline_outlined,
+                            color: _lifeCheck >= 2
+                                ? AppColors.appDark
+                                : Colors.grey,
+                          ),
+                          Icon(
+                            Icons.favorite_outline_outlined,
+                            color: _lifeCheck == 3
+                                ? AppColors.appDark
+                                : Colors.grey,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.cancel_outlined,
+                            color: _deathCheck <= -1
+                                ? AppColors.appDark
+                                : Colors.grey,
+                          ),
+                          Icon(
+                            Icons.cancel_outlined,
+                            color: _deathCheck <= -2
+                                ? AppColors.appDark
+                                : Colors.grey,
+                          ),
+                          Icon(
+                            Icons.cancel_outlined,
+                            color: _deathCheck == -3
+                                ? AppColors.appDark
+                                : Colors.grey,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    color: AppColors.appDark,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -185,7 +357,7 @@ class CharacterDetailsInfo extends StatelessWidget {
           height: 10,
         ),
         Container(
-          height: 250,
+          height: 200,
           decoration: BoxDecoration(
             color: AppColors.appLight,
             boxShadow: [

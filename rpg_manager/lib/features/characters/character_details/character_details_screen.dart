@@ -1,13 +1,16 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/features/characters/character_details/character_details_controller.dart';
+import 'package:rpg_manager/features/characters/character_details/views/character_details_equipment.dart';
+import 'package:rpg_manager/features/characters/character_details/views/character_details_info.dart';
+import 'package:rpg_manager/features/characters/character_details/views/character_details_skills.dart';
+import 'package:rpg_manager/features/characters/character_details/views/character_details_spells.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
 
-class CharacterDetailsScreen extends StatelessWidget {
+class CharacterDetailsScreen extends StatefulWidget {
   CharacterDetailsScreen({
     Key? key,
     required this.characterId,
@@ -15,12 +18,18 @@ class CharacterDetailsScreen extends StatelessWidget {
 
   final String characterId;
 
+  @override
+  State<CharacterDetailsScreen> createState() => _CharacterDetailsScreenState();
+}
+
+class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
   final _controller = CharacterDetailsScreenController();
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     final _characterDetails =
-        _controller.getCharacterDetails(characterId: characterId);
+        _controller.getCharacterDetails(characterId: widget.characterId);
 
     return AppBackground(
       child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
@@ -32,51 +41,50 @@ class CharacterDetailsScreen extends StatelessWidget {
 
               final String? image = data['image'];
 
+              final _pages = <Widget>[
+                CharacterDetailsInfo(
+                  image: image!,
+                  system: data['system'],
+                ),
+                CharacterDetailsSkills(),
+                CharacterDetailsEquipment(),
+                CharacterDetailsSpells(),
+              ];
+
               return Scaffold(
                 appBar: AppNavBar(
                   title: '${data['name']}',
                 ),
                 backgroundColor: Colors.transparent,
-                body: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
-                        child: Container(
-                          width: double.infinity,
-                          height: 400,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black,
-                                blurRadius: 3,
-                                spreadRadius: 1,
-                              ),
-                            ],
-                            borderRadius: BorderRadiusDirectional.all(
-                                Radius.circular(20)),
-                            image: image == null || !File(image).existsSync()
-                                ? DecorationImage(
-                                    fit: BoxFit.cover,
-                                    colorFilter: new ColorFilter.mode(
-                                        Colors.black.withOpacity(0.6),
-                                        BlendMode.dstATop),
-                                    image: AssetImage(
-                                      'lib/app_assets/images/character-img.jpg',
-                                    ),
-                                  )
-                                : DecorationImage(
-                                    fit: BoxFit.cover,
-                                    colorFilter: new ColorFilter.mode(
-                                        Colors.black.withOpacity(0.5),
-                                        BlendMode.dstATop),
-                                    image: FileImage(File(image)),
-                                  ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                body: _pages[_currentIndex],
+                bottomNavigationBar: BottomNavigationBar(
+                  backgroundColor: Colors.transparent,
+                  type: BottomNavigationBarType.fixed,
+                  fixedColor: AppColors.appLight,
+                  unselectedItemColor: AppColors.appDark,
+                  elevation: 0.1,
+                  unselectedFontSize: 14,
+                  selectedFontSize: 16,
+                  currentIndex: _currentIndex,
+                  onTap: (index) => setState(() => _currentIndex = index),
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.info_outline_rounded),
+                      label: 'Informacje',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.grade_outlined),
+                      label: 'Umiejętności',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.backpack_outlined),
+                      label: 'Ekwipunek',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.book_outlined),
+                      label: 'Czary',
+                    ),
+                  ],
                 ),
               );
             } else {

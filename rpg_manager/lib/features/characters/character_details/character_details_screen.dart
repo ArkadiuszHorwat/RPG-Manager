@@ -43,8 +43,9 @@ class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
 
               final _pages = <Widget>[
                 CharacterDetailsInfo(
-                  image: image!,
+                  image: image ?? null,
                   system: data['system'],
+                  characterId: widget.characterId,
                 ),
                 CharacterDetailsSkills(),
                 CharacterDetailsEquipment(),

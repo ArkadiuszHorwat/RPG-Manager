@@ -21,9 +21,6 @@ class ThrowAgainstDeath extends StatefulWidget {
 }
 
 class _ThrowAgainstDeathState extends State<ThrowAgainstDeath> {
-  var _deathCheck = 0;
-  var _lifeCheck = 0;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -197,8 +194,12 @@ class _ThrowAgainstDeathState extends State<ThrowAgainstDeath> {
                 },
                 child: Text(
                   AppLocal.commonNoText,
-                  style: TextStyle(
-                    color: Colors.black,
+                  style: GoogleFonts.rubik(
+                    textStyle: TextStyle(
+                      color: AppColors.appDark,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
@@ -231,8 +232,12 @@ class _ThrowAgainstDeathState extends State<ThrowAgainstDeath> {
                 },
                 child: Text(
                   AppLocal.commonYesText,
-                  style: TextStyle(
-                    color: Colors.black,
+                  style: GoogleFonts.rubik(
+                    textStyle: TextStyle(
+                      color: AppColors.appDark,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

@@ -11,11 +11,19 @@ class CharacterDetailsInfo extends StatefulWidget {
     this.image,
     required this.system,
     required this.characterId,
+    this.characterPD,
+    required this.characterLvl,
+    this.deathCheck,
+    this.lifeCheck,
   });
 
   final String? image;
   final String system;
   final String characterId;
+  final String? characterPD;
+  final int characterLvl;
+  final int? deathCheck;
+  final int? lifeCheck;
 
   @override
   State<CharacterDetailsInfo> createState() => _CharacterDetailsInfoState();
@@ -46,6 +54,8 @@ class _CharacterDetailsInfoState extends State<CharacterDetailsInfo> {
                   CharacterImage(
                     image: widget.image,
                     characterId: widget.characterId,
+                    characterPD: widget.characterPD,
+                    characterLvl: widget.characterLvl,
                   ),
                 ],
               ),
@@ -95,7 +105,11 @@ class _CharacterDetailsInfoState extends State<CharacterDetailsInfo> {
                 ],
               ),
             ),
-            ThrowAgainstDeath(),
+            ThrowAgainstDeath(
+              characterId: widget.characterId,
+              deathCheck: widget.deathCheck ?? 0,
+              lifeCheck: widget.lifeCheck ?? 0,
+            ),
           ],
         ),
       ),

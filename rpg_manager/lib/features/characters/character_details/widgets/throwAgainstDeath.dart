@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,6 +6,16 @@ import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 
 class ThrowAgainstDeath extends StatefulWidget {
+  ThrowAgainstDeath({
+    required this.characterId,
+    required this.deathCheck,
+    required this.lifeCheck,
+  });
+
+  final String characterId;
+  final int deathCheck;
+  final int lifeCheck;
+
   @override
   State<ThrowAgainstDeath> createState() => _ThrowAgainstDeathState();
 }
@@ -64,26 +75,26 @@ class _ThrowAgainstDeathState extends State<ThrowAgainstDeath> {
                       Row(
                         children: [
                           Icon(
-                            _lifeCheck >= 1
+                            widget.lifeCheck >= 1
                                 ? Icons.favorite
                                 : Icons.favorite_outline_outlined,
-                            color: _lifeCheck >= 1
+                            color: widget.lifeCheck >= 1
                                 ? AppColors.appDark
                                 : Colors.grey,
                           ),
                           Icon(
-                            _lifeCheck >= 2
+                            widget.lifeCheck >= 2
                                 ? Icons.favorite
                                 : Icons.favorite_outline_outlined,
-                            color: _lifeCheck >= 2
+                            color: widget.lifeCheck >= 2
                                 ? AppColors.appDark
                                 : Colors.grey,
                           ),
                           Icon(
-                            _lifeCheck >= 3
+                            widget.lifeCheck >= 3
                                 ? Icons.favorite
                                 : Icons.favorite_outline_outlined,
-                            color: _lifeCheck == 3
+                            color: widget.lifeCheck == 3
                                 ? AppColors.appDark
                                 : Colors.grey,
                           ),
@@ -92,26 +103,26 @@ class _ThrowAgainstDeathState extends State<ThrowAgainstDeath> {
                       Row(
                         children: [
                           Icon(
-                            _deathCheck <= -1
+                            widget.deathCheck <= -1
                                 ? Icons.cancel
                                 : Icons.cancel_outlined,
-                            color: _deathCheck <= -1
+                            color: widget.deathCheck <= -1
                                 ? AppColors.appDark
                                 : Colors.grey,
                           ),
                           Icon(
-                            _deathCheck <= -2
+                            widget.deathCheck <= -2
                                 ? Icons.cancel
                                 : Icons.cancel_outlined,
-                            color: _deathCheck <= -2
+                            color: widget.deathCheck <= -2
                                 ? AppColors.appDark
                                 : Colors.grey,
                           ),
                           Icon(
-                            _deathCheck <= -3
+                            widget.deathCheck <= -3
                                 ? Icons.cancel
                                 : Icons.cancel_outlined,
-                            color: _deathCheck == -3
+                            color: widget.deathCheck == -3
                                 ? AppColors.appDark
                                 : Colors.grey,
                           ),
@@ -158,12 +169,30 @@ class _ThrowAgainstDeathState extends State<ThrowAgainstDeath> {
             ),
             actions: [
               TextButton(
-                onPressed: () {
-                  setState(() => _deathCheck--);
-                  if (_deathCheck == -3) {
-                    setState(() => _deathCheck = 0);
-                    setState(() => _lifeCheck = 0);
+                onPressed: () async {
+                  CollectionReference characters =
+                      FirebaseFirestore.instance.collection('characters');
+
+                  await characters
+                      .doc('${widget.characterId}')
+                      .update({'deathCheck': widget.deathCheck - 1})
+                      .then((value) => print('Death updated'))
+                      .catchError((error) => print('Failed to update death'));
+
+                  if (widget.deathCheck == -3) {
+                    characters
+                        .doc('${widget.characterId}')
+                        .update({'deathCheck': 0})
+                        .then((value) => print('Death updated'))
+                        .catchError((error) => print('Failed to update death'));
+
+                    characters
+                        .doc('${widget.characterId}')
+                        .update({'lifeCheck': 0})
+                        .then((value) => print('Death updated'))
+                        .catchError((error) => print('Failed to update death'));
                   }
+
                   Navigator.pop(context);
                 },
                 child: Text(
@@ -174,12 +203,30 @@ class _ThrowAgainstDeathState extends State<ThrowAgainstDeath> {
                 ),
               ),
               TextButton(
-                onPressed: () {
-                  setState(() => _lifeCheck++);
-                  if (_lifeCheck == 3) {
-                    setState(() => _lifeCheck = 0);
-                    setState(() => _deathCheck = 0);
+                onPressed: () async {
+                  CollectionReference characters =
+                      FirebaseFirestore.instance.collection('characters');
+
+                  await characters
+                      .doc('${widget.characterId}')
+                      .update({'lifeCheck': widget.lifeCheck + 1})
+                      .then((value) => print('Death updated'))
+                      .catchError((error) => print('Failed to update death'));
+
+                  if (widget.lifeCheck == 3) {
+                    characters
+                        .doc('${widget.characterId}')
+                        .update({'deathCheck': 0})
+                        .then((value) => print('Death updated'))
+                        .catchError((error) => print('Failed to update death'));
+
+                    characters
+                        .doc('${widget.characterId}')
+                        .update({'lifeCheck': 0})
+                        .then((value) => print('Death updated'))
+                        .catchError((error) => print('Failed to update death'));
                   }
+
                   Navigator.pop(context);
                 },
                 child: Text(

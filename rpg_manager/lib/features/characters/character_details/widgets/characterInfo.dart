@@ -11,6 +11,7 @@ class CharacterInfo extends StatelessWidget {
     required this.characterRace,
     required this.characterClass,
     required this.characterAlignment,
+    required this.characterActiveCampaign,
   });
 
   final String system;
@@ -18,6 +19,7 @@ class CharacterInfo extends StatelessWidget {
   final String characterRace;
   final String characterClass;
   final String characterAlignment;
+  final String characterActiveCampaign;
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +99,7 @@ class CharacterInfo extends StatelessWidget {
                     ),
                     _infoCell(
                       title: 'Aktualna przygoda',
-                      infoType: 'Comarch',
+                      infoType: characterActiveCampaign,
                       action: () {},
                     ),
                     Divider(

@@ -6,16 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
-import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 
 class CharacterImage extends StatelessWidget {
   CharacterImage({
     this.image,
     required this.characterId,
+    this.characterPD,
+    required this.characterLvl,
   });
 
   final String? image;
   final String characterId;
+  final String? characterPD;
+  final int characterLvl;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +76,7 @@ class CharacterImage extends StatelessWidget {
                 ),
                 child: Center(
                     child: Text(
-                  '0',
+                  characterLvl.toString(),
                   style: GoogleFonts.rubik(
                     textStyle: TextStyle(
                       color: AppColors.appDark,
@@ -101,7 +104,7 @@ class CharacterImage extends StatelessWidget {
                   color: AppColors.appDark,
                 ),
                 Text(
-                  'Edytować obrazek?',
+                  'Edytuj obraz',
                   style: GoogleFonts.rubik(
                     textStyle: TextStyle(
                       color: AppColors.appDark,
@@ -115,17 +118,6 @@ class CharacterImage extends StatelessWidget {
               ],
             ),
             actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  AppLocal.commonNoText,
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
               TextButton(
                 onPressed: () async {
                   try {
@@ -148,9 +140,13 @@ class CharacterImage extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 child: Text(
-                  AppLocal.commonYesText,
-                  style: TextStyle(
-                    color: Colors.black,
+                  'Zmień',
+                  style: GoogleFonts.rubik(
+                    textStyle: TextStyle(
+                      color: AppColors.appDark,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
@@ -167,9 +163,27 @@ class CharacterImage extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 child: Text(
-                  'Usuń obraz',
-                  style: TextStyle(
-                    color: Colors.black,
+                  'Usuń',
+                  style: GoogleFonts.rubik(
+                    textStyle: TextStyle(
+                      color: AppColors.appDark,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Wróć',
+                  style: GoogleFonts.rubik(
+                    textStyle: TextStyle(
+                      color: AppColors.appDark,
+                      fontSize: 16.0,
+                    ),
                   ),
                 ),
               ),
@@ -182,38 +196,195 @@ class CharacterImage extends StatelessWidget {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: AppColors.appLight,
-            title: Column(
-              children: [
-                Divider(
-                  color: AppColors.appDark,
-                ),
-                Text(
-                  'Punkty doświadczenia',
-                  style: GoogleFonts.rubik(
-                    textStyle: TextStyle(
-                      color: AppColors.appDark,
-                      fontSize: 14.0,
+          var editOpen = false;
+          return StatefulBuilder(
+              builder: (context, StateSetter setDialogState) {
+            final formKey = GlobalKey<FormState>();
+            final _textController = TextEditingController();
+
+            return AlertDialog(
+              backgroundColor: AppColors.appLight,
+              title: Column(
+                children: [
+                  Divider(
+                    color: AppColors.appDark,
+                  ),
+                  Text(
+                    'Punkty doświadczenia',
+                    style: GoogleFonts.rubik(
+                      textStyle: TextStyle(
+                        color: AppColors.appDark,
+                        fontSize: 14.0,
+                      ),
                     ),
                   ),
-                ),
-                Text(
-                  '1550',
-                  style: GoogleFonts.rubik(
-                    textStyle: TextStyle(
-                      color: AppColors.appDark,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
+                  editOpen == false
+                      ? Text(
+                          characterPD!.isEmpty ? '0' : characterPD!,
+                          style: GoogleFonts.rubik(
+                            textStyle: TextStyle(
+                              color: AppColors.appDark,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )
+                      : Form(
+                          key: formKey,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          child: TextFormField(
+                            controller: _textController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              hintText: 'Ilość punktów doświadczenia',
+                              hintStyle: GoogleFonts.rubik(
+                                textStyle: TextStyle(
+                                  color: Colors.black45,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                            autofocus: false,
+                            validator: (text) {
+                              if (text != null) {
+                                print('fajen');
+                              } else {
+                                print('niefajen');
+                                return '';
+                              }
+                            },
+                          ),
+                        ),
+                  Divider(
+                    color: AppColors.appDark,
+                  ),
+                  TextButton(
+                    onPressed: editOpen == false
+                        ? () {
+                            CollectionReference characters = FirebaseFirestore
+                                .instance
+                                .collection('characters');
+
+                            characters
+                                .doc('$characterId')
+                                .update({'level': characterLvl + 1})
+                                .then((value) => print('Lvl updated'))
+                                .catchError(
+                                    (error) => print('Failed to update Lvl'));
+                            Navigator.pop(context);
+                          }
+                        : () {},
+                    child: Text(
+                      'Dodaj poziom',
+                      style: GoogleFonts.rubik(
+                        textStyle: TextStyle(
+                          color: editOpen == false
+                              ? AppColors.appDark
+                              : Colors.grey,
+                          fontSize: 16.0,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-                Divider(
-                  color: AppColors.appDark,
+                  Divider(
+                    color: AppColors.appDark,
+                  ),
+                  TextButton(
+                    onPressed: editOpen == false
+                        ? () {
+                            if (characterLvl > 0) {
+                              CollectionReference characters = FirebaseFirestore
+                                  .instance
+                                  .collection('characters');
+
+                              characters
+                                  .doc('$characterId')
+                                  .update({'level': characterLvl - 1})
+                                  .then((value) => print('Lvl updated'))
+                                  .catchError(
+                                      (error) => print('Failed to update Lvl'));
+                              Navigator.pop(context);
+                            }
+                          }
+                        : () {},
+                    child: Text(
+                      'Odejmij poziom',
+                      style: GoogleFonts.rubik(
+                        textStyle: TextStyle(
+                          color: editOpen == false
+                              ? AppColors.appDark
+                              : Colors.grey,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: AppColors.appDark,
+                  ),
+                ],
+              ),
+              actions: [
+                editOpen == false
+                    ? TextButton(
+                        onPressed: () {
+                          setDialogState(() => editOpen = true);
+                        },
+                        child: Text(
+                          'Edytuj',
+                          style: GoogleFonts.rubik(
+                            textStyle: TextStyle(
+                              color: AppColors.appDark,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      )
+                    : TextButton(
+                        onPressed: () {
+                          CollectionReference characters = FirebaseFirestore
+                              .instance
+                              .collection('characters');
+
+                          characters
+                              .doc('$characterId')
+                              .update({'characterPD': _textController.text})
+                              .then((value) => print('PD updated'))
+                              .catchError(
+                                  (error) => print('Failed to update PD'));
+
+                          Navigator.pop(context);
+                          setDialogState(() => editOpen = false);
+                        },
+                        child: Text(
+                          'Zapisz',
+                          style: GoogleFonts.rubik(
+                            textStyle: TextStyle(
+                              color: AppColors.appDark,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Wróć',
+                    style: GoogleFonts.rubik(
+                      textStyle: TextStyle(
+                        color: AppColors.appDark,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  ),
                 ),
               ],
-            ),
-          );
+            );
+          });
         });
   }
 }

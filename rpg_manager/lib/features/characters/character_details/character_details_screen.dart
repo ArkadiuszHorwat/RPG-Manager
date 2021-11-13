@@ -32,8 +32,8 @@ class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
         _controller.getCharacterDetails(characterId: widget.characterId);
 
     return AppBackground(
-      child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-          future: _characterDetails.get(),
+      child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+          stream: _characterDetails,
           builder: (context, snapshot) {
             if (snapshot.data != null) {
               Map<String, dynamic> data =

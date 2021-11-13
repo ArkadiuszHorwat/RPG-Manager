@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CharacterDetailsScreenController {
-  DocumentReference<Map<String, dynamic>> getCharacterDetails(
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getCharacterDetails(
       {required String characterId}) {
-    return FirebaseFirestore.instance.collection('characters').doc(characterId);
+    return FirebaseFirestore.instance
+        .collection('characters')
+        .doc(characterId)
+        .snapshots();
   }
 }

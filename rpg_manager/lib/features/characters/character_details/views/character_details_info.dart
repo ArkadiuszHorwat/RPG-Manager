@@ -15,6 +15,10 @@ class CharacterDetailsInfo extends StatefulWidget {
     required this.characterLvl,
     this.deathCheck,
     this.lifeCheck,
+    this.characterBio,
+    this.characterRace,
+    this.characterClass,
+    this.characterAlignment,
   });
 
   final String? image;
@@ -24,6 +28,10 @@ class CharacterDetailsInfo extends StatefulWidget {
   final int characterLvl;
   final int? deathCheck;
   final int? lifeCheck;
+  final String? characterBio;
+  final String? characterRace;
+  final String? characterClass;
+  final String? characterAlignment;
 
   @override
   State<CharacterDetailsInfo> createState() => _CharacterDetailsInfoState();
@@ -47,6 +55,10 @@ class _CharacterDetailsInfoState extends State<CharacterDetailsInfo> {
                 children: [
                   CharacterInfo(
                     system: widget.system,
+                    characterId: widget.characterId,
+                    characterRace: widget.characterRace ?? '',
+                    characterClass: widget.characterClass ?? '',
+                    characterAlignment: widget.characterAlignment ?? '',
                   ),
                   SizedBox(
                     width: 10,
@@ -60,7 +72,10 @@ class _CharacterDetailsInfoState extends State<CharacterDetailsInfo> {
                 ],
               ),
             ),
-            CharacterBio(),
+            CharacterBio(
+              characterId: widget.characterId,
+              characterBio: widget.characterBio ?? '',
+            ),
             SizedBox(
               height: 20,
             ),

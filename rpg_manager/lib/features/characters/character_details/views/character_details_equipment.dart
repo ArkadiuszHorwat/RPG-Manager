@@ -138,10 +138,6 @@ class CharacterDetailsEquipment extends StatelessWidget {
   }
 
   Widget _inventory(BuildContext context) {
-    final _equipElements = <Widget>[];
-    for (int i = 0; i <= 5; i++) {
-      _equipElements.add(_inventoryElement());
-    }
     return Column(
       children: [
         SizedBox(
@@ -227,17 +223,50 @@ class CharacterDetailsEquipment extends StatelessWidget {
                       ),
                     ],
                   ),
-                  _equipElement(),
+                  _equipElement('miecz długi', '+2', '1k8/sieczne'),
                   SizedBox(
                     height: 5,
                   ),
-                  _equipElement(),
+                  _equipElement('miecz krótki', '+1', '1k6+1/kłute'),
                   SizedBox(
                     height: 5,
                   ),
-                  _equipElement(),
-                  Column(
-                    children: _equipElements,
+                  _equipElement('długi łuk', '+3', '1k10/kłute'),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Ataki i magia',
+                    style: GoogleFonts.rubik(
+                      textStyle: TextStyle(
+                        color: AppColors.appDark,
+                        fontSize: 14.0,
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: AppColors.appDark,
+                  ),
+                  Text(
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                    'Phasellus ut erat a diam posuere interdum. Nam maximus vel'
+                    'libero vel mollis. Duis ac felis varius neque vulputate '
+                    'suscipit. Aenean malesuada lectus in scelerisque viverra. '
+                    'Curabitur metus turpis, finibus a sagittis sed, tempus '
+                    'vitae leo. Phasellus dolor massa, lacinia eu velit vehicula, '
+                    'cursus vulputate odio. Sed maximus aliquet lectus vitae rhoncus. '
+                    'Proin ornare, ante maximus cursus pharetra, lectus arcu gravida '
+                    'dui, nec elementum orci nisl a dui. Morbi eget mi condimentum, aliquet orci eget, maximus nunc.',
+                    style: GoogleFonts.rubik(
+                      textStyle: TextStyle(
+                        color: AppColors.appDark,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: AppColors.appDark,
                   ),
                 ],
               ),
@@ -272,12 +301,13 @@ class CharacterDetailsEquipment extends StatelessWidget {
     );
   }
 
-  Widget _equipElement() {
+  Widget _equipElement(String name, String bonus, String type) {
     return Row(
       children: [
         Expanded(
           flex: 2,
           child: Container(
+            alignment: AlignmentDirectional.center,
             decoration: BoxDecoration(
               color: AppColors.appDark,
               boxShadow: [
@@ -289,6 +319,16 @@ class CharacterDetailsEquipment extends StatelessWidget {
               ],
             ),
             height: 40,
+            child: Text(
+              name,
+              style: GoogleFonts.rubik(
+                textStyle: TextStyle(
+                  color: AppColors.appLight,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ),
         ),
         SizedBox(
@@ -297,6 +337,7 @@ class CharacterDetailsEquipment extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Container(
+            alignment: AlignmentDirectional.center,
             decoration: BoxDecoration(
               color: AppColors.appDark,
               boxShadow: [
@@ -308,6 +349,16 @@ class CharacterDetailsEquipment extends StatelessWidget {
               ],
             ),
             height: 40,
+            child: Text(
+              bonus,
+              style: GoogleFonts.rubik(
+                textStyle: TextStyle(
+                  color: AppColors.appLight,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ),
         ),
         SizedBox(
@@ -316,6 +367,7 @@ class CharacterDetailsEquipment extends StatelessWidget {
         Expanded(
           flex: 2,
           child: Container(
+            alignment: AlignmentDirectional.center,
             decoration: BoxDecoration(
               color: AppColors.appDark,
               boxShadow: [
@@ -327,6 +379,16 @@ class CharacterDetailsEquipment extends StatelessWidget {
               ],
             ),
             height: 40,
+            child: Text(
+              type,
+              style: GoogleFonts.rubik(
+                textStyle: TextStyle(
+                  color: AppColors.appLight,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ),
         ),
       ],

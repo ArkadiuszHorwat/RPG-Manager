@@ -9,7 +9,7 @@ class CharacterDetailsSpells extends StatefulWidget {
 }
 
 class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
-  int spellsLvl = 0;
+  var spellsLvl = '0';
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _characterInfoCell(info: 'cecha bazowa', value: 'Int'),
+                _characterInfoCell(info: 'Cecha bazowa', value: 'Int'),
                 _characterInfoCell(info: 'Komórki czarów', value: '5'),
                 _characterInfoCell(info: 'Zużyte komórki', value: '2'),
               ],
@@ -37,8 +37,8 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _characterInfoCell(
-                    info: 'st rzutu przeciw czarom', value: '16'),
-                _characterInfoCell(info: 'premia do ataku czarem', value: '+4'),
+                    info: 'St rzutu przeciw czarom', value: '16'),
+                _characterInfoCell(info: 'Premia do ataku czarem', value: '+4'),
               ],
             ),
           ],
@@ -69,8 +69,8 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
           ),
           Container(
             clipBehavior: Clip.none,
-            height: 70,
-            width: 100,
+            height: 60,
+            width: 80,
             decoration: BoxDecoration(
               color: AppColors.appLight,
               boxShadow: [
@@ -102,8 +102,13 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
   Widget _listSpells({
     required BuildContext context,
   }) {
+    final _spells = <Widget>[];
+
+    for (int i = 0; i <= 5; i++) {
+      _spells.add(_spell());
+    }
+
     return Container(
-      clipBehavior: Clip.none,
       height: 450,
       width: double.infinity,
       decoration: BoxDecoration(
@@ -130,17 +135,32 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
             height: 380,
             child: SingleChildScrollView(
               child: Column(
-                children: [
-                  _spell(),
-                  _spell(),
-                  _spell(),
-                  _spell(),
-                  _spell(),
-                  _spell(),
-                  _spell(),
-                ],
+                children: _spells,
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _spell() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'spell name',
+            style: GoogleFonts.rubik(
+              textStyle: TextStyle(
+                color: AppColors.appDark,
+                fontSize: 16.0,
+              ),
+            ),
+          ),
+          Divider(
+            color: AppColors.appDark,
           ),
         ],
       ),
@@ -152,7 +172,7 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
       padding: const EdgeInsets.only(right: 20),
       child: GestureDetector(
         onTap: () {
-          _infoEditHandle(context: context);
+          _spellLvlEditHandle(context: context);
         },
         child: Container(
           alignment: AlignmentDirectional.center,
@@ -182,7 +202,7 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
                   ),
                 ),
                 Text(
-                  spellsLvl.toString(),
+                  spellsLvl,
                   style: GoogleFonts.rubik(
                     textStyle: TextStyle(
                       color: AppColors.appLight,
@@ -199,35 +219,12 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
     );
   }
 
-  Widget _spell() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'asd',
-            style: GoogleFonts.rubik(
-              textStyle: TextStyle(
-                color: AppColors.appDark,
-                fontSize: 14.0,
-              ),
-            ),
-          ),
-          Divider(
-            color: AppColors.appDark,
-          ),
-        ],
-      ),
-    );
-  }
+  void _spellLvlEditHandle({required BuildContext context}) {
+    final _spellsLvl = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-  void _infoEditHandle({required BuildContext context}) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          final textController = TextEditingController();
-          final formKey = GlobalKey<FormState>();
           return AlertDialog(
             backgroundColor: AppColors.appLight,
             title: Column(
@@ -247,32 +244,31 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
                 Divider(
                   color: AppColors.appDark,
                 ),
-                Form(
-                  key: formKey,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  child: TextFormField(
-                    controller: textController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Krąg',
-                      hintStyle: GoogleFonts.rubik(
-                        textStyle: TextStyle(
-                          color: Colors.black45,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    autofocus: false,
-                    validator: (text) {
-                      if (text != null) {
-                        print('fajen');
-                      } else {
-                        print('niefajen');
-                        return '';
-                      }
-                    },
-                  ),
+                DropdownButton(
+                  value: spellsLvl,
+                  icon: Icon(Icons.keyboard_arrow_down),
+                  iconSize: 30,
+                  iconEnabledColor: AppColors.appDark,
+                  items: _spellsLvl
+                      .map((item) => DropdownMenuItem(
+                            value: item,
+                            child: Text(
+                              item,
+                              style: GoogleFonts.rubik(
+                                textStyle: TextStyle(
+                                  color: AppColors.appDark,
+                                  fontSize: 18.0,
+                                ),
+                              ),
+                            ),
+                          ))
+                      .toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      spellsLvl = newValue!;
+                    });
+                    Navigator.pop(context);
+                  },
                 ),
                 Divider(
                   color: AppColors.appDark,
@@ -280,28 +276,6 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
               ],
             ),
             actions: [
-              TextButton(
-                onPressed: () {
-                  try {
-                    setState(() {
-                      spellsLvl = int.parse(textController.text);
-                    });
-                  } on Exception catch (e) {
-                    print('Coś poszło nie tak: $e');
-                  }
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Wybierz',
-                  style: GoogleFonts.rubik(
-                    textStyle: TextStyle(
-                      color: AppColors.appDark,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);

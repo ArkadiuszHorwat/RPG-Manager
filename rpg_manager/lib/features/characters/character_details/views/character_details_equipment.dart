@@ -11,15 +11,19 @@ class CharacterDetailsEquipment extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
-            _wyposazenie(context),
-            _ekwipunek(context),
+            _inventory(context),
+            _equipment(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _ekwipunek(BuildContext context) {
+  Widget _equipment(BuildContext context) {
+    final _equipElements = <Widget>[];
+    for (int i = 0; i <= 5; i++) {
+      _equipElements.add(_inventoryElement());
+    }
     return Column(
       children: [
         SizedBox(
@@ -58,21 +62,8 @@ class CharacterDetailsEquipment extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Divider(
-                          color: AppColors.appDark,
-                        ),
-                        Text(
-                          'asdasda',
-                          style: GoogleFonts.rubik(
-                            textStyle: TextStyle(
-                              color: AppColors.appDark,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Divider(
-                          color: AppColors.appDark,
+                        Column(
+                          children: _equipElements,
                         ),
                       ],
                     ),
@@ -146,7 +137,11 @@ class CharacterDetailsEquipment extends StatelessWidget {
     );
   }
 
-  Widget _wyposazenie(BuildContext context) {
+  Widget _inventory(BuildContext context) {
+    final _equipElements = <Widget>[];
+    for (int i = 0; i <= 5; i++) {
+      _equipElements.add(_inventoryElement());
+    }
     return Column(
       children: [
         SizedBox(
@@ -241,26 +236,37 @@ class CharacterDetailsEquipment extends StatelessWidget {
                     height: 5,
                   ),
                   _equipElement(),
-                  Divider(
-                    color: AppColors.appDark,
-                  ),
-                  Text(
-                    'asd',
-                    style: GoogleFonts.rubik(
-                      textStyle: TextStyle(
-                        color: AppColors.appDark,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Divider(
-                    color: AppColors.appDark,
+                  Column(
+                    children: _equipElements,
                   ),
                 ],
               ),
             ),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _inventoryElement() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 10,
+        ),
+        Text(
+          'element ekwipunku',
+          style: GoogleFonts.rubik(
+            textStyle: TextStyle(
+              color: AppColors.appDark,
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Divider(
+          color: AppColors.appDark,
         ),
       ],
     );
@@ -325,98 +331,5 @@ class CharacterDetailsEquipment extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  void _bioEditHandle(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          final formKey = GlobalKey<FormState>();
-          final textController = TextEditingController();
-          textController.text = '';
-
-          return AlertDialog(
-            backgroundColor: AppColors.appLight,
-            title: Column(
-              children: [
-                Divider(
-                  color: AppColors.appDark,
-                ),
-                Text(
-                  'Edytuj wyposażenie',
-                  style: GoogleFonts.rubik(
-                    textStyle: TextStyle(
-                      color: AppColors.appDark,
-                      fontSize: 14.0,
-                    ),
-                  ),
-                ),
-                Divider(
-                  color: AppColors.appDark,
-                ),
-                Container(
-                  height: 250,
-                  child: Form(
-                    key: formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: TextFormField(
-                      maxLines: 15,
-                      controller: textController,
-                      keyboardType: TextInputType.multiline,
-                      autofocus: false,
-                      validator: (text) {
-                        if (text != null) {
-                          print('fajen');
-                        } else {
-                          print('niefajen');
-                          return '';
-                        }
-                      },
-                    ),
-                  ),
-                ),
-                Divider(
-                  color: AppColors.appDark,
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () async {
-                  try {
-                    print('asd');
-                  } on Exception catch (e) {
-                    print('Coś poszło nie tak: $e');
-                  }
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Zapisz',
-                  style: GoogleFonts.rubik(
-                    textStyle: TextStyle(
-                      color: AppColors.appDark,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Wróć',
-                  style: GoogleFonts.rubik(
-                    textStyle: TextStyle(
-                      color: AppColors.appDark,
-                      fontSize: 16.0,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        });
   }
 }

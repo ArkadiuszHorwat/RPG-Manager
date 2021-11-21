@@ -41,7 +41,14 @@ final atributes = [
   'Cha',
 ];
 
-class CharacterDetailsSkills extends StatelessWidget {
+class CharacterDetailsSkills extends StatefulWidget {
+  @override
+  State<CharacterDetailsSkills> createState() => _CharacterDetailsSkillsState();
+}
+
+class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
+  var _pageFlag = true;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -51,66 +58,114 @@ class CharacterDetailsSkills extends StatelessWidget {
           children: [
             Container(
               alignment: AlignmentDirectional.centerEnd,
-              height: 100,
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _characterInfoCell('Inspiracja', '1'),
-                  _characterInfoCell('Szybkość', '9'),
-                  _characterInfoCell('Inicjatywa', '+3'),
-                  _characterInfoCell('KP', '16'),
-                ],
-              ),
+              child: _pageFlag
+                  ? TextButton.icon(
+                      onPressed: () {
+                        setState(() {
+                          _pageFlag = false;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.arrow_forward,
+                        color: AppColors.appLight,
+                      ),
+                      label: Text(
+                        'Reszta',
+                        style: GoogleFonts.rubik(
+                          textStyle: TextStyle(
+                            color: AppColors.appLight,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    )
+                  : TextButton.icon(
+                      onPressed: () {
+                        setState(() {
+                          _pageFlag = true;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: AppColors.appLight,
+                      ),
+                      label: Text(
+                        'Ogólne',
+                        style: GoogleFonts.rubik(
+                          textStyle: TextStyle(
+                            color: AppColors.appLight,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
             ),
-            Container(
-              alignment: AlignmentDirectional.centerEnd,
-              height: 100,
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _characterInfoCell('PW (max)', '27'),
-                  _characterInfoCell('PW (temp)', '11'),
-                  _characterInfoCell('Inicjatywa', '+3'),
-                  _characterInfoCell('KW', 'k10'),
-                ],
-              ),
-            ),
-            Container(
-              alignment: AlignmentDirectional.centerEnd,
-              height: 100,
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _characterInfoCell('pr. z bieg.', '+2'),
-                  _characterInfoCell('percepcja', '14'),
-                  _characterInfoCell('Inicjatywa', '+3'),
-                  _characterInfoCell('KW', 'k10'),
-                ],
-              ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: _infoContainer('Rzuty obronne', savingThrows),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  flex: 1,
-                  child: _infoContainer('Umiejętności', skills),
-                ),
-              ],
-            ),
-            _infoContainer('Biegłości i języki', ['asda', 'asda', 'asd']),
-            _infoContainer('Zdolności', ['asda', 'asda', 'asd']),
+            _pageFlag
+                ? Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: _infoContainer('Umiejętności', skills),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child:
+                                _infoContainer('Rzuty obronne', savingThrows),
+                          ),
+                        ],
+                      ),
+                      _infoContainer('Zdolności', ['asda', 'asda', 'asd']),
+                      _infoContainer(
+                          'Biegłości i języki', ['asda', 'asda', 'asd']),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _characterInfoCell('Szybkość', '9'),
+                          _characterInfoCell('Inicjatywa', '+3'),
+                          _characterInfoCell('Percepcja', '14'),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _characterInfoCell('PW (max)', '27'),
+                          _characterInfoCell('PW (temp)', '11'),
+                          _characterInfoCell('KP', '16'),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _characterInfoCell('Inspiracja', '1'),
+                          _characterInfoCell('Premia z biegłości', '+2'),
+                          _characterInfoCell('KW', 'k10'),
+                        ],
+                      ),
+                    ],
+                  ),
           ],
         ),
       ),
@@ -136,7 +191,7 @@ class CharacterDetailsSkills extends StatelessWidget {
                 spreadRadius: 1,
               ),
             ],
-            borderRadius: BorderRadiusDirectional.all(Radius.circular(20)),
+            borderRadius: BorderRadiusDirectional.all(Radius.circular(10)),
           ),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
@@ -193,49 +248,46 @@ class CharacterDetailsSkills extends StatelessWidget {
     String info,
     String count,
   ) {
-    return Container(
-      width: 80,
-      child: Column(
-        children: [
-          Text(
-            info,
+    return Column(
+      children: [
+        Text(
+          info,
+          style: GoogleFonts.rubik(
+            textStyle: TextStyle(
+                color: AppColors.appLight,
+                fontSize: 14.0,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          alignment: AlignmentDirectional.center,
+          height: 60,
+          width: 60,
+          decoration: BoxDecoration(
+            color: AppColors.appLight,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black,
+                blurRadius: 3,
+                spreadRadius: 0.5,
+              ),
+            ],
+            borderRadius: BorderRadiusDirectional.all(Radius.circular(10)),
+          ),
+          child: Text(
+            count,
             style: GoogleFonts.rubik(
               textStyle: TextStyle(
-                  color: AppColors.appLight,
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Container(
-            alignment: AlignmentDirectional.center,
-            height: 60,
-            width: 60,
-            decoration: BoxDecoration(
-              color: AppColors.appLight,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black,
-                  blurRadius: 3,
-                  spreadRadius: 0.5,
-                ),
-              ],
-              borderRadius: BorderRadiusDirectional.all(Radius.circular(20)),
-            ),
-            child: Text(
-              count,
-              style: GoogleFonts.rubik(
-                textStyle: TextStyle(
-                  color: AppColors.appDark,
-                  fontSize: 24.0,
-                ),
+                color: AppColors.appDark,
+                fontSize: 24.0,
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

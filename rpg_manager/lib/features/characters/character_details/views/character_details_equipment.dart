@@ -40,7 +40,7 @@ class CharacterDetailsEquipment extends StatelessWidget {
                 spreadRadius: 1,
               ),
             ],
-            borderRadius: BorderRadiusDirectional.all(Radius.circular(20)),
+            borderRadius: BorderRadiusDirectional.all(Radius.circular(10)),
           ),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
@@ -154,7 +154,7 @@ class CharacterDetailsEquipment extends StatelessWidget {
                 spreadRadius: 1,
               ),
             ],
-            borderRadius: BorderRadiusDirectional.all(Radius.circular(20)),
+            borderRadius: BorderRadiusDirectional.all(Radius.circular(10)),
           ),
           child: Padding(
             padding: const EdgeInsets.all(10.0),

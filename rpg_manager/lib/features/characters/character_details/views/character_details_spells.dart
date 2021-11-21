@@ -80,7 +80,7 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
                   spreadRadius: 0.5,
                 ),
               ],
-              borderRadius: BorderRadiusDirectional.all(Radius.circular(20)),
+              borderRadius: BorderRadiusDirectional.all(Radius.circular(10)),
             ),
             child: Center(
                 child: Text(
@@ -120,7 +120,7 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
             spreadRadius: 0.5,
           ),
         ],
-        borderRadius: BorderRadiusDirectional.all(Radius.circular(20)),
+        borderRadius: BorderRadiusDirectional.all(Radius.circular(10)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

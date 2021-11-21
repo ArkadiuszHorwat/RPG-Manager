@@ -96,7 +96,7 @@ class AtributeCell extends StatelessWidget {
                     spreadRadius: 0.5,
                   ),
                 ],
-                borderRadius: BorderRadiusDirectional.all(Radius.circular(20)),
+                borderRadius: BorderRadiusDirectional.all(Radius.circular(10)),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

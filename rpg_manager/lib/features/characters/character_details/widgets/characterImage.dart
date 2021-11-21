@@ -39,7 +39,7 @@ class CharacterImage extends StatelessWidget {
                     spreadRadius: 1,
                   ),
                 ],
-                borderRadius: BorderRadiusDirectional.all(Radius.circular(20)),
+                borderRadius: BorderRadiusDirectional.all(Radius.circular(10)),
                 image: image == null || !File(image!).existsSync()
                     ? DecorationImage(
                         fit: BoxFit.cover,
@@ -72,7 +72,7 @@ class CharacterImage extends StatelessWidget {
                     ),
                   ],
                   borderRadius:
-                      BorderRadiusDirectional.all(Radius.circular(20)),
+                      BorderRadiusDirectional.all(Radius.circular(10)),
                 ),
                 child: Center(
                     child: Text(

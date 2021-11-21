@@ -50,7 +50,7 @@ class CharacterInfo extends StatelessWidget {
                   spreadRadius: 1,
                 ),
               ],
-              borderRadius: BorderRadiusDirectional.all(Radius.circular(20)),
+              borderRadius: BorderRadiusDirectional.all(Radius.circular(10)),
             ),
             child: Padding(
               padding: const EdgeInsets.all(10.0),

@@ -2,8 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
+import 'package:rpg_manager/features/characters/character_details/character_details_controller.dart';
+import 'package:rpg_manager/features/characters/character_details/widgets/statisticCell.dart';
+import 'package:rpg_manager/features/characters/models/character_model.dart';
 
 class CharacterDetailsSpells extends StatefulWidget {
+  CharacterDetailsSpells({
+    required this.controller,
+    required this.characterModel,
+  });
+
+  final CharacterDetailsScreenController controller;
+  final CharacterModel characterModel;
+
   @override
   State<CharacterDetailsSpells> createState() => _CharacterDetailsSpellsState();
 }
@@ -28,73 +39,70 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _characterInfoCell(info: 'Cecha bazowa', value: 'Int'),
-                _characterInfoCell(info: 'Komórki czarów', value: '5'),
-                _characterInfoCell(info: 'Zużyte komórki', value: '2'),
+                StatisticCell(
+                  info: 'Cecha bazowa',
+                  value: widget.characterModel.spellBaseAttribute ?? '',
+                  action: () => widget.controller.atributeEditHandle(
+                    context,
+                    title: 'Edytuj cechę bazową:',
+                    updateTargetName: 'spellBaseAttribute',
+                    characterId: widget.characterModel.characterId ?? '',
+                    atributeType: "text",
+                  ),
+                ),
+                StatisticCell(
+                  info: 'Komórki czarów',
+                  value: widget.characterModel.countSpellCells ?? '',
+                  action: () => widget.controller.atributeEditHandle(
+                    context,
+                    title: 'Edytuj maksymalną ilość komórek:',
+                    updateTargetName: 'countSpellCells',
+                    characterId: widget.characterModel.characterId ?? '',
+                    atributeType: "number",
+                  ),
+                ),
+                StatisticCell(
+                  info: 'Zużyte komórki',
+                  value: widget.characterModel.spellCellsUsed ?? '',
+                  action: () => widget.controller.atributeEditHandle(
+                    context,
+                    title: 'Edytuj zużyte komórki:',
+                    updateTargetName: 'spellCellsUsed',
+                    characterId: widget.characterModel.characterId ?? '',
+                    atributeType: "number",
+                  ),
+                ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _characterInfoCell(
-                    info: 'St rzutu przeciw czarom', value: '16'),
-                _characterInfoCell(info: 'Premia do ataku czarem', value: '+4'),
+                StatisticCell(
+                  info: 'St rzutu przeciw czarom',
+                  value: widget.characterModel.throwAgainstSpells ?? '',
+                  action: () => widget.controller.atributeEditHandle(
+                    context,
+                    title: 'Edytuj rzut przeciw czarom:',
+                    updateTargetName: 'throwAgainstSpells',
+                    characterId: widget.characterModel.characterId ?? '',
+                    atributeType: "number",
+                  ),
+                ),
+                StatisticCell(
+                  info: 'Premia do ataku czarem',
+                  value: widget.characterModel.magicAttackBonus ?? '',
+                  action: () => widget.controller.atributeEditHandle(
+                    context,
+                    title: 'Edytuj premię do ataku czarem:',
+                    updateTargetName: 'magicAttackBonus',
+                    characterId: widget.characterModel.characterId ?? '',
+                    atributeType: "number",
+                  ),
+                ),
               ],
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _characterInfoCell({
-    required String info,
-    required String value,
-  }) {
-    return Container(
-      height: 100,
-      child: Column(
-        children: [
-          Text(
-            info,
-            style: GoogleFonts.rubik(
-              textStyle: TextStyle(
-                color: AppColors.appLight,
-                fontSize: 14.0,
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Container(
-            clipBehavior: Clip.none,
-            height: 60,
-            width: 80,
-            decoration: BoxDecoration(
-              color: AppColors.appLight,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black,
-                  blurRadius: 3,
-                  spreadRadius: 0.5,
-                ),
-              ],
-              borderRadius: BorderRadiusDirectional.all(Radius.circular(10)),
-            ),
-            child: Center(
-                child: Text(
-              value,
-              style: GoogleFonts.rubik(
-                textStyle: TextStyle(
-                  color: AppColors.appDark,
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            )),
-          ),
-        ],
       ),
     );
   }

@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
+import 'package:rpg_manager/features/characters/character_details/character_details_controller.dart';
+import 'package:rpg_manager/features/characters/character_details/widgets/statisticCell.dart';
+import 'package:rpg_manager/features/characters/models/character_model.dart';
 
 final skills = [
   'Akrobatyka',
@@ -42,6 +45,14 @@ final atributes = [
 ];
 
 class CharacterDetailsSkills extends StatefulWidget {
+  CharacterDetailsSkills({
+    required this.controller,
+    required this.characterModel,
+  });
+
+  final CharacterDetailsScreenController controller;
+  final CharacterModel characterModel;
+
   @override
   State<CharacterDetailsSkills> createState() => _CharacterDetailsSkillsState();
 }
@@ -135,9 +146,42 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _characterInfoCell('Szybkość', '9'),
-                          _characterInfoCell('Inicjatywa', '+3'),
-                          _characterInfoCell('Percepcja', '14'),
+                          StatisticCell(
+                            info: 'Szybkość',
+                            value: widget.characterModel.speed ?? '',
+                            action: () => widget.controller.atributeEditHandle(
+                              context,
+                              title: 'Edytuj szybkość:',
+                              updateTargetName: 'speed',
+                              characterId:
+                                  widget.characterModel.characterId ?? '',
+                              atributeType: "number",
+                            ),
+                          ),
+                          StatisticCell(
+                            info: 'Inicjatywa',
+                            value: widget.characterModel.initiative ?? '',
+                            action: () => widget.controller.atributeEditHandle(
+                              context,
+                              title: 'Edytuj inicjatywe:',
+                              updateTargetName: 'initiative',
+                              characterId:
+                                  widget.characterModel.characterId ?? '',
+                              atributeType: "number",
+                            ),
+                          ),
+                          StatisticCell(
+                            info: 'Percepcja',
+                            value: widget.characterModel.perception ?? '',
+                            action: () => widget.controller.atributeEditHandle(
+                              context,
+                              title: 'Edytuj percepcje:',
+                              updateTargetName: 'perception',
+                              characterId:
+                                  widget.characterModel.characterId ?? '',
+                              atributeType: "number",
+                            ),
+                          ),
                         ],
                       ),
                       SizedBox(
@@ -147,9 +191,42 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _characterInfoCell('PW (max)', '27'),
-                          _characterInfoCell('PW (temp)', '11'),
-                          _characterInfoCell('KP', '16'),
+                          StatisticCell(
+                            info: 'PW (max)',
+                            value: widget.characterModel.maxPW ?? '',
+                            action: () => widget.controller.atributeEditHandle(
+                              context,
+                              title: 'Edytuj maksymalne punkty wytrzymałości:',
+                              updateTargetName: 'maxPW',
+                              characterId:
+                                  widget.characterModel.characterId ?? '',
+                              atributeType: "number",
+                            ),
+                          ),
+                          StatisticCell(
+                            info: 'PW (temp)',
+                            value: widget.characterModel.tempPW ?? '',
+                            action: () => widget.controller.atributeEditHandle(
+                              context,
+                              title: 'Edytuj aktualne punkty wytrzymałości:',
+                              updateTargetName: 'tempPW',
+                              characterId:
+                                  widget.characterModel.characterId ?? '',
+                              atributeType: "number",
+                            ),
+                          ),
+                          StatisticCell(
+                            info: 'KP',
+                            value: widget.characterModel.characterKP ?? '',
+                            action: () => widget.controller.atributeEditHandle(
+                              context,
+                              title: 'Edytuj klasę pancerza:',
+                              updateTargetName: 'characterKP',
+                              characterId:
+                                  widget.characterModel.characterId ?? '',
+                              atributeType: "number",
+                            ),
+                          ),
                         ],
                       ),
                       SizedBox(
@@ -159,9 +236,42 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _characterInfoCell('Inspiracja', '1'),
-                          _characterInfoCell('Premia z biegłości', '+2'),
-                          _characterInfoCell('KW', 'k10'),
+                          StatisticCell(
+                            info: 'Inspiracja',
+                            value: widget.characterModel.inspiration ?? '',
+                            action: () => widget.controller.atributeEditHandle(
+                              context,
+                              title: 'Edytuj punkty inspiracji:',
+                              updateTargetName: 'inspiration',
+                              characterId:
+                                  widget.characterModel.characterId ?? '',
+                              atributeType: "number",
+                            ),
+                          ),
+                          StatisticCell(
+                            info: 'Premia z biegłości',
+                            value: widget.characterModel.specialBonus ?? '',
+                            action: () => widget.controller.atributeEditHandle(
+                              context,
+                              title: 'Edytuj premię z biegłości:',
+                              updateTargetName: 'specialBonus',
+                              characterId:
+                                  widget.characterModel.characterId ?? '',
+                              atributeType: "number",
+                            ),
+                          ),
+                          StatisticCell(
+                            info: 'KW',
+                            value: widget.characterModel.characterKW ?? '',
+                            action: () => widget.controller.atributeEditHandle(
+                              context,
+                              title: 'Edytuj kość wytrzymałości:',
+                              updateTargetName: 'characterKW',
+                              characterId:
+                                  widget.characterModel.characterId ?? '',
+                              atributeType: "text",
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -239,53 +349,6 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
         ),
         Divider(
           color: AppColors.appDark,
-        ),
-      ],
-    );
-  }
-
-  Widget _characterInfoCell(
-    String info,
-    String count,
-  ) {
-    return Column(
-      children: [
-        Text(
-          info,
-          style: GoogleFonts.rubik(
-            textStyle: TextStyle(
-                color: AppColors.appLight,
-                fontSize: 14.0,
-                fontWeight: FontWeight.bold),
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-          alignment: AlignmentDirectional.center,
-          height: 60,
-          width: 60,
-          decoration: BoxDecoration(
-            color: AppColors.appLight,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black,
-                blurRadius: 3,
-                spreadRadius: 0.5,
-              ),
-            ],
-            borderRadius: BorderRadiusDirectional.all(Radius.circular(10)),
-          ),
-          child: Text(
-            count,
-            style: GoogleFonts.rubik(
-              textStyle: TextStyle(
-                color: AppColors.appDark,
-                fontSize: 24.0,
-              ),
-            ),
-          ),
         ),
       ],
     );

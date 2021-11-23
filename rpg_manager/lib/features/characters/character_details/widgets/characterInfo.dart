@@ -1,25 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
+import 'package:rpg_manager/features/characters/character_details/character_details_controller.dart';
+import 'package:rpg_manager/features/characters/models/character_model.dart';
 
 class CharacterInfo extends StatelessWidget {
   CharacterInfo({
-    required this.system,
-    required this.characterId,
-    required this.characterRace,
-    required this.characterClass,
-    required this.characterAlignment,
-    required this.characterActiveCampaign,
+    required this.characterModel,
+    required this.controller,
   });
 
-  final String system;
-  final String characterId;
-  final String characterRace;
-  final String characterClass;
-  final String characterAlignment;
-  final String characterActiveCampaign;
+  final CharacterModel characterModel;
+  final CharacterDetailsScreenController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -60,12 +53,14 @@ class CharacterInfo extends StatelessWidget {
                   children: [
                     _infoCell(
                       title: 'Rasa',
-                      infoType: characterRace,
-                      action: () => _infoEditHandle(
+                      infoType: characterModel.characterRace ?? '',
+                      action: () => controller.atributeEditHandle(
                         context,
                         title: 'Edytuj rase',
                         hintText: 'Rasa',
                         updateTargetName: 'race',
+                        atributeType: 'string',
+                        characterId: characterModel.characterId ?? '',
                       ),
                     ),
                     Divider(
@@ -73,12 +68,14 @@ class CharacterInfo extends StatelessWidget {
                     ),
                     _infoCell(
                       title: 'Klasa',
-                      infoType: characterClass,
-                      action: () => _infoEditHandle(
+                      infoType: characterModel.characterClass ?? '',
+                      action: () => controller.atributeEditHandle(
                         context,
                         title: 'Edytuj klase',
                         hintText: 'Klasa',
                         updateTargetName: 'class',
+                        atributeType: 'string',
+                        characterId: characterModel.characterId ?? '',
                       ),
                     ),
                     Divider(
@@ -86,12 +83,14 @@ class CharacterInfo extends StatelessWidget {
                     ),
                     _infoCell(
                       title: 'Charakter',
-                      infoType: characterAlignment,
-                      action: () => _infoEditHandle(
+                      infoType: characterModel.characterAlignment ?? '',
+                      action: () => controller.atributeEditHandle(
                         context,
                         title: 'Edytuj charakter',
                         hintText: 'Charakter',
                         updateTargetName: 'alignment',
+                        atributeType: 'string',
+                        characterId: characterModel.characterId ?? '',
                       ),
                     ),
                     Divider(
@@ -99,7 +98,7 @@ class CharacterInfo extends StatelessWidget {
                     ),
                     _infoCell(
                       title: 'Aktualna przygoda',
-                      infoType: characterActiveCampaign,
+                      infoType: characterModel.characterActiveCampaign ?? '',
                       action: () {},
                     ),
                     Divider(
@@ -107,7 +106,7 @@ class CharacterInfo extends StatelessWidget {
                     ),
                     _infoCell(
                       title: 'System',
-                      infoType: system,
+                      infoType: characterModel.system ?? '',
                       action: () {},
                     ),
                     Divider(
@@ -159,115 +158,5 @@ class CharacterInfo extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void _infoEditHandle(
-    BuildContext context, {
-    required String title,
-    required String hintText,
-    required String updateTargetName,
-  }) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          final textController = TextEditingController();
-          final formKey = GlobalKey<FormState>();
-          return AlertDialog(
-            backgroundColor: AppColors.appLight,
-            title: Column(
-              children: [
-                Divider(
-                  color: AppColors.appDark,
-                ),
-                Text(
-                  title,
-                  style: GoogleFonts.rubik(
-                    textStyle: TextStyle(
-                      color: AppColors.appDark,
-                      fontSize: 14.0,
-                    ),
-                  ),
-                ),
-                Divider(
-                  color: AppColors.appDark,
-                ),
-                Form(
-                  key: formKey,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  child: TextFormField(
-                    controller: textController,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: hintText,
-                      hintStyle: GoogleFonts.rubik(
-                        textStyle: TextStyle(
-                          color: Colors.black45,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    autofocus: false,
-                    validator: (text) {
-                      if (text != null) {
-                        print('fajen');
-                      } else {
-                        print('niefajen');
-                        return '';
-                      }
-                    },
-                  ),
-                ),
-                Divider(
-                  color: AppColors.appDark,
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  try {
-                    CollectionReference characters =
-                        FirebaseFirestore.instance.collection('characters');
-
-                    characters
-                        .doc('$characterId')
-                        .update({updateTargetName: textController.text})
-                        .then((value) => print('$updateTargetName was updated'))
-                        .catchError((error) =>
-                            print('Failed to update $updateTargetName'));
-                  } on Exception catch (e) {
-                    print('Coś poszło nie tak: $e');
-                  }
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Zapisz',
-                  style: GoogleFonts.rubik(
-                    textStyle: TextStyle(
-                      color: AppColors.appDark,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Wróć',
-                  style: GoogleFonts.rubik(
-                    textStyle: TextStyle(
-                      color: AppColors.appDark,
-                      fontSize: 16.0,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        });
   }
 }

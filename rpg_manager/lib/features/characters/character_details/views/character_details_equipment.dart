@@ -2,8 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
+import 'package:rpg_manager/features/characters/character_details/character_details_controller.dart';
+import 'package:rpg_manager/features/characters/character_details/widgets/attacksAndMagicCell.dart';
+import 'package:rpg_manager/features/characters/character_details/widgets/moneyCell.dart';
+import 'package:rpg_manager/features/characters/models/character_model.dart';
 
 class CharacterDetailsEquipment extends StatelessWidget {
+  CharacterDetailsEquipment({
+    required this.characterModel,
+    required this.controller,
+  });
+
+  final CharacterModel characterModel;
+  final CharacterDetailsScreenController controller;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -77,11 +89,61 @@ class CharacterDetailsEquipment extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _money(),
-                      _money(),
-                      _money(),
-                      _money(),
-                      _money(),
+                      MoneyCell(
+                        title: 'SM',
+                        action: () => controller.atributeEditHandle(
+                          context,
+                          title: 'Sztuki miedzi',
+                          updateTargetName: 'SM',
+                          characterId: characterModel.characterId ?? '',
+                          atributeType: 'number',
+                        ),
+                        value: characterModel.sM,
+                      ),
+                      MoneyCell(
+                        title: 'SS',
+                        action: () => controller.atributeEditHandle(
+                          context,
+                          title: 'Sztuki srebra',
+                          updateTargetName: 'SS',
+                          characterId: characterModel.characterId ?? '',
+                          atributeType: 'number',
+                        ),
+                        value: characterModel.sS,
+                      ),
+                      MoneyCell(
+                        title: 'SE',
+                        action: () => controller.atributeEditHandle(
+                          context,
+                          title: 'Sztuki eledium',
+                          updateTargetName: 'SE',
+                          characterId: characterModel.characterId ?? '',
+                          atributeType: 'number',
+                        ),
+                        value: characterModel.sE,
+                      ),
+                      MoneyCell(
+                        title: 'SZ',
+                        action: () => controller.atributeEditHandle(
+                          context,
+                          title: 'Sztuki złota',
+                          updateTargetName: 'SZ',
+                          characterId: characterModel.characterId ?? '',
+                          atributeType: 'number',
+                        ),
+                        value: characterModel.sZ,
+                      ),
+                      MoneyCell(
+                        title: 'SP',
+                        action: () => controller.atributeEditHandle(
+                          context,
+                          title: 'Sztuki platyny',
+                          updateTargetName: 'SP',
+                          characterId: characterModel.characterId ?? '',
+                          atributeType: 'number',
+                        ),
+                        value: characterModel.sP,
+                      ),
                     ],
                   ),
                 ),
@@ -90,50 +152,6 @@ class CharacterDetailsEquipment extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _money() {
-    return Container(
-      alignment: AlignmentDirectional.center,
-      height: 50,
-      width: 80,
-      decoration: BoxDecoration(
-        color: AppColors.appDark,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black,
-            blurRadius: 3,
-            spreadRadius: 0.5,
-          ),
-        ],
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'SS',
-              style: GoogleFonts.rubik(
-                textStyle: TextStyle(
-                  color: AppColors.appLight,
-                  fontSize: 11.0,
-                ),
-              ),
-            ),
-            Text(
-              '50',
-              style: GoogleFonts.rubik(
-                textStyle: TextStyle(
-                  color: AppColors.appLight,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -235,38 +253,10 @@ class CharacterDetailsEquipment extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    'Ataki i magia',
-                    style: GoogleFonts.rubik(
-                      textStyle: TextStyle(
-                        color: AppColors.appDark,
-                        fontSize: 14.0,
-                      ),
-                    ),
-                  ),
-                  Divider(
-                    color: AppColors.appDark,
-                  ),
-                  Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-                    'Phasellus ut erat a diam posuere interdum. Nam maximus vel'
-                    'libero vel mollis. Duis ac felis varius neque vulputate '
-                    'suscipit. Aenean malesuada lectus in scelerisque viverra. '
-                    'Curabitur metus turpis, finibus a sagittis sed, tempus '
-                    'vitae leo. Phasellus dolor massa, lacinia eu velit vehicula, '
-                    'cursus vulputate odio. Sed maximus aliquet lectus vitae rhoncus. '
-                    'Proin ornare, ante maximus cursus pharetra, lectus arcu gravida '
-                    'dui, nec elementum orci nisl a dui. Morbi eget mi condimentum, aliquet orci eget, maximus nunc.',
-                    style: GoogleFonts.rubik(
-                      textStyle: TextStyle(
-                        color: AppColors.appDark,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Divider(
-                    color: AppColors.appDark,
+                  AttacksAndMagicCell(
+                    controller: controller,
+                    characterId: characterModel.characterId ?? '',
+                    multiTextValue: characterModel.attacksAndMagic,
                   ),
                 ],
               ),

@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/features/characters/character_details/character_details_controller.dart';
 import 'package:rpg_manager/features/characters/character_details/views/character_details_equipment.dart';
 import 'package:rpg_manager/features/characters/character_details/views/character_details_info.dart';
 import 'package:rpg_manager/features/characters/character_details/views/character_details_skills.dart';
 import 'package:rpg_manager/features/characters/character_details/views/character_details_spells.dart';
+import 'package:rpg_manager/features/characters/models/character_model.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
 
@@ -42,30 +42,64 @@ class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
 
               final String? image = data['image'];
 
+              final characterModel = CharacterModel(
+                image: image ?? null,
+                system: data['system'],
+                characterId: widget.characterId,
+                characterPD: data['characterPD'] ?? '0',
+                characterActiveCampaign: data['activeCampaign'] ?? '',
+                characterLvl: data['level'] ?? 0,
+                lifeCheck: data['lifeCheck'] ?? 0,
+                deathCheck: data['deathCheck'] ?? 0,
+                characterBio: data['bio'],
+                characterRace: data['race'],
+                characterClass: data['class'],
+                characterAlignment: data['alignment'],
+                characterStrength: data['strength'],
+                characterDexterity: data['dexterity'],
+                characterConstitution: data['constitution'],
+                characterIntelligence: data['intelligence'],
+                characterWisdom: data['wisdom'],
+                characterCharisma: data['charisma'],
+                sM: data['SM'],
+                sS: data['SS'],
+                sE: data['SE'],
+                sZ: data['SZ'],
+                sP: data['SP'],
+                attacksAndMagic: data['attacksAndMagic'],
+                spellBaseAttribute: data['spellBaseAttribute'],
+                countSpellCells: data['countSpellCells'],
+                spellCellsUsed: data['spellCellsUsed'],
+                throwAgainstSpells: data['throwAgainstSpells'],
+                magicAttackBonus: data['magicAttackBonus'],
+                speed: data['speed'],
+                initiative: data['initiative'],
+                perception: data['perception'],
+                maxPW: data['maxPW'],
+                tempPW: data['tempPW'],
+                characterKP: data['characterKP'],
+                inspiration: data['inspiration'],
+                specialBonus: data['specialBonus'],
+                characterKW: data['characterKW'],
+              );
+
               final _pages = <Widget>[
                 CharacterDetailsInfo(
-                  image: image ?? null,
-                  system: data['system'],
-                  characterId: widget.characterId,
-                  characterPD: data['characterPD'] ?? '0',
-                  characterActiveCampaign: data['activeCampaign'] ?? '',
-                  characterLvl: data['level'] ?? 0,
-                  lifeCheck: data['lifeCheck'] ?? 0,
-                  deathCheck: data['deathCheck'] ?? 0,
-                  characterBio: data['bio'],
-                  characterRace: data['race'],
-                  characterClass: data['class'],
-                  characterAlignment: data['alignment'],
-                  characterStrength: data['strength'],
-                  characterDexterity: data['dexterity'],
-                  characterConstitution: data['constitution'],
-                  characterIntelligence: data['intelligence'],
-                  characterWisdom: data['wisdom'],
-                  characterCharisma: data['charisma'],
+                  characterModel: characterModel,
+                  controller: _controller,
                 ),
-                CharacterDetailsSkills(),
-                CharacterDetailsEquipment(),
-                CharacterDetailsSpells(),
+                CharacterDetailsSkills(
+                  characterModel: characterModel,
+                  controller: _controller,
+                ),
+                CharacterDetailsEquipment(
+                  characterModel: characterModel,
+                  controller: _controller,
+                ),
+                CharacterDetailsSpells(
+                  characterModel: characterModel,
+                  controller: _controller,
+                ),
               ];
 
               return Scaffold(
@@ -74,7 +108,8 @@ class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
                   actions: [
                     IconButton(
                       onPressed: () {
-                        _characterDelete(context);
+                        _controller.characterDelete(context,
+                            characterId: widget.characterId);
                       },
                       icon: Icon(Icons.person_off),
                     ),
@@ -117,80 +152,5 @@ class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
             }
           }),
     );
-  }
-
-  void _characterDelete(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: AppColors.appLight,
-            title: Column(
-              children: [
-                Divider(
-                  color: AppColors.appDark,
-                ),
-                Text(
-                  'Napewno chcesz usunąć postać?',
-                  style: GoogleFonts.rubik(
-                    textStyle: TextStyle(
-                      color: AppColors.appDark,
-                      fontSize: 14.0,
-                    ),
-                  ),
-                ),
-                Divider(
-                  color: AppColors.appDark,
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  try {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-
-                    CollectionReference characters =
-                        FirebaseFirestore.instance.collection('characters');
-
-                    characters
-                        .doc('${widget.characterId}')
-                        .delete()
-                        .then((value) => print('character was deleted'))
-                        .catchError(
-                            (error) => print('Failed to delete character'));
-                  } on Exception catch (e) {
-                    print('Coś poszło nie tak: $e');
-                  }
-                },
-                child: Text(
-                  'Tak',
-                  style: GoogleFonts.rubik(
-                    textStyle: TextStyle(
-                      color: AppColors.appDark,
-                      fontSize: 16.0,
-                    ),
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Nie',
-                  style: GoogleFonts.rubik(
-                    textStyle: TextStyle(
-                      color: AppColors.appDark,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        });
   }
 }

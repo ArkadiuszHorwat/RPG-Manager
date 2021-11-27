@@ -13,6 +13,32 @@ class CharacterDetailsScreenController {
         .snapshots();
   }
 
+  final spellsSnapshot = FirebaseFirestore.instance
+      .collection('spells')
+      .orderBy('createdAt', descending: true)
+      .snapshots();
+
+  final spells = FirebaseFirestore.instance.collection('spells');
+
+  Future<void> addSpell({
+    required String name,
+    required Timestamp timestamp,
+    required String level,
+    required String characterId,
+    String? description,
+  }) {
+    return spells
+        .add({
+          'name': name,
+          'createdAt': timestamp,
+          'characterId': characterId,
+          'description': description ?? "",
+          'level': level,
+        })
+        .then((value) => print("Spell Added"))
+        .catchError((error) => print("Failed to add spell: $error"));
+  }
+
   void _updateCharacter({
     required String characterId,
     required String updateTargetName,
@@ -42,6 +68,21 @@ class CharacterDetailsScreenController {
           .delete()
           .then((value) => print('character was deleted'))
           .catchError((error) => print('Failed to delete character'));
+    } on Exception catch (e) {
+      print('Coś poszło nie tak: $e');
+    }
+  }
+
+  void _deleteSpell({required String spellId}) {
+    try {
+      CollectionReference characters =
+          FirebaseFirestore.instance.collection('spells');
+
+      characters
+          .doc(spellId)
+          .delete()
+          .then((value) => print('spell was deleted'))
+          .catchError((error) => print('Failed to delete spell'));
     } on Exception catch (e) {
       print('Coś poszło nie tak: $e');
     }
@@ -78,6 +119,67 @@ class CharacterDetailsScreenController {
                   Navigator.pop(context);
                   Navigator.pop(context);
                   _deleteCharacter(characterId: characterId);
+                },
+                child: Text(
+                  'Tak',
+                  style: GoogleFonts.rubik(
+                    textStyle: TextStyle(
+                      color: AppColors.appDark,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Nie',
+                  style: GoogleFonts.rubik(
+                    textStyle: TextStyle(
+                      color: AppColors.appDark,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  void spellDelete(BuildContext context, {required String spellId}) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: AppColors.appLight,
+            title: Column(
+              children: [
+                Divider(
+                  color: AppColors.appDark,
+                ),
+                Text(
+                  'Napewno chcesz usunąć ten czar?',
+                  style: GoogleFonts.rubik(
+                    textStyle: TextStyle(
+                      color: AppColors.appDark,
+                      fontSize: 14.0,
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: AppColors.appDark,
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  _deleteSpell(spellId: spellId);
+                  Navigator.pop(context);
                 },
                 child: Text(
                   'Tak',

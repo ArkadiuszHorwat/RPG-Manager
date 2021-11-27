@@ -428,7 +428,7 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
         _spellInfoEditHandle(
           context: context,
           name: name,
-          description: description ?? "",
+          description: description ?? "Ten czar nie ma opisu",
         );
       },
       child: Padding(
@@ -530,9 +530,6 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
             backgroundColor: AppColors.appLight,
             title: Column(
               children: [
-                Divider(
-                  color: AppColors.appDark,
-                ),
                 Text(
                   name,
                   style: GoogleFonts.rubik(

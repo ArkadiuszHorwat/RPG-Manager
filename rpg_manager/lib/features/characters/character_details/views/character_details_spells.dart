@@ -428,7 +428,7 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
         _spellInfoEditHandle(
           context: context,
           name: name,
-          description: description ?? "Ten czar nie ma opisu",
+          description: description ?? "",
         );
       },
       child: Padding(
@@ -450,10 +450,15 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
                 ),
                 IconButton(
                   onPressed: () {
-                    widget.controller.spellDelete(context, spellId: spellId);
+                    widget.controller.delete(context,
+                        id: spellId,
+                        collectionName: 'spells',
+                        title: 'Czy na pewno chcesz usunąć ten czar?');
                   },
                   icon: Icon(Icons.cancel_outlined),
                   color: AppColors.appDark,
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(),
                 ),
               ],
             ),

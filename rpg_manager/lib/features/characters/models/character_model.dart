@@ -43,6 +43,12 @@ class CharacterModel {
     this.inspiration,
     this.specialBonus,
     this.characterKW,
+    this.defenseThrowsCharisma,
+    this.defenseThrowsWisdom,
+    this.defenseThrowsIntelligence,
+    this.defenseThrowsConstitution,
+    this.defenseThrowsDexterity,
+    this.defenseThrowsStrength,
   });
 
   final String? name;
@@ -87,4 +93,10 @@ class CharacterModel {
   final String? inspiration;
   final String? specialBonus;
   final String? characterKW;
+  final String? defenseThrowsCharisma;
+  final String? defenseThrowsWisdom;
+  final String? defenseThrowsIntelligence;
+  final String? defenseThrowsConstitution;
+  final String? defenseThrowsDexterity;
+  final String? defenseThrowsStrength;
 }

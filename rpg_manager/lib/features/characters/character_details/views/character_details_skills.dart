@@ -1,47 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/features/characters/character_details/character_details_controller.dart';
+import 'package:rpg_manager/features/characters/character_details/widgets/defenseThrowsCell.dart';
 import 'package:rpg_manager/features/characters/character_details/widgets/statisticCell.dart';
 import 'package:rpg_manager/features/characters/models/character_model.dart';
 
 final skills = [
-  'Akrobatyka',
-  'Atletyka',
-  'Historia',
-  'Intuicja',
-  'Medycyna',
-  'Opieka nad zwierzętami',
-  'Oszustwo',
-  'Percepcja',
-  'Perswazja',
-  'Przyroda',
-  'Religia',
-  'Skradanie się',
-  'Sztuka przetrwania',
-  'Śledztwo',
-  'Wiedza tajemna',
-  'Występy',
-  'Zastraszenie',
-  'Zwinne dłonie',
-];
-
-final savingThrows = [
-  'Siła',
-  'Zręczność',
-  'Kondycja',
-  'Inteligencja',
-  'Mądrość',
-  'Charyzma',
-];
-
-final atributes = [
-  'Zrc',
-  'Sil',
-  'Int',
-  'Mdr',
-  'Cha',
+  'Akrobatyka (Zrc)',
+  'Atletyka (Sil)',
+  'Historia (Int)',
+  'Intuicja (Mdr)',
+  'Medycyna (Mdr)',
+  'Opieka nad zwierzętami (Mdr)',
+  'Oszustwo (Cha)',
+  'Percepcja (Mdr)',
+  'Perswazja (Cha)',
+  'Przyroda (Int)',
+  'Religia (Int)',
+  'Skradanie się (Zrc)',
+  'Sztuka przetrwania (Mdr)',
+  'Śledztwo (Int)',
+  'Wiedza tajemna (Int)',
+  'Występy (Cha)',
+  'Zastraszenie (Cha)',
+  'Zwinne dłonie (Zrc)',
 ];
 
 class CharacterDetailsSkills extends StatefulWidget {
@@ -59,6 +44,9 @@ class CharacterDetailsSkills extends StatefulWidget {
 
 class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
   var _pageFlag = true;
+  final _nameTextController = TextEditingController();
+  final _descriptionTextController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +69,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                         color: AppColors.appLight,
                       ),
                       label: Text(
-                        'Reszta',
+                        'Pozostałe',
                         style: GoogleFonts.rubik(
                           textStyle: TextStyle(
                             color: AppColors.appLight,
@@ -102,7 +90,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                         color: AppColors.appLight,
                       ),
                       label: Text(
-                        'Ogólne',
+                        'Wróć',
                         style: GoogleFonts.rubik(
                           textStyle: TextStyle(
                             color: AppColors.appLight,
@@ -115,26 +103,52 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
             ),
             _pageFlag
                 ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        'Rzuty obronne:',
+                        style: GoogleFonts.rubik(
+                          textStyle: TextStyle(
+                            color: AppColors.appLight,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Divider(
+                        color: AppColors.appLight,
+                      ),
+                      _defenseThrows(),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
                             flex: 1,
-                            child: _infoContainer('Umiejętności', skills),
+                            child: _infoContainer('Zdolności', [
+                              'asda',
+                              'asda',
+                              'asd',
+                              'asdasd',
+                              'asdads asdsdsdasd sd asdas sdsdaas sdasdasd d sa sdss asdas'
+                            ]),
                           ),
                           SizedBox(
                             width: 10,
                           ),
                           Expanded(
                             flex: 1,
-                            child:
-                                _infoContainer('Rzuty obronne', savingThrows),
+                            child: _infoContainer(
+                                'Biegłości i języki', ['asda', 'asda', 'asd']),
                           ),
                         ],
                       ),
-                      _infoContainer('Zdolności', ['asda', 'asda', 'asd']),
-                      _infoContainer(
-                          'Biegłości i języki', ['asda', 'asda', 'asd']),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      _infoContainer('Umiejętności', skills),
                     ],
                   )
                 : Column(
@@ -285,48 +299,59 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
   Widget _infoContainer(String title, List<String> items) {
     final listItem = <Widget>[];
     items.forEach((item) => listItem.add(_listElement(item)));
-    return Column(
-      children: [
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-          height: 350,
-          decoration: BoxDecoration(
-            color: AppColors.appLight,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black,
-                blurRadius: 1,
-                spreadRadius: 1,
-              ),
-            ],
-            borderRadius: BorderRadiusDirectional.all(Radius.circular(10)),
+    return Container(
+      height: 300,
+      decoration: BoxDecoration(
+        color: AppColors.appLight,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black,
+            blurRadius: 1,
+            spreadRadius: 1,
           ),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.rubik(
-                      textStyle: TextStyle(
-                        color: AppColors.appDark,
-                        fontSize: 14.0,
-                      ),
+        ],
+        borderRadius: BorderRadiusDirectional.all(Radius.circular(10)),
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.rubik(
+                    textStyle: TextStyle(
+                      color: AppColors.appDark,
+                      fontSize: 14.0,
                     ),
                   ),
-                  Column(
-                    children: listItem,
-                  ),
-                ],
+                ),
+                _addSkill(
+                  context,
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            child: Container(
+              height: 220,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      children: listItem,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -352,5 +377,304 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
         ),
       ],
     );
+  }
+
+  Widget _defenseThrows() {
+    return Container(
+      alignment: AlignmentDirectional.centerEnd,
+      height: 80,
+      width: double.infinity,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          DefenseThrowsCell(
+            attribute: 'Sil',
+            throwsCount: widget.characterModel.defenseThrowsStrength ?? '',
+            action: () => widget.controller.atributeEditHandle(
+              context,
+              title: 'Edytuj rzut obronny:',
+              hintText: 'Rzut obronny',
+              updateTargetName: 'defenseThrowsStrength',
+              characterId: widget.characterModel.characterId ?? '',
+              atributeType: 'number',
+            ),
+          ),
+          DefenseThrowsCell(
+            attribute: 'Zrc',
+            throwsCount: widget.characterModel.defenseThrowsDexterity ?? '',
+            action: () => widget.controller.atributeEditHandle(
+              context,
+              title: 'Edytuj rzut obronny:',
+              hintText: 'Rzut obronny',
+              updateTargetName: 'defenseThrowsDexterity',
+              characterId: widget.characterModel.characterId ?? '',
+              atributeType: 'number',
+            ),
+          ),
+          DefenseThrowsCell(
+            attribute: 'Kon',
+            throwsCount: widget.characterModel.defenseThrowsConstitution ?? '',
+            action: () => widget.controller.atributeEditHandle(
+              context,
+              title: 'Edytuj rzut obronny:',
+              hintText: 'Rzut obronny',
+              updateTargetName: 'defenseThrowsConstitution',
+              characterId: widget.characterModel.characterId ?? '',
+              atributeType: 'number',
+            ),
+          ),
+          DefenseThrowsCell(
+            attribute: 'Int',
+            throwsCount: widget.characterModel.defenseThrowsIntelligence ?? '',
+            action: () => widget.controller.atributeEditHandle(
+              context,
+              title: 'Edytuj rzut obronny:',
+              hintText: 'Rzut obronny',
+              updateTargetName: 'defenseThrowsIntelligence',
+              characterId: widget.characterModel.characterId ?? '',
+              atributeType: 'number',
+            ),
+          ),
+          DefenseThrowsCell(
+            attribute: 'Mdr',
+            throwsCount: widget.characterModel.defenseThrowsWisdom ?? '',
+            action: () => widget.controller.atributeEditHandle(
+              context,
+              title: 'Edytuj rzut obronny:',
+              hintText: 'Rzut obronny',
+              updateTargetName: 'defenseThrowsWisdom',
+              characterId: widget.characterModel.characterId ?? '',
+              atributeType: 'number',
+            ),
+          ),
+          DefenseThrowsCell(
+            attribute: 'Cha',
+            throwsCount: widget.characterModel.defenseThrowsCharisma ?? '',
+            action: () => widget.controller.atributeEditHandle(
+              context,
+              title: 'Edytuj rzut obronny:',
+              hintText: 'Rzut obronny',
+              updateTargetName: 'defenseThrowsCharisma',
+              characterId: widget.characterModel.characterId ?? '',
+              atributeType: 'number',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _addSkill(
+    BuildContext context, {
+    String? title,
+  }) {
+    return Container(
+      alignment: AlignmentDirectional.centerStart,
+      decoration: title != null
+          ? BoxDecoration(
+              color: AppColors.appDark,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black,
+                  blurRadius: 3,
+                  spreadRadius: 0.5,
+                ),
+              ],
+            )
+          : BoxDecoration(),
+      child: TextButton(
+        onPressed: () => _onButtonPressed(
+          context,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            title != null
+                ? Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Text(
+                      title,
+                      style: GoogleFonts.rubik(
+                        textStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: AppColors.appLight,
+                        ),
+                      ),
+                    ),
+                  )
+                : SizedBox.shrink(),
+            Icon(
+              CupertinoIcons.plus_app_fill,
+              color: title != null ? AppColors.appLight : AppColors.appDark,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _onButtonPressed(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isDismissible: false,
+        elevation: 10,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(30.0),
+          ),
+        ),
+        isScrollControlled: true,
+        backgroundColor: AppColors.appLight,
+        builder: (context) {
+          return _addSkillBuilder();
+        });
+  }
+
+  Widget _addSkillBuilder() {
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setModalState) {
+      return Form(
+        key: formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: EdgeInsets.zero,
+              margin: EdgeInsets.zero,
+              alignment: AlignmentDirectional.topCenter,
+              child: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(
+                  Icons.keyboard_arrow_down_outlined,
+                  color: AppColors.appDark,
+                  size: 44,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        print('OK');
+
+                        widget.controller.addItem(
+                            name: _nameTextController.text,
+                            timestamp: Timestamp.now(),
+                            description: _descriptionTextController.text,
+                            characterId:
+                                widget.characterModel.characterId ?? "");
+
+                        Navigator.pop(context);
+                        setState(() {
+                          _nameTextController.text = '';
+                          _descriptionTextController.text = '';
+                        });
+                      } else {
+                        print('błąd');
+                      }
+                    },
+                    child: Text(
+                      "Zatwierdź",
+                      style: GoogleFonts.rubik(
+                        textStyle: TextStyle(
+                          color: AppColors.appDark,
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Nazwa przedmiotu:",
+                    style: GoogleFonts.rubik(
+                      textStyle: TextStyle(
+                        color: AppColors.appDark,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _nameTextController,
+                    decoration: InputDecoration(
+                      hintText: "Nazwa przedmiotu",
+                      hintStyle: GoogleFonts.rubik(
+                        textStyle: TextStyle(
+                          color: Colors.black45,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    autofocus: false,
+                    validator: (text) {
+                      if (text!.isEmpty) {
+                        print('niefajen');
+                        return '';
+                      } else {
+                        print('fajen');
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Opis:",
+                        style: GoogleFonts.rubik(
+                          textStyle: TextStyle(
+                            color: AppColors.appDark,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom,
+                        ),
+                        child: TextFormField(
+                          controller: _descriptionTextController,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 5,
+                          decoration: InputDecoration(
+                            hintText: "Opis",
+                            hintStyle: GoogleFonts.rubik(
+                              textStyle: TextStyle(
+                                color: Colors.black45,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                          autofocus: false,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }

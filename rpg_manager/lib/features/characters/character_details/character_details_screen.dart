@@ -81,6 +81,12 @@ class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
                 inspiration: data['inspiration'],
                 specialBonus: data['specialBonus'],
                 characterKW: data['characterKW'],
+                defenseThrowsCharisma: data['defenseThrowsCharisma'],
+                defenseThrowsWisdom: data['defenseThrowsWisdom'],
+                defenseThrowsIntelligence: data['defenseThrowsIntelligence'],
+                defenseThrowsConstitution: data['defenseThrowsConstitution'],
+                defenseThrowsDexterity: data['defenseThrowsDexterity'],
+                defenseThrowsStrength: data['defenseThrowsStrength'],
               );
 
               final _pages = <Widget>[

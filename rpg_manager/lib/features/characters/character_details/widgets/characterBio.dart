@@ -31,6 +31,7 @@ class CharacterBio extends StatelessWidget {
               characterId: characterId,
               characterMultiText: characterBio,
               atributeType: 'string',
+              pathName: 'character',
             );
           },
           child: Container(

@@ -79,6 +79,7 @@ class _CharacterDetailsInfoState extends State<CharacterDetailsInfo> {
                       updateTargetName: 'strength',
                       characterId: widget.characterModel.characterId ?? '',
                       atributeType: 'number',
+                      pathName: 'character',
                     ),
                   ),
                   AtributeCell(
@@ -91,6 +92,7 @@ class _CharacterDetailsInfoState extends State<CharacterDetailsInfo> {
                       updateTargetName: 'dexterity',
                       characterId: widget.characterModel.characterId ?? '',
                       atributeType: 'number',
+                      pathName: 'character',
                     ),
                   ),
                   AtributeCell(
@@ -103,6 +105,7 @@ class _CharacterDetailsInfoState extends State<CharacterDetailsInfo> {
                       updateTargetName: 'constitution',
                       characterId: widget.characterModel.characterId ?? '',
                       atributeType: 'number',
+                      pathName: 'character',
                     ),
                   ),
                   AtributeCell(
@@ -115,6 +118,7 @@ class _CharacterDetailsInfoState extends State<CharacterDetailsInfo> {
                       updateTargetName: 'intelligence',
                       characterId: widget.characterModel.characterId ?? '',
                       atributeType: 'number',
+                      pathName: 'character',
                     ),
                   ),
                   AtributeCell(
@@ -127,6 +131,7 @@ class _CharacterDetailsInfoState extends State<CharacterDetailsInfo> {
                       updateTargetName: 'wisdom',
                       characterId: widget.characterModel.characterId ?? '',
                       atributeType: 'number',
+                      pathName: 'character',
                     ),
                   ),
                   AtributeCell(
@@ -139,6 +144,7 @@ class _CharacterDetailsInfoState extends State<CharacterDetailsInfo> {
                       updateTargetName: 'charisma',
                       characterId: widget.characterModel.characterId ?? '',
                       atributeType: 'number',
+                      pathName: 'character',
                     ),
                   ),
                 ],

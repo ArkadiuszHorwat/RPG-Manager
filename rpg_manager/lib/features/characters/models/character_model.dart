@@ -49,6 +49,7 @@ class CharacterModel {
     this.defenseThrowsConstitution,
     this.defenseThrowsDexterity,
     this.defenseThrowsStrength,
+    this.skillsId,
   });
 
   final String? name;
@@ -99,4 +100,5 @@ class CharacterModel {
   final String? defenseThrowsConstitution;
   final String? defenseThrowsDexterity;
   final String? defenseThrowsStrength;
+  final String? skillsId;
 }

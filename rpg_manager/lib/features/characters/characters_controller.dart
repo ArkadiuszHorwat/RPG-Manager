@@ -9,20 +9,44 @@ class CharactersScreenController {
       .orderBy('createdAt', descending: true)
       .snapshots();
   final characters = FirebaseFirestore.instance.collection('characters');
+  final skills = FirebaseFirestore.instance.collection('skills');
 
   Future<void> addCharacter({
     required CharacterModel characterModel,
   }) {
-    return characters
-        .add({
-          'name': characterModel.name,
-          'system': characterModel.system,
-          'userId': characterModel.userId,
-          'image': characterModel.image,
-          'createdAt': characterModel.timestamp,
-        })
-        .then((value) => print("Character Added"))
-        .catchError((error) => print("Failed to add character: $error"));
+    return skills.add({
+      'acrobatics': '',
+      'animalHandling': '',
+      'arcana': '',
+      'athletics': '',
+      'deception': '',
+      'history': '',
+      'insight': '',
+      'intimidation': '',
+      'investigation': '',
+      'medicine': '',
+      'nature': '',
+      'perception': '',
+      'performance': '',
+      'persuasion': '',
+      'religion': '',
+      'sleightOfHand': '',
+      'stealth': '',
+      'survival': '',
+    }).then((value) {
+      print("Skills Added");
+      characters
+          .add({
+            'name': characterModel.name,
+            'system': characterModel.system,
+            'userId': characterModel.userId,
+            'image': characterModel.image,
+            'createdAt': characterModel.timestamp,
+            'skillsId': value.id,
+          })
+          .then((value) => print("Character Added"))
+          .catchError((error) => print("Failed to add character: $error"));
+    });
   }
 
   void routeToCharacterDetails(BuildContext context, String characterId) {

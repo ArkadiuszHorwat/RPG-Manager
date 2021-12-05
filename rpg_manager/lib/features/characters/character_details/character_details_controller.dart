@@ -13,6 +13,14 @@ class CharacterDetailsScreenController {
         .snapshots();
   }
 
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getSkills(
+      {required String skillsId}) {
+    return FirebaseFirestore.instance
+        .collection('skills')
+        .doc(skillsId)
+        .snapshots();
+  }
+
   final spellsSnapshot = FirebaseFirestore.instance
       .collection('spells')
       .orderBy('createdAt', descending: true)
@@ -23,11 +31,23 @@ class CharacterDetailsScreenController {
       .orderBy('createdAt', descending: true)
       .snapshots();
 
+  final proficienciesSnapshot = FirebaseFirestore.instance
+      .collection('proficiencies')
+      .orderBy('createdAt', descending: true)
+      .snapshots();
+
+  final featuresSnapshot = FirebaseFirestore.instance
+      .collection('features')
+      .orderBy('createdAt', descending: true)
+      .snapshots();
+
   final inUseItemsSnapshot =
       FirebaseFirestore.instance.collection('inUseItems').snapshots();
 
   final spells = FirebaseFirestore.instance.collection('spells');
   final items = FirebaseFirestore.instance.collection('items');
+  final features = FirebaseFirestore.instance.collection('features');
+  final proficiencies = FirebaseFirestore.instance.collection('proficiencies');
   final inUseItems = FirebaseFirestore.instance.collection('inUseItems');
 
   Future<void> addSpell({
@@ -54,7 +74,42 @@ class CharacterDetailsScreenController {
     required Timestamp timestamp,
     required String characterId,
     String? description,
+    required String pathName,
   }) {
+    switch (pathName) {
+      case 'itmes':
+        return items
+            .add({
+              'name': name,
+              'createdAt': timestamp,
+              'characterId': characterId,
+              'description': description ?? "",
+            })
+            .then((value) => print("Item Added"))
+            .catchError((error) => print("Failed to add item: $error"));
+      case 'features':
+        return features
+            .add({
+              'name': name,
+              'createdAt': timestamp,
+              'characterId': characterId,
+              'description': description ?? "",
+            })
+            .then((value) => print("Feature Added"))
+            .catchError((error) => print("Failed to add feature: $error"));
+      case 'proficiencies':
+        return proficiencies
+            .add({
+              'name': name,
+              'createdAt': timestamp,
+              'characterId': characterId,
+              'description': description ?? "",
+            })
+            .then((value) => print("Proficiencies Added"))
+            .catchError(
+                (error) => print("Failed to add proficiencies: $error"));
+      default:
+    }
     return items
         .add({
           'name': name,
@@ -96,6 +151,25 @@ class CharacterDetailsScreenController {
 
       characters
           .doc(characterId)
+          .update({updateTargetName: newValue})
+          .then((value) => print('$updateTargetName was updated'))
+          .catchError((error) => print('Failed to update $updateTargetName'));
+    } on Exception catch (e) {
+      print('Coś poszło nie tak: $e');
+    }
+  }
+
+  void _updateSkill({
+    required String skillId,
+    required String updateTargetName,
+    required String newValue,
+  }) {
+    try {
+      CollectionReference skills =
+          FirebaseFirestore.instance.collection('skills');
+
+      skills
+          .doc(skillId)
           .update({updateTargetName: newValue})
           .then((value) => print('$updateTargetName was updated'))
           .catchError((error) => print('Failed to update $updateTargetName'));
@@ -308,9 +382,11 @@ class CharacterDetailsScreenController {
     required String title,
     String? hintText,
     required String updateTargetName,
-    required String characterId,
+    String? characterId,
     String? characterMultiText,
     required String atributeType,
+    required String pathName,
+    String? skillId,
   }) {
     showDialog(
         context: context,
@@ -381,14 +457,23 @@ class CharacterDetailsScreenController {
             ),
             actions: [
               TextButton(
-                onPressed: () {
-                  _updateCharacter(
-                    characterId: characterId,
-                    updateTargetName: updateTargetName,
-                    newValue: textController.text,
-                  );
-                  Navigator.pop(context);
-                },
+                onPressed: pathName == 'character'
+                    ? () {
+                        _updateCharacter(
+                          characterId: characterId ?? '',
+                          updateTargetName: updateTargetName,
+                          newValue: textController.text,
+                        );
+                        Navigator.pop(context);
+                      }
+                    : () {
+                        _updateSkill(
+                          skillId: skillId ?? '',
+                          updateTargetName: updateTargetName,
+                          newValue: textController.text,
+                        );
+                        Navigator.pop(context);
+                      },
                 child: Text(
                   'Zapisz',
                   style: GoogleFonts.rubik(

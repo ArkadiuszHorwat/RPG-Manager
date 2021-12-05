@@ -7,27 +7,7 @@ import 'package:rpg_manager/features/characters/character_details/character_deta
 import 'package:rpg_manager/features/characters/character_details/widgets/defenseThrowsCell.dart';
 import 'package:rpg_manager/features/characters/character_details/widgets/statisticCell.dart';
 import 'package:rpg_manager/features/characters/models/character_model.dart';
-
-final skills = [
-  'Akrobatyka (Zrc)',
-  'Atletyka (Sil)',
-  'Historia (Int)',
-  'Intuicja (Mdr)',
-  'Medycyna (Mdr)',
-  'Opieka nad zwierzętami (Mdr)',
-  'Oszustwo (Cha)',
-  'Percepcja (Mdr)',
-  'Perswazja (Cha)',
-  'Przyroda (Int)',
-  'Religia (Int)',
-  'Skradanie się (Zrc)',
-  'Sztuka przetrwania (Mdr)',
-  'Śledztwo (Int)',
-  'Wiedza tajemna (Int)',
-  'Występy (Cha)',
-  'Zastraszenie (Cha)',
-  'Zwinne dłonie (Zrc)',
-];
+import 'package:rpg_manager/features/characters/models/skills_model.dart';
 
 class CharacterDetailsSkills extends StatefulWidget {
   CharacterDetailsSkills({
@@ -127,13 +107,10 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                         children: [
                           Expanded(
                             flex: 1,
-                            child: _infoContainer('Zdolności', [
-                              'asda',
-                              'asda',
-                              'asd',
-                              'asdasd',
-                              'asdads asdsdsdasd sd asdas sdsdaas sdasdasd d sa sdss asdas'
-                            ]),
+                            child: _infoContainer(
+                              title: 'Zdolności',
+                              collectionName: 'features',
+                            ),
                           ),
                           SizedBox(
                             width: 10,
@@ -141,14 +118,20 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                           Expanded(
                             flex: 1,
                             child: _infoContainer(
-                                'Biegłości i języki', ['asda', 'asda', 'asd']),
+                              title: 'Biegłości i języki',
+                              collectionName: 'proficiencies',
+                            ),
                           ),
                         ],
                       ),
                       SizedBox(
                         height: 15,
                       ),
-                      _infoContainer('Umiejętności', skills),
+                      _infoContainer(
+                        title: 'Umiejętności',
+                        collectionName: 'skills',
+                        items: SkillsModel().skills,
+                      ),
                     ],
                   )
                 : Column(
@@ -170,6 +153,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                               characterId:
                                   widget.characterModel.characterId ?? '',
                               atributeType: "number",
+                              pathName: 'character',
                             ),
                           ),
                           StatisticCell(
@@ -182,6 +166,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                               characterId:
                                   widget.characterModel.characterId ?? '',
                               atributeType: "number",
+                              pathName: 'character',
                             ),
                           ),
                           StatisticCell(
@@ -194,6 +179,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                               characterId:
                                   widget.characterModel.characterId ?? '',
                               atributeType: "number",
+                              pathName: 'character',
                             ),
                           ),
                         ],
@@ -215,6 +201,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                               characterId:
                                   widget.characterModel.characterId ?? '',
                               atributeType: "number",
+                              pathName: 'character',
                             ),
                           ),
                           StatisticCell(
@@ -227,6 +214,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                               characterId:
                                   widget.characterModel.characterId ?? '',
                               atributeType: "number",
+                              pathName: 'character',
                             ),
                           ),
                           StatisticCell(
@@ -239,6 +227,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                               characterId:
                                   widget.characterModel.characterId ?? '',
                               atributeType: "number",
+                              pathName: 'character',
                             ),
                           ),
                         ],
@@ -260,6 +249,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                               characterId:
                                   widget.characterModel.characterId ?? '',
                               atributeType: "number",
+                              pathName: 'character',
                             ),
                           ),
                           StatisticCell(
@@ -272,6 +262,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                               characterId:
                                   widget.characterModel.characterId ?? '',
                               atributeType: "number",
+                              pathName: 'character',
                             ),
                           ),
                           StatisticCell(
@@ -284,6 +275,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                               characterId:
                                   widget.characterModel.characterId ?? '',
                               atributeType: "text",
+                              pathName: 'character',
                             ),
                           ),
                         ],
@@ -296,9 +288,22 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
     );
   }
 
-  Widget _infoContainer(String title, List<String> items) {
-    final listItem = <Widget>[];
-    items.forEach((item) => listItem.add(_listElement(item)));
+  Widget _infoContainer({
+    required String title,
+    required String collectionName,
+    List<String>? items,
+  }) {
+    Stream<QuerySnapshot<Object?>>? _currentSnapshot;
+
+    switch (collectionName) {
+      case 'proficiencies':
+        _currentSnapshot = widget.controller.proficienciesSnapshot;
+        break;
+      case 'features':
+        _currentSnapshot = widget.controller.featuresSnapshot;
+        break;
+      default:
+    }
     return Container(
       height: 300,
       decoration: BoxDecoration(
@@ -319,34 +324,199 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  title,
-                  style: GoogleFonts.rubik(
-                    textStyle: TextStyle(
-                      color: AppColors.appDark,
-                      fontSize: 14.0,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 5),
+                  child: Text(
+                    title,
+                    style: GoogleFonts.rubik(
+                      textStyle: TextStyle(
+                        color: AppColors.appDark,
+                        fontSize: 14.0,
+                      ),
                     ),
                   ),
                 ),
-                _addSkill(
-                  context,
-                ),
+                items != null
+                    ? SizedBox.shrink()
+                    : _addSkill(
+                        context,
+                        collectionName: collectionName,
+                      ),
               ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
             child: Container(
-              height: 220,
+              height: 250,
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      children: listItem,
-                    ),
-                  ],
-                ),
+                child: items != null
+                    ? StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                        stream: widget.controller.getSkills(
+                            skillsId: widget.characterModel.skillsId ?? ''),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Text('Something went wrong');
+                          }
+
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Text("Loading");
+                          }
+
+                          Map<String, dynamic> data =
+                              snapshot.data!.data() as Map<String, dynamic>;
+
+                          final skillsModel = SkillsModel(
+                            acrobatics: data['acrobatics'],
+                            animalHandling: data['animalHandling'],
+                            arcana: data['arcana'],
+                            athletics: data['athletics'],
+                            deception: data['deception'],
+                            history: data['history'],
+                            insight: data['insight'],
+                            intimidation: data['intimidation'],
+                            investigation: data['investigation'],
+                            medicine: data['medicine'],
+                            nature: data['nature'],
+                            perception: data['perception'],
+                            performance: data['performance'],
+                            persuasion: data['persuasion'],
+                            religion: data['religion'],
+                            sleightOfHand: data['sleightOfHand'],
+                            stealth: data['stealth'],
+                            survival: data['survival'],
+                          );
+
+                          final listItem = <Widget>[];
+
+                          items.forEach((item) {
+                            var _itemValue = '';
+                            var _updateTargetName = '';
+                            switch (item) {
+                              case 'Akrobatyka (Zrc)':
+                                _itemValue = skillsModel.acrobatics ?? '';
+                                _updateTargetName = 'acrobatics';
+                                break;
+                              case 'Atletyka (Sil)':
+                                _itemValue = skillsModel.athletics ?? '';
+                                _updateTargetName = 'athletics';
+                                break;
+                              case 'Historia (Int)':
+                                _itemValue = skillsModel.history ?? '';
+                                _updateTargetName = 'history';
+                                break;
+                              case 'Intuicja (Mdr)':
+                                _itemValue = skillsModel.insight ?? '';
+                                _updateTargetName = 'insight';
+                                break;
+                              case 'Medycyna (Mdr)':
+                                _itemValue = skillsModel.medicine ?? '';
+                                _updateTargetName = 'medicine';
+                                break;
+                              case 'Opieka nad zwierzętami (Mdr)':
+                                _itemValue = skillsModel.animalHandling ?? '';
+                                _updateTargetName = 'animalHandling';
+                                break;
+                              case 'Oszustwo (Cha)':
+                                _itemValue = skillsModel.deception ?? '';
+                                _updateTargetName = 'deception';
+                                break;
+                              case 'Percepcja (Mdr)':
+                                _itemValue = skillsModel.perception ?? '';
+                                _updateTargetName = 'perception';
+                                break;
+                              case 'Perswazja (Cha)':
+                                _itemValue = skillsModel.persuasion ?? '';
+                                _updateTargetName = 'persuasion';
+                                break;
+                              case 'Przyroda (Int)':
+                                _itemValue = skillsModel.nature ?? '';
+                                _updateTargetName = 'nature';
+                                break;
+                              case 'Religia (Int)':
+                                _itemValue = skillsModel.religion ?? '';
+                                _updateTargetName = 'religion';
+                                break;
+                              case 'Skradanie się (Zrc)':
+                                _itemValue = skillsModel.stealth ?? '';
+                                _updateTargetName = 'stealth';
+                                break;
+                              case 'Sztuka przetrwania (Mdr)':
+                                _itemValue = skillsModel.survival ?? '';
+                                _updateTargetName = 'survival';
+                                break;
+                              case 'Śledztwo (Int)':
+                                _itemValue = skillsModel.investigation ?? '';
+                                _updateTargetName = 'investigation';
+                                break;
+                              case 'Wiedza tajemna (Int)':
+                                _itemValue = skillsModel.arcana ?? '';
+                                _updateTargetName = 'arcana';
+                                break;
+                              case 'Występy (Cha)':
+                                _itemValue = skillsModel.performance ?? '';
+                                _updateTargetName = 'performance';
+                                break;
+                              case 'Zastraszenie (Cha)':
+                                _itemValue = skillsModel.intimidation ?? '';
+                                _updateTargetName = 'intimidation';
+                                break;
+                              case 'Zwinne dłonie (Zrc)':
+                                _itemValue = skillsModel.sleightOfHand ?? '';
+                                _updateTargetName = 'sleightOfHand';
+                                break;
+                              default:
+                            }
+                            listItem.add(_listElement(
+                              name: item,
+                              elementId: '',
+                              collectionName: 'skills',
+                              context: context,
+                              value: _itemValue,
+                              updateTargetName: _updateTargetName,
+                            ));
+                          });
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: listItem,
+                          );
+                        })
+                    : StreamBuilder<QuerySnapshot>(
+                        stream: _currentSnapshot,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Text('Something went wrong');
+                          }
+
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Text("Loading");
+                          }
+
+                          return SingleChildScrollView(
+                            child: Column(
+                              children: snapshot.data!.docs
+                                  .map((DocumentSnapshot document) {
+                                Map<dynamic, dynamic> data =
+                                    document.data()! as Map<dynamic, dynamic>;
+
+                                if (data["characterId"] ==
+                                    widget.characterModel.characterId) {
+                                  return _listElement(
+                                    name: data['name'],
+                                    context: context,
+                                    description: data["description"],
+                                    elementId: document.id,
+                                    collectionName: collectionName,
+                                  );
+                                } else
+                                  return SizedBox.shrink();
+                              }).toList(),
+                            ),
+                          );
+                        }),
               ),
             ),
           ),
@@ -355,28 +525,151 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
     );
   }
 
-  Widget _listElement(String name) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 10,
-        ),
-        Text(
-          name,
-          style: GoogleFonts.rubik(
-            textStyle: TextStyle(
-              color: AppColors.appDark,
-              fontSize: 14.0,
-              fontWeight: FontWeight.bold,
-            ),
+  Widget _listElement({
+    required String name,
+    required String elementId,
+    required String collectionName,
+    String? description,
+    required BuildContext context,
+    String? value,
+    String? updateTargetName,
+  }) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: collectionName == 'skills'
+          ? () => widget.controller.atributeEditHandle(
+                context,
+                title: 'Edytuj umiejętność',
+                updateTargetName: updateTargetName ?? '',
+                skillId: widget.characterModel.skillsId,
+                atributeType: 'number',
+                pathName: 'skills',
+              )
+          : () => _itemInfoEditHandle(
+                context: context,
+                name: name,
+                description: description ?? "",
+              ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 10,
           ),
-        ),
-        Divider(
-          color: AppColors.appDark,
-        ),
-      ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                name,
+                style: GoogleFonts.rubik(
+                  textStyle: TextStyle(
+                    color: AppColors.appDark,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              collectionName == 'skills'
+                  ? Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: Text(
+                            value ?? '',
+                            style: GoogleFonts.rubik(
+                              textStyle: TextStyle(
+                                color: AppColors.appDark,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Icon(
+                          Icons.edit,
+                          color: AppColors.appDark,
+                        ),
+                      ],
+                    )
+                  : IconButton(
+                      onPressed: () {
+                        widget.controller.delete(context,
+                            id: elementId,
+                            collectionName: collectionName,
+                            title: 'Czy na pewno chcesz to usunąć?');
+                      },
+                      icon: Icon(Icons.cancel_outlined),
+                      color: AppColors.appDark,
+                      padding: EdgeInsets.zero,
+                      constraints: BoxConstraints(),
+                    ),
+            ],
+          ),
+          Divider(
+            color: AppColors.appDark,
+          ),
+        ],
+      ),
     );
+  }
+
+  void _itemInfoEditHandle({
+    required BuildContext context,
+    required String name,
+    required String description,
+  }) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: AppColors.appLight,
+            title: Column(
+              children: [
+                Text(
+                  name,
+                  style: GoogleFonts.rubik(
+                    textStyle: TextStyle(
+                      color: AppColors.appDark,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: AppColors.appDark,
+                ),
+                Text(
+                  description,
+                  style: GoogleFonts.rubik(
+                    textStyle: TextStyle(
+                      color: AppColors.appDark,
+                      fontSize: 14.0,
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: AppColors.appDark,
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Wróć',
+                  style: GoogleFonts.rubik(
+                    textStyle: TextStyle(
+                      color: AppColors.appDark,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   Widget _defenseThrows() {
@@ -398,6 +691,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
               updateTargetName: 'defenseThrowsStrength',
               characterId: widget.characterModel.characterId ?? '',
               atributeType: 'number',
+              pathName: 'character',
             ),
           ),
           DefenseThrowsCell(
@@ -410,6 +704,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
               updateTargetName: 'defenseThrowsDexterity',
               characterId: widget.characterModel.characterId ?? '',
               atributeType: 'number',
+              pathName: 'character',
             ),
           ),
           DefenseThrowsCell(
@@ -422,6 +717,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
               updateTargetName: 'defenseThrowsConstitution',
               characterId: widget.characterModel.characterId ?? '',
               atributeType: 'number',
+              pathName: 'character',
             ),
           ),
           DefenseThrowsCell(
@@ -434,6 +730,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
               updateTargetName: 'defenseThrowsIntelligence',
               characterId: widget.characterModel.characterId ?? '',
               atributeType: 'number',
+              pathName: 'character',
             ),
           ),
           DefenseThrowsCell(
@@ -446,6 +743,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
               updateTargetName: 'defenseThrowsWisdom',
               characterId: widget.characterModel.characterId ?? '',
               atributeType: 'number',
+              pathName: 'character',
             ),
           ),
           DefenseThrowsCell(
@@ -458,6 +756,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
               updateTargetName: 'defenseThrowsCharisma',
               characterId: widget.characterModel.characterId ?? '',
               atributeType: 'number',
+              pathName: 'character',
             ),
           ),
         ],
@@ -468,6 +767,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
   Widget _addSkill(
     BuildContext context, {
     String? title,
+    required String collectionName,
   }) {
     return Container(
       alignment: AlignmentDirectional.centerStart,
@@ -486,6 +786,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
       child: TextButton(
         onPressed: () => _onButtonPressed(
           context,
+          collectionName: collectionName,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -515,7 +816,8 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
     );
   }
 
-  void _onButtonPressed(BuildContext context) {
+  void _onButtonPressed(BuildContext context,
+      {required String collectionName}) {
     showModalBottomSheet(
         context: context,
         isDismissible: false,
@@ -528,11 +830,11 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
         isScrollControlled: true,
         backgroundColor: AppColors.appLight,
         builder: (context) {
-          return _addSkillBuilder();
+          return _addSkillBuilder(collectionName: collectionName);
         });
   }
 
-  Widget _addSkillBuilder() {
+  Widget _addSkillBuilder({required String collectionName}) {
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setModalState) {
       return Form(
@@ -566,11 +868,12 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                         print('OK');
 
                         widget.controller.addItem(
-                            name: _nameTextController.text,
-                            timestamp: Timestamp.now(),
-                            description: _descriptionTextController.text,
-                            characterId:
-                                widget.characterModel.characterId ?? "");
+                          name: _nameTextController.text,
+                          timestamp: Timestamp.now(),
+                          description: _descriptionTextController.text,
+                          characterId: widget.characterModel.characterId ?? "",
+                          pathName: collectionName,
+                        );
 
                         Navigator.pop(context);
                         setState(() {
@@ -601,7 +904,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Nazwa przedmiotu:",
+                    "Nazwa:",
                     style: GoogleFonts.rubik(
                       textStyle: TextStyle(
                         color: AppColors.appDark,
@@ -613,7 +916,7 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                   TextFormField(
                     controller: _nameTextController,
                     decoration: InputDecoration(
-                      hintText: "Nazwa przedmiotu",
+                      hintText: "Nazwa",
                       hintStyle: GoogleFonts.rubik(
                         textStyle: TextStyle(
                           color: Colors.black45,

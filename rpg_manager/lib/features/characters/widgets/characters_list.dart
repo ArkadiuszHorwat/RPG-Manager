@@ -25,19 +25,20 @@ class CharacterList extends StatelessWidget {
             return Text("Loading");
           }
           var charactersList = <Widget>[];
-          charactersList =
-              snapshot.data!.docs.map<Widget>((DocumentSnapshot document) {
+
+          snapshot.data!.docs.map<Widget>((DocumentSnapshot document) {
             Map<dynamic, dynamic> data =
                 document.data()! as Map<dynamic, dynamic>;
-
-            return data["userId"] == userId
-                ? CharacterListItem(
-                    characterName: data['name'],
-                    image: data['image'],
-                    controller: controller,
-                    characterId: document.id,
-                  )
-                : SizedBox.shrink();
+            if (data["userId"] == userId) {
+              charactersList.add(CharacterListItem(
+                characterName: data['name'],
+                image: data['image'],
+                controller: controller,
+                characterId: document.id,
+              ));
+              return SizedBox.shrink();
+            } else
+              return SizedBox.shrink();
           }).toList();
 
           return Container(

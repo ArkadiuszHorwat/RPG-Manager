@@ -61,6 +61,7 @@ class CharacterInfo extends StatelessWidget {
                         updateTargetName: 'race',
                         atributeType: 'string',
                         characterId: characterModel.characterId ?? '',
+                        pathName: 'character',
                       ),
                     ),
                     Divider(
@@ -76,6 +77,7 @@ class CharacterInfo extends StatelessWidget {
                         updateTargetName: 'class',
                         atributeType: 'string',
                         characterId: characterModel.characterId ?? '',
+                        pathName: 'character',
                       ),
                     ),
                     Divider(
@@ -91,6 +93,7 @@ class CharacterInfo extends StatelessWidget {
                         updateTargetName: 'alignment',
                         atributeType: 'string',
                         characterId: characterModel.characterId ?? '',
+                        pathName: 'character',
                       ),
                     ),
                     Divider(

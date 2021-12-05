@@ -15,7 +15,7 @@ class CharacterList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: controller.campaignsSnapshot,
+        stream: controller.charactersSnapshot,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Something went wrong');
@@ -34,6 +34,8 @@ class CharacterList extends StatelessWidget {
                 ? CharacterListItem(
                     characterName: data['name'],
                     image: data['image'],
+                    controller: controller,
+                    characterId: document.id,
                   )
                 : SizedBox.shrink();
           }).toList();

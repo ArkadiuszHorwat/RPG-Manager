@@ -7,10 +7,12 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   AppNavBar({
     this.title,
     this.icon,
+    this.actions,
   });
 
   final String? title;
   final Widget? icon;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
       iconTheme: IconThemeData(
         color: AppColors.appLight,
       ),
+      actions: actions ?? [],
     );
   }
 

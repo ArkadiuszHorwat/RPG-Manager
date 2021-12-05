@@ -55,6 +55,7 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
                     updateTargetName: 'spellBaseAttribute',
                     characterId: widget.characterModel.characterId ?? '',
                     atributeType: "text",
+                    pathName: 'character',
                   ),
                 ),
                 StatisticCell(
@@ -66,6 +67,7 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
                     updateTargetName: 'countSpellCells',
                     characterId: widget.characterModel.characterId ?? '',
                     atributeType: "number",
+                    pathName: 'character',
                   ),
                 ),
                 StatisticCell(
@@ -77,6 +79,7 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
                     updateTargetName: 'spellCellsUsed',
                     characterId: widget.characterModel.characterId ?? '',
                     atributeType: "number",
+                    pathName: 'character',
                   ),
                 ),
               ],
@@ -93,6 +96,7 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
                     updateTargetName: 'throwAgainstSpells',
                     characterId: widget.characterModel.characterId ?? '',
                     atributeType: "number",
+                    pathName: 'character',
                   ),
                 ),
                 StatisticCell(
@@ -104,6 +108,7 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
                     updateTargetName: 'magicAttackBonus',
                     characterId: widget.characterModel.characterId ?? '',
                     atributeType: "number",
+                    pathName: 'character',
                   ),
                 ),
               ],

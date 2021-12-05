@@ -87,6 +87,7 @@ class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
                 defenseThrowsConstitution: data['defenseThrowsConstitution'],
                 defenseThrowsDexterity: data['defenseThrowsDexterity'],
                 defenseThrowsStrength: data['defenseThrowsStrength'],
+                skillsId: data['skillsId'],
               );
 
               final _pages = <Widget>[

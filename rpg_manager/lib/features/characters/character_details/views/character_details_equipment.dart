@@ -146,6 +146,7 @@ class _CharacterDetailsEquipmentState extends State<CharacterDetailsEquipment> {
                         updateTargetName: 'SM',
                         characterId: widget.characterModel.characterId ?? '',
                         atributeType: 'number',
+                        pathName: 'character',
                       ),
                       value: widget.characterModel.sM,
                     ),
@@ -157,6 +158,7 @@ class _CharacterDetailsEquipmentState extends State<CharacterDetailsEquipment> {
                         updateTargetName: 'SS',
                         characterId: widget.characterModel.characterId ?? '',
                         atributeType: 'number',
+                        pathName: 'character',
                       ),
                       value: widget.characterModel.sS,
                     ),
@@ -168,6 +170,7 @@ class _CharacterDetailsEquipmentState extends State<CharacterDetailsEquipment> {
                         updateTargetName: 'SE',
                         characterId: widget.characterModel.characterId ?? '',
                         atributeType: 'number',
+                        pathName: 'character',
                       ),
                       value: widget.characterModel.sE,
                     ),
@@ -179,6 +182,7 @@ class _CharacterDetailsEquipmentState extends State<CharacterDetailsEquipment> {
                         updateTargetName: 'SZ',
                         characterId: widget.characterModel.characterId ?? '',
                         atributeType: 'number',
+                        pathName: 'character',
                       ),
                       value: widget.characterModel.sZ,
                     ),
@@ -190,6 +194,7 @@ class _CharacterDetailsEquipmentState extends State<CharacterDetailsEquipment> {
                         updateTargetName: 'SP',
                         characterId: widget.characterModel.characterId ?? '',
                         atributeType: 'number',
+                        pathName: 'character',
                       ),
                       value: widget.characterModel.sP,
                     ),
@@ -311,7 +316,9 @@ class _CharacterDetailsEquipmentState extends State<CharacterDetailsEquipment> {
                                 timestamp: Timestamp.now(),
                                 description: _descriptionTextController.text,
                                 characterId:
-                                    widget.characterModel.characterId ?? "")
+                                    widget.characterModel.characterId ?? "",
+                                pathName: 'items',
+                              )
                             : widget.controller.addInUseItem(
                                 bonus: _bonusTextController.text,
                                 name: _nameTextController.text,

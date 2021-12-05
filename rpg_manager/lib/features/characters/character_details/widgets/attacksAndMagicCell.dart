@@ -26,6 +26,7 @@ class AttacksAndMagicCell extends StatelessWidget {
         characterId: characterId,
         characterMultiText: multiTextValue,
         atributeType: 'text',
+        pathName: 'character',
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

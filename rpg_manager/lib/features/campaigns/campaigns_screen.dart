@@ -56,17 +56,24 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                         snapshot.data!.docs.map((DocumentSnapshot document) {
                       Map<dynamic, dynamic> data =
                           document.data()! as Map<dynamic, dynamic>;
+                      var _currentPlayerId = null;
+                      final _playersId = data['playersId'] ?? [];
+                      for (String playerId in _playersId) {
+                        playerId == widget.userId
+                            ? _currentPlayerId = playerId
+                            : null;
+                      }
 
-                      for (String id in data['usersId']) {
-                        if (id == widget.userId) {
-                          return data['sessionType'] == widget.sessionType
-                              ? CampaignsCardItem(
-                                  title: data['title'],
-                                  image: data['image'],
-                                )
-                              : SizedBox.shrink();
-                        } else
-                          return SizedBox.shrink();
+                      if ((data['gameMasterId'] == widget.userId &&
+                              data['sessionType'] == widget.sessionType) ||
+                          (_currentPlayerId != null &&
+                              data['sessionType'] != widget.sessionType)) {
+                        return CampaignsCardItem(
+                          title: data['title'],
+                          image: data['image'],
+                          controller: _controller,
+                          campaignId: document.id,
+                        );
                       }
 
                       return SizedBox.shrink();
@@ -191,7 +198,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                               image:
                                   _imageFile != null ? _imageFile!.path : null,
                               sessionType: widget.sessionType,
-                              userId: widget.userId,
+                              gameMasterId: widget.userId,
                               timestamp: Timestamp.now(),
                             );
 

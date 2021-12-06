@@ -5,15 +5,17 @@ class CampaignModel {
     required this.title,
     required this.system,
     this.image,
-    required this.sessionType,
-    required this.userId,
-    required this.timestamp,
+    this.sessionType,
+    this.gameMasterId,
+    this.timestamp,
+    this.sessionNumber,
   });
 
   final String title;
   final String system;
   final String? image;
-  final String sessionType;
-  final String userId;
-  final Timestamp timestamp;
+  final String? sessionType;
+  final String? gameMasterId;
+  final int? sessionNumber;
+  final Timestamp? timestamp;
 }

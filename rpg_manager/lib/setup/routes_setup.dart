@@ -7,6 +7,7 @@ import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/authorization/register/register_screen.dart';
 import 'package:rpg_manager/features/calendar/calendar_screen.dart';
+import 'package:rpg_manager/features/campaigns/campaign_details/campaign_details_screen.dart';
 import 'package:rpg_manager/features/campaigns/campaigns_screen.dart';
 import 'package:rpg_manager/features/characters/character_details/character_details_screen.dart';
 import 'package:rpg_manager/features/characters/characters_sreen.dart';
@@ -65,6 +66,13 @@ class RoutesSetup {
             characterId: args,
           );
         });
+      case RoutePageName.campaignDetailsPage:
+        return MaterialPageRoute(builder: (_) {
+          args as String;
+          return CampaignDetailsScreen(
+            campaignId: args,
+          );
+        });
       default:
         return _errorRoute();
     }
@@ -104,4 +112,5 @@ class RoutePageName {
   static const String playersListPage = '/playersList';
   static const String charactersListPage = '/charactersList';
   static const String characterDetailsPage = '/characterDetails';
+  static const String campaignDetailsPage = '/campaignDetails';
 }

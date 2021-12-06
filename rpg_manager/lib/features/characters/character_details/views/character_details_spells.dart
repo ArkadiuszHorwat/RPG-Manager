@@ -250,7 +250,6 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
   Widget _addSpellBuilder() {
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setModalState) {
-      print(_level);
       return Form(
         key: formKey,
         child: Column(

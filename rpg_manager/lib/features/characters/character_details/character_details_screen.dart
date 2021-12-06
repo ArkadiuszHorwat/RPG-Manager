@@ -40,10 +40,8 @@ class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
               Map<String, dynamic> data =
                   snapshot.data!.data() as Map<String, dynamic>;
 
-              final String? image = data['image'];
-
               final characterModel = CharacterModel(
-                image: image ?? null,
+                image: data['image'] ?? null,
                 system: data['system'],
                 characterId: widget.characterId,
                 characterPD: data['characterPD'] ?? '0',

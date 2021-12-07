@@ -7,29 +7,34 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/features/campaigns/campaign_details/campaign_details_screen_controller.dart';
+import 'package:rpg_manager/features/campaigns/models/campaign_model.dart';
 
 class CampaignImage extends StatefulWidget {
   CampaignImage({
-    this.image,
-    required this.campaignId,
-    required this.sessionNumber,
-    required this.system,
+    required this.campaignModel,
+    required this.controller,
+    required this.sessionType,
   });
 
-  final String? image;
-  final String campaignId;
-  final String system;
-  final int sessionNumber;
+  final CampaignModel campaignModel;
+  final CampaignDetailsScreenController controller;
+  final String sessionType;
 
   @override
   State<CampaignImage> createState() => _CampaignImageState();
 }
 
 class _CampaignImageState extends State<CampaignImage> {
-  final controller = CampaignDetailsScreenController();
   final _emailTextController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  var _sessionStatus = false;
+  var _sessionStatus;
+  var _playerStatus = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _sessionStatus = widget.campaignModel.sessionStatus ?? false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +44,11 @@ class _CampaignImageState extends State<CampaignImage> {
       child: Stack(
         children: [
           GestureDetector(
-            onTap: () {
-              _imageEditHandle(context);
-            },
+            onTap: widget.sessionType == 'game master'
+                ? () {
+                    _imageEditHandle(context);
+                  }
+                : () {},
             child: Container(
               decoration: BoxDecoration(
                 boxShadow: [
@@ -52,7 +59,8 @@ class _CampaignImageState extends State<CampaignImage> {
                   ),
                 ],
                 borderRadius: BorderRadiusDirectional.all(Radius.circular(10)),
-                image: widget.image == null || !File(widget.image!).existsSync()
+                image: widget.campaignModel.image == null ||
+                        !File(widget.campaignModel.image!).existsSync()
                     ? DecorationImage(
                         fit: BoxFit.cover,
                         image: AssetImage(
@@ -61,7 +69,7 @@ class _CampaignImageState extends State<CampaignImage> {
                       )
                     : DecorationImage(
                         fit: BoxFit.cover,
-                        image: FileImage(File(widget.image!)),
+                        image: FileImage(File(widget.campaignModel.image!)),
                       ),
               ),
             ),
@@ -75,7 +83,9 @@ class _CampaignImageState extends State<CampaignImage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GestureDetector(
-                    onTap: () => _sessionNumberInfo(context),
+                    onTap: widget.sessionType == 'game master'
+                        ? () => _sessionNumberInfo(context)
+                        : () {},
                     child: Container(
                       margin: EdgeInsetsDirectional.only(
                         top: 10,
@@ -109,7 +119,7 @@ class _CampaignImageState extends State<CampaignImage> {
                             ),
                           ),
                           Text(
-                            widget.sessionNumber.toString(),
+                            widget.campaignModel.sessionNumber.toString(),
                             style: GoogleFonts.rubik(
                               textStyle: TextStyle(
                                 color: AppColors.appDark,
@@ -151,7 +161,7 @@ class _CampaignImageState extends State<CampaignImage> {
                           ),
                         ),
                         Text(
-                          widget.system,
+                          widget.campaignModel.system,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.rubik(
                             textStyle: TextStyle(
@@ -170,7 +180,9 @@ class _CampaignImageState extends State<CampaignImage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  _addPlayer(context, 'Dodaj gracza'),
+                  widget.sessionType == 'game master'
+                      ? _addPlayer(context, 'Dodaj gracza')
+                      : SizedBox.shrink(),
                   Container(
                     margin: EdgeInsetsDirectional.only(
                       bottom: 10,
@@ -191,24 +203,41 @@ class _CampaignImageState extends State<CampaignImage> {
                       borderRadius:
                           BorderRadiusDirectional.all(Radius.circular(10)),
                     ),
-                    child: IconButton(
-                      icon: _sessionStatus
-                          ? Icon(Icons.logout_outlined)
-                          : Icon(Icons.login_outlined),
-                      onPressed: () {
-                        _sessionStatus
-                            ? _sessionStatus = false
-                            : _sessionStatus = true;
-                        setState(() {
-                          _sessionStatus = _sessionStatus;
-                        });
-                        controller.updateSessionStatus(
-                            campaignId: widget.campaignId,
-                            sessionStatus: _sessionStatus);
-                      },
-                      color: AppColors.appDark,
-                      iconSize: 32,
-                    ),
+                    child: widget.sessionType == 'game master'
+                        ? IconButton(
+                            icon: _sessionStatus
+                                ? Icon(Icons.logout_outlined)
+                                : Icon(Icons.login_outlined),
+                            onPressed: () {
+                              _sessionStatus
+                                  ? _sessionStatus = false
+                                  : _sessionStatus = true;
+                              widget.controller.updateCampaign(
+                                campaignId: widget.campaignModel.campaignId!,
+                                newValue: _sessionStatus,
+                                updateTargetName: 'sessionStatus',
+                              );
+                            },
+                            color: AppColors.appDark,
+                            iconSize: 32,
+                          )
+                        : IconButton(
+                            icon: _playerStatus
+                                ? Icon(Icons.logout_outlined)
+                                : Icon(Icons.login_outlined),
+                            onPressed: () {
+                              _playerStatus
+                                  ? _playerStatus = false
+                                  : _playerStatus = true;
+                              setState(() {
+                                _playerStatus;
+                              });
+                              // widget.controller.updateSessionStatus(
+                              //     campaignId: widget.campaignModel.campaignId!,
+                              //     sessionStatus: _sessionStatus);
+                            },
+                            color: AppColors.appDark,
+                            iconSize: 32),
                   ),
                 ],
               ),
@@ -257,7 +286,7 @@ class _CampaignImageState extends State<CampaignImage> {
                         FirebaseFirestore.instance.collection('campaigns');
 
                     campaigns
-                        .doc('${widget.campaignId}')
+                        .doc('${widget.campaignModel.campaignId}')
                         .update({'image': imageFromGallery.path})
                         .then((value) => print('image was updated'))
                         .catchError((error) => print('Failed to update image'));
@@ -283,7 +312,7 @@ class _CampaignImageState extends State<CampaignImage> {
                       FirebaseFirestore.instance.collection('campaigns');
 
                   campaigns
-                      .doc('${widget.campaignId}')
+                      .doc('${widget.campaignModel.campaignId}')
                       .update({'image': FieldValue.delete()})
                       .then((value) => print('image deleted'))
                       .catchError((error) => print('Failed to delete image'));
@@ -336,8 +365,11 @@ class _CampaignImageState extends State<CampaignImage> {
                           FirebaseFirestore.instance.collection('campaigns');
 
                       campaigns
-                          .doc('${widget.campaignId}')
-                          .update({'sessionNumber': widget.sessionNumber + 1})
+                          .doc('${widget.campaignModel.campaignId}')
+                          .update({
+                            'sessionNumber':
+                                widget.campaignModel.sessionNumber! + 1
+                          })
                           .then((value) => print('Session number updated'))
                           .catchError((error) =>
                               print('Failed to update session number'));
@@ -356,13 +388,16 @@ class _CampaignImageState extends State<CampaignImage> {
                   ),
                   TextButton(
                     onPressed: () {
-                      if (widget.sessionNumber > 0) {
+                      if (widget.campaignModel.sessionNumber! > 0) {
                         CollectionReference campaigns =
                             FirebaseFirestore.instance.collection('campaigns');
 
                         campaigns
-                            .doc('${widget.campaignId}')
-                            .update({'sessionNumber': widget.sessionNumber - 1})
+                            .doc('${widget.campaignModel.campaignId}')
+                            .update({
+                              'sessionNumber':
+                                  widget.campaignModel.sessionNumber! - 1
+                            })
                             .then((value) => print('Session number updated'))
                             .catchError((error) =>
                                 print('Failed to update session number'));
@@ -503,9 +538,9 @@ class _CampaignImageState extends State<CampaignImage> {
                     if (formKey.currentState!.validate()) {
                       print('OK');
 
-                      controller.addPlayer(
+                      widget.controller.addPlayer(
                         playerMail: _emailTextController.text,
-                        campaignId: widget.campaignId,
+                        campaignId: widget.campaignModel.campaignId!,
                         context: context,
                       );
 

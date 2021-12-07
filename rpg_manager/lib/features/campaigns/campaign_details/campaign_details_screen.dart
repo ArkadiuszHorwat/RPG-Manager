@@ -4,29 +4,39 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/features/campaigns/campaign_details/campaign_details_screen_controller.dart';
+import 'package:rpg_manager/features/campaigns/campaign_details/widgets/campaign_description.dart';
 import 'package:rpg_manager/features/campaigns/campaign_details/widgets/campaign_image.dart';
 import 'package:rpg_manager/features/campaigns/models/campaign_model.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
 
+//TODO: create flag to activePlayers widget or descriptions widget + create update methods to them
 class CampaignDetailsScreen extends StatelessWidget {
   final _controller = CampaignDetailsScreenController();
 
   CampaignDetailsScreen({
     Key? key,
     required this.campaignId,
+    required this.sessionType,
   });
 
   final String campaignId;
+  final String sessionType;
 
   @override
   Widget build(BuildContext context) {
-    final _campaignDetails =
-        _controller.getCampaignDetails(campaignId: campaignId);
     return AppBackground(
       child: StreamBuilder<DocumentSnapshot<Map<dynamic, dynamic>>>(
-          stream: _campaignDetails,
+          stream: _controller.getCampaignDetails(campaignId: campaignId),
           builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text('Something went wrong');
+            }
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Text("Loading");
+            }
+
             if (snapshot.data != null) {
               Map<dynamic, dynamic> data =
                   snapshot.data!.data() as Map<dynamic, dynamic>;
@@ -34,21 +44,26 @@ class CampaignDetailsScreen extends StatelessWidget {
               final _campaignModel = CampaignModel(
                 title: data['title'],
                 system: data['system'],
+                campaignId: campaignId,
                 image: data['image'],
-                sessionNumber: data['sessionNumber'],
+                sessionNumber: data['sessionNumber'] ?? 0,
+                sessionStatus: data['sessionStatus'],
+                description: data['description'] ?? '',
               );
 
               return Scaffold(
                 appBar: AppNavBar(
                   title: _campaignModel.title,
                   actions: [
-                    IconButton(
-                      onPressed: () {
-                        _controller.campaignDelete(context,
-                            campaignId: campaignId);
-                      },
-                      icon: Icon(Icons.delete_outline),
-                    ),
+                    sessionType == 'game master'
+                        ? IconButton(
+                            onPressed: () {
+                              _controller.campaignDelete(context,
+                                  campaignId: campaignId);
+                            },
+                            icon: Icon(Icons.delete_outline),
+                          )
+                        : SizedBox.shrink(),
                   ],
                 ),
                 backgroundColor: Colors.transparent,
@@ -56,10 +71,9 @@ class CampaignDetailsScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       CampaignImage(
-                        image: _campaignModel.image,
-                        campaignId: campaignId,
-                        sessionNumber: _campaignModel.sessionNumber ?? 0,
-                        system: _campaignModel.system,
+                        campaignModel: _campaignModel,
+                        controller: _controller,
+                        sessionType: sessionType,
                       ),
                       Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -94,6 +108,10 @@ class CampaignDetailsScreen extends StatelessWidget {
                             ),
                           ],
                         ),
+                      ),
+                      CampaignDescription(
+                        campaignModel: _campaignModel,
+                        controller: _controller,
                       ),
                     ],
                   ),

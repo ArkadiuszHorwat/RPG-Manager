@@ -26,10 +26,11 @@ class CampaignsScreenController {
         .catchError((error) => print("Failed to add campaign: $error"));
   }
 
-  void routeToCampaignDetails(BuildContext context, String campaignId) {
+  void routeToCampaignDetails(
+      BuildContext context, Map<String, dynamic> campaignDetailsObject) {
     Navigator.of(context).pushNamed(
       RoutePageName.campaignDetailsPage,
-      arguments: campaignId,
+      arguments: campaignDetailsObject,
     );
   }
 }

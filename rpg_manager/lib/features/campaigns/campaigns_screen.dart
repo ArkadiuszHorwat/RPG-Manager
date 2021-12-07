@@ -54,8 +54,16 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                   child: Column(
                     children:
                         snapshot.data!.docs.map((DocumentSnapshot document) {
+                      if (snapshot.hasError) {
+                        return Text('Something went wrong');
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Text("Loading");
+                      }
                       Map<dynamic, dynamic> data =
                           document.data()! as Map<dynamic, dynamic>;
+
                       var _currentPlayerId = null;
                       final _playersId = data['playersId'] ?? [];
                       for (String playerId in _playersId) {
@@ -73,6 +81,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                           image: data['image'],
                           controller: _controller,
                           campaignId: document.id,
+                          sessionType: widget.sessionType,
                         );
                       }
 

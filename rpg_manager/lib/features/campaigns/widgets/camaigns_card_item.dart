@@ -13,18 +13,26 @@ class CampaignsCardItem extends StatelessWidget {
     this.image,
     required this.controller,
     required this.campaignId,
+    required this.sessionType,
   }) : super(key: key);
 
   final String title;
   final String? image;
   final CampaignsScreenController controller;
   final String campaignId;
+  final String sessionType;
 
   @override
   Widget build(BuildContext context) {
+    final _campaignDetailsObject = {
+      'campaignId': campaignId,
+      'sessionType': sessionType
+    };
+
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () => controller.routeToCampaignDetails(context, campaignId),
+      onTap: () =>
+          controller.routeToCampaignDetails(context, _campaignDetailsObject),
       child: Container(
         alignment: AlignmentDirectional.center,
         margin: EdgeInsets.all(10),

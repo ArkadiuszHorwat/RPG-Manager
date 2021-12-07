@@ -68,9 +68,10 @@ class RoutesSetup {
         });
       case RoutePageName.campaignDetailsPage:
         return MaterialPageRoute(builder: (_) {
-          args as String;
+          args as Map<String, dynamic>;
           return CampaignDetailsScreen(
-            campaignId: args,
+            campaignId: args['campaignId'],
+            sessionType: args['sessionType'],
           );
         });
       default:

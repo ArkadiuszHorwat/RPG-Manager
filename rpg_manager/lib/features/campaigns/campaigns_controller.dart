@@ -9,20 +9,27 @@ class CampaignsScreenController {
       .orderBy('createdAt', descending: true)
       .snapshots();
   final campaigns = FirebaseFirestore.instance.collection('campaigns');
+  final campaignNotes = FirebaseFirestore.instance.collection('campaignNotes');
 
   Future<void> addCampaigns({
     required CampaignModel campaignModel,
+    String? userId,
   }) {
-    return campaigns
-        .add({
-          'title': campaignModel.title,
-          'system': campaignModel.system,
-          'gameMasterId': campaignModel.gameMasterId,
-          'image': campaignModel.image,
-          'sessionType': campaignModel.sessionType,
-          'createdAt': campaignModel.timestamp,
-        })
-        .then((value) => print("Campaing Added"))
+    return campaigns.add({
+      'title': campaignModel.title,
+      'system': campaignModel.system,
+      'gameMasterId': campaignModel.gameMasterId,
+      'image': campaignModel.image,
+      'sessionType': campaignModel.sessionType,
+      'createdAt': campaignModel.timestamp,
+    }).then((value) {
+      print("Campaing Added");
+      campaignNotes.add({
+        'campaignId': value.id,
+        'userId': userId,
+      });
+    })
+        // ignore: invalid_return_type_for_catch_error
         .catchError((error) => print("Failed to add campaign: $error"));
   }
 

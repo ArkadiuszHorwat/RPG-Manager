@@ -9,6 +9,7 @@ import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/campaigns/campaigns_controller.dart';
 import 'package:rpg_manager/features/campaigns/models/campaign_model.dart';
 import 'package:rpg_manager/features/campaigns/widgets/camaigns_card_item.dart';
+import 'package:rpg_manager/widgets/app_loading_screen.dart';
 
 class CampaignsScreen extends StatefulWidget {
   CampaignsScreen({
@@ -41,7 +42,9 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Text("Loading");
+            return AppLoadingScreen(
+              color: AppColors.appLight,
+            );
           }
 
           return Column(
@@ -59,7 +62,9 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                       }
 
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Text("Loading");
+                        return AppLoadingScreen(
+                          color: AppColors.appLight,
+                        );
                       }
                       Map<dynamic, dynamic> data =
                           document.data()! as Map<dynamic, dynamic>;
@@ -82,6 +87,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                           controller: _controller,
                           campaignId: document.id,
                           sessionType: widget.sessionType,
+                          userId: widget.userId,
                         );
                       }
 
@@ -213,6 +219,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
 
                             _controller.addCampaigns(
                               campaignModel: campaign,
+                              userId: widget.userId,
                             );
 
                             Navigator.pop(context);

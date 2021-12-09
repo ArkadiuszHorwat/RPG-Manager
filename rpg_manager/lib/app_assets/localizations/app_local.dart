@@ -28,7 +28,7 @@ class AppLocal {
   static const mainMenuCalendarItemTitle = 'Kalendarz';
   static const mainMenuCampaignsItemTitle = 'Kampanie';
   static const mainMenuCharactersItemTitle = 'Karty postaci';
-  static const mainMenuPlayersItemTitle = 'Gracze';
+  static const mainMenuNotificationsItemTitle = 'Powiadomienia';
 
   static const homeExitTitle = 'Napewno chcesz się wylogować?';
   static const homeGameMasterTitle = 'PANEL MISTRZA GRY';

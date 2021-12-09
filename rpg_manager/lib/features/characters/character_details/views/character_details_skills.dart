@@ -8,6 +8,7 @@ import 'package:rpg_manager/features/characters/character_details/widgets/defens
 import 'package:rpg_manager/features/characters/character_details/widgets/statisticCell.dart';
 import 'package:rpg_manager/features/characters/models/character_model.dart';
 import 'package:rpg_manager/features/characters/models/skills_model.dart';
+import 'package:rpg_manager/widgets/app_loading_screen.dart';
 
 class CharacterDetailsSkills extends StatefulWidget {
   CharacterDetailsSkills({
@@ -99,6 +100,9 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                         color: AppColors.appLight,
                       ),
                       _defenseThrows(),
+                      Divider(
+                        color: AppColors.appLight,
+                      ),
                       SizedBox(
                         height: 10,
                       ),
@@ -358,130 +362,127 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                           if (snapshot.hasError) {
                             return Text('Something went wrong');
                           }
+                          if (snapshot.data != null) {
+                            Map<String, dynamic> data =
+                                snapshot.data!.data() as Map<String, dynamic>;
 
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Text("Loading");
+                            final skillsModel = SkillsModel(
+                              acrobatics: data['acrobatics'],
+                              animalHandling: data['animalHandling'],
+                              arcana: data['arcana'],
+                              athletics: data['athletics'],
+                              deception: data['deception'],
+                              history: data['history'],
+                              insight: data['insight'],
+                              intimidation: data['intimidation'],
+                              investigation: data['investigation'],
+                              medicine: data['medicine'],
+                              nature: data['nature'],
+                              perception: data['perception'],
+                              performance: data['performance'],
+                              persuasion: data['persuasion'],
+                              religion: data['religion'],
+                              sleightOfHand: data['sleightOfHand'],
+                              stealth: data['stealth'],
+                              survival: data['survival'],
+                            );
+
+                            final listItem = <Widget>[];
+
+                            items.forEach((item) {
+                              var _itemValue = '';
+                              var _updateTargetName = '';
+                              switch (item) {
+                                case 'Akrobatyka (Zrc)':
+                                  _itemValue = skillsModel.acrobatics ?? '';
+                                  _updateTargetName = 'acrobatics';
+                                  break;
+                                case 'Atletyka (Sil)':
+                                  _itemValue = skillsModel.athletics ?? '';
+                                  _updateTargetName = 'athletics';
+                                  break;
+                                case 'Historia (Int)':
+                                  _itemValue = skillsModel.history ?? '';
+                                  _updateTargetName = 'history';
+                                  break;
+                                case 'Intuicja (Mdr)':
+                                  _itemValue = skillsModel.insight ?? '';
+                                  _updateTargetName = 'insight';
+                                  break;
+                                case 'Medycyna (Mdr)':
+                                  _itemValue = skillsModel.medicine ?? '';
+                                  _updateTargetName = 'medicine';
+                                  break;
+                                case 'Opieka nad zwierzętami (Mdr)':
+                                  _itemValue = skillsModel.animalHandling ?? '';
+                                  _updateTargetName = 'animalHandling';
+                                  break;
+                                case 'Oszustwo (Cha)':
+                                  _itemValue = skillsModel.deception ?? '';
+                                  _updateTargetName = 'deception';
+                                  break;
+                                case 'Percepcja (Mdr)':
+                                  _itemValue = skillsModel.perception ?? '';
+                                  _updateTargetName = 'perception';
+                                  break;
+                                case 'Perswazja (Cha)':
+                                  _itemValue = skillsModel.persuasion ?? '';
+                                  _updateTargetName = 'persuasion';
+                                  break;
+                                case 'Przyroda (Int)':
+                                  _itemValue = skillsModel.nature ?? '';
+                                  _updateTargetName = 'nature';
+                                  break;
+                                case 'Religia (Int)':
+                                  _itemValue = skillsModel.religion ?? '';
+                                  _updateTargetName = 'religion';
+                                  break;
+                                case 'Skradanie się (Zrc)':
+                                  _itemValue = skillsModel.stealth ?? '';
+                                  _updateTargetName = 'stealth';
+                                  break;
+                                case 'Sztuka przetrwania (Mdr)':
+                                  _itemValue = skillsModel.survival ?? '';
+                                  _updateTargetName = 'survival';
+                                  break;
+                                case 'Śledztwo (Int)':
+                                  _itemValue = skillsModel.investigation ?? '';
+                                  _updateTargetName = 'investigation';
+                                  break;
+                                case 'Wiedza tajemna (Int)':
+                                  _itemValue = skillsModel.arcana ?? '';
+                                  _updateTargetName = 'arcana';
+                                  break;
+                                case 'Występy (Cha)':
+                                  _itemValue = skillsModel.performance ?? '';
+                                  _updateTargetName = 'performance';
+                                  break;
+                                case 'Zastraszenie (Cha)':
+                                  _itemValue = skillsModel.intimidation ?? '';
+                                  _updateTargetName = 'intimidation';
+                                  break;
+                                case 'Zwinne dłonie (Zrc)':
+                                  _itemValue = skillsModel.sleightOfHand ?? '';
+                                  _updateTargetName = 'sleightOfHand';
+                                  break;
+                                default:
+                              }
+                              listItem.add(_listElement(
+                                name: item,
+                                elementId: '',
+                                collectionName: 'skills',
+                                context: context,
+                                value: _itemValue,
+                                updateTargetName: _updateTargetName,
+                              ));
+                            });
+
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: listItem,
+                            );
                           }
-
-                          Map<String, dynamic> data =
-                              snapshot.data!.data() as Map<String, dynamic>;
-
-                          final skillsModel = SkillsModel(
-                            acrobatics: data['acrobatics'],
-                            animalHandling: data['animalHandling'],
-                            arcana: data['arcana'],
-                            athletics: data['athletics'],
-                            deception: data['deception'],
-                            history: data['history'],
-                            insight: data['insight'],
-                            intimidation: data['intimidation'],
-                            investigation: data['investigation'],
-                            medicine: data['medicine'],
-                            nature: data['nature'],
-                            perception: data['perception'],
-                            performance: data['performance'],
-                            persuasion: data['persuasion'],
-                            religion: data['religion'],
-                            sleightOfHand: data['sleightOfHand'],
-                            stealth: data['stealth'],
-                            survival: data['survival'],
-                          );
-
-                          final listItem = <Widget>[];
-
-                          items.forEach((item) {
-                            var _itemValue = '';
-                            var _updateTargetName = '';
-                            switch (item) {
-                              case 'Akrobatyka (Zrc)':
-                                _itemValue = skillsModel.acrobatics ?? '';
-                                _updateTargetName = 'acrobatics';
-                                break;
-                              case 'Atletyka (Sil)':
-                                _itemValue = skillsModel.athletics ?? '';
-                                _updateTargetName = 'athletics';
-                                break;
-                              case 'Historia (Int)':
-                                _itemValue = skillsModel.history ?? '';
-                                _updateTargetName = 'history';
-                                break;
-                              case 'Intuicja (Mdr)':
-                                _itemValue = skillsModel.insight ?? '';
-                                _updateTargetName = 'insight';
-                                break;
-                              case 'Medycyna (Mdr)':
-                                _itemValue = skillsModel.medicine ?? '';
-                                _updateTargetName = 'medicine';
-                                break;
-                              case 'Opieka nad zwierzętami (Mdr)':
-                                _itemValue = skillsModel.animalHandling ?? '';
-                                _updateTargetName = 'animalHandling';
-                                break;
-                              case 'Oszustwo (Cha)':
-                                _itemValue = skillsModel.deception ?? '';
-                                _updateTargetName = 'deception';
-                                break;
-                              case 'Percepcja (Mdr)':
-                                _itemValue = skillsModel.perception ?? '';
-                                _updateTargetName = 'perception';
-                                break;
-                              case 'Perswazja (Cha)':
-                                _itemValue = skillsModel.persuasion ?? '';
-                                _updateTargetName = 'persuasion';
-                                break;
-                              case 'Przyroda (Int)':
-                                _itemValue = skillsModel.nature ?? '';
-                                _updateTargetName = 'nature';
-                                break;
-                              case 'Religia (Int)':
-                                _itemValue = skillsModel.religion ?? '';
-                                _updateTargetName = 'religion';
-                                break;
-                              case 'Skradanie się (Zrc)':
-                                _itemValue = skillsModel.stealth ?? '';
-                                _updateTargetName = 'stealth';
-                                break;
-                              case 'Sztuka przetrwania (Mdr)':
-                                _itemValue = skillsModel.survival ?? '';
-                                _updateTargetName = 'survival';
-                                break;
-                              case 'Śledztwo (Int)':
-                                _itemValue = skillsModel.investigation ?? '';
-                                _updateTargetName = 'investigation';
-                                break;
-                              case 'Wiedza tajemna (Int)':
-                                _itemValue = skillsModel.arcana ?? '';
-                                _updateTargetName = 'arcana';
-                                break;
-                              case 'Występy (Cha)':
-                                _itemValue = skillsModel.performance ?? '';
-                                _updateTargetName = 'performance';
-                                break;
-                              case 'Zastraszenie (Cha)':
-                                _itemValue = skillsModel.intimidation ?? '';
-                                _updateTargetName = 'intimidation';
-                                break;
-                              case 'Zwinne dłonie (Zrc)':
-                                _itemValue = skillsModel.sleightOfHand ?? '';
-                                _updateTargetName = 'sleightOfHand';
-                                break;
-                              default:
-                            }
-                            listItem.add(_listElement(
-                              name: item,
-                              elementId: '',
-                              collectionName: 'skills',
-                              context: context,
-                              value: _itemValue,
-                              updateTargetName: _updateTargetName,
-                            ));
-                          });
-
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: listItem,
-                          );
+                          return SizedBox.shrink();
                         })
                     : StreamBuilder<QuerySnapshot>(
                         stream: _currentSnapshot,
@@ -489,33 +490,30 @@ class _CharacterDetailsSkillsState extends State<CharacterDetailsSkills> {
                           if (snapshot.hasError) {
                             return Text('Something went wrong');
                           }
+                          if (snapshot.data != null) {
+                            return SingleChildScrollView(
+                              child: Column(
+                                children: snapshot.data!.docs
+                                    .map((DocumentSnapshot document) {
+                                  Map<dynamic, dynamic> data =
+                                      document.data()! as Map<dynamic, dynamic>;
 
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Text("Loading");
+                                  if (data["characterId"] ==
+                                      widget.characterModel.characterId) {
+                                    return _listElement(
+                                      name: data['name'],
+                                      context: context,
+                                      description: data["description"],
+                                      elementId: document.id,
+                                      collectionName: collectionName,
+                                    );
+                                  } else
+                                    return SizedBox.shrink();
+                                }).toList(),
+                              ),
+                            );
                           }
-
-                          return SingleChildScrollView(
-                            child: Column(
-                              children: snapshot.data!.docs
-                                  .map((DocumentSnapshot document) {
-                                Map<dynamic, dynamic> data =
-                                    document.data()! as Map<dynamic, dynamic>;
-
-                                if (data["characterId"] ==
-                                    widget.characterModel.characterId) {
-                                  return _listElement(
-                                    name: data['name'],
-                                    context: context,
-                                    description: data["description"],
-                                    elementId: document.id,
-                                    collectionName: collectionName,
-                                  );
-                                } else
-                                  return SizedBox.shrink();
-                              }).toList(),
-                            ),
-                          );
+                          return SizedBox.shrink();
                         }),
               ),
             ),

@@ -5,15 +5,28 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
 
 class CampaignDetailsScreenController {
+  var _userId = '';
+  var _campaignNotesId = '';
+
   Stream<DocumentSnapshot<Map<String, dynamic>>> getCampaignDetails(
       {required String campaignId}) {
-    return FirebaseFirestore.instance
-        .collection('campaigns')
-        .doc(campaignId)
-        .snapshots();
+    return campaigns.doc(campaignId).snapshots();
+  }
+
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getCampaignNotes(
+      {required String campaignId, required String userId}) {
+    return campaignNotes
+        .where('campaignId', isEqualTo: campaignId)
+        .where('userId', isEqualTo: userId)
+        .snapshots()
+        .map((value) {
+      print('test: ${value.docs.single}');
+      return value.docs.single;
+    });
   }
 
   final campaigns = FirebaseFirestore.instance.collection('campaigns');
+  final campaignNotes = FirebaseFirestore.instance.collection('campaignNotes');
   final users = FirebaseFirestore.instance.collection('users');
 
   Future<void> addPlayer({
@@ -21,33 +34,53 @@ class CampaignDetailsScreenController {
     required String campaignId,
     required BuildContext context,
   }) {
-    var _userId = '';
     return users.where('email', isEqualTo: playerMail).get().then((value) {
       _userId = value.docs.single.id;
-      campaigns
-          .doc(campaignId)
-          .update({
-            'playersId': FieldValue.arrayUnion([_userId]),
-          })
-          .then((value) => print("campaigns Added"))
-          .catchError((error) => print("Failed to add campaigns: $error"));
+      campaigns.doc(campaignId).update({
+        'playersId': FieldValue.arrayUnion([_userId]),
+      }).then((value) {
+        print("campaigns Added");
+        campaignNotes.add({
+          'campaignId': campaignId,
+          'userId': _userId,
+        });
+        // ignore: invalid_return_type_for_catch_error
+      }).catchError((error) => print("Failed to add campaigns: $error"));
       // ignore: invalid_return_type_for_catch_error
     }).catchError((_) => errorDialog(context));
   }
 
   void updateCampaign({
     required String campaignId,
+    String? userId,
     required dynamic newValue,
     required String updateTargetName,
   }) {
     try {
-      campaigns
-          .doc(campaignId)
-          .update({
-            updateTargetName: newValue,
-          })
-          .then((value) => print('$updateTargetName was update'))
-          .catchError((error) => print('Failed to update $updateTargetName'));
+      userId != null
+          ? campaignNotes
+              .where('campaignId', isEqualTo: campaignId)
+              .where('userId', isEqualTo: userId)
+              .get()
+              .then((value) {
+              _campaignNotesId = value.docs.single.id;
+              campaignNotes
+                  .doc(_campaignNotesId)
+                  .update({
+                    updateTargetName: newValue,
+                  })
+                  .then((value) => print('$updateTargetName was update'))
+                  .catchError(
+                      (error) => print('Failed to update $updateTargetName'));
+            })
+          : campaigns
+              .doc(campaignId)
+              .update({
+                updateTargetName: newValue,
+              })
+              .then((value) => print('$updateTargetName was update'))
+              .catchError(
+                  (error) => print('Failed to update $updateTargetName'));
     } on Exception catch (e) {
       print('Coś poszło nie tak: $e');
     }
@@ -60,6 +93,7 @@ class CampaignDetailsScreenController {
     required String updateTargetName,
     String? campaignId,
     String? campaignMultiText,
+    String? userId,
   }) {
     showDialog(
         context: context,
@@ -131,6 +165,7 @@ class CampaignDetailsScreenController {
                 onPressed: () {
                   updateCampaign(
                     campaignId: campaignId ?? '',
+                    userId: userId ?? '',
                     updateTargetName: updateTargetName,
                     newValue: textController.text,
                   );

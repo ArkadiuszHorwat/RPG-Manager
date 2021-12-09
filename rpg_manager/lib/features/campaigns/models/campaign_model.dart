@@ -11,7 +11,6 @@ class CampaignModel {
     this.timestamp,
     this.sessionNumber,
     this.sessionStatus,
-    this.description,
   });
 
   final String title;
@@ -23,5 +22,4 @@ class CampaignModel {
   final int? sessionNumber;
   final bool? sessionStatus;
   final Timestamp? timestamp;
-  final String? description;
 }

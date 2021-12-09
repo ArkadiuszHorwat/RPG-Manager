@@ -1,40 +1,43 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/features/campaigns/campaign_details/campaign_details_screen_controller.dart';
 import 'package:rpg_manager/features/campaigns/campaign_details/widgets/campaign_description.dart';
 import 'package:rpg_manager/features/campaigns/campaign_details/widgets/campaign_image.dart';
+import 'package:rpg_manager/features/campaigns/campaign_details/widgets/campaign_players_list.dart';
 import 'package:rpg_manager/features/campaigns/models/campaign_model.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
 
-//TODO: create flag to activePlayers widget or descriptions widget + create update methods to them
-class CampaignDetailsScreen extends StatelessWidget {
-  final _controller = CampaignDetailsScreenController();
-
+class CampaignDetailsScreen extends StatefulWidget {
   CampaignDetailsScreen({
     Key? key,
     required this.campaignId,
+    required this.userId,
     required this.sessionType,
   });
 
   final String campaignId;
+  final String userId;
   final String sessionType;
+
+  @override
+  State<CampaignDetailsScreen> createState() => _CampaignDetailsScreenState();
+}
+
+class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
+  final _controller = CampaignDetailsScreenController();
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return AppBackground(
       child: StreamBuilder<DocumentSnapshot<Map<dynamic, dynamic>>>(
-          stream: _controller.getCampaignDetails(campaignId: campaignId),
+          stream: _controller.getCampaignDetails(campaignId: widget.campaignId),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Text('Something went wrong');
-            }
-
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Text("Loading");
             }
 
             if (snapshot.data != null) {
@@ -44,22 +47,21 @@ class CampaignDetailsScreen extends StatelessWidget {
               final _campaignModel = CampaignModel(
                 title: data['title'],
                 system: data['system'],
-                campaignId: campaignId,
+                campaignId: widget.campaignId,
                 image: data['image'],
                 sessionNumber: data['sessionNumber'] ?? 0,
                 sessionStatus: data['sessionStatus'],
-                description: data['description'] ?? '',
               );
 
               return Scaffold(
                 appBar: AppNavBar(
                   title: _campaignModel.title,
                   actions: [
-                    sessionType == 'game master'
+                    widget.sessionType == 'game master'
                         ? IconButton(
                             onPressed: () {
                               _controller.campaignDelete(context,
-                                  campaignId: campaignId);
+                                  campaignId: widget.campaignId);
                             },
                             icon: Icon(Icons.delete_outline),
                           )
@@ -67,52 +69,42 @@ class CampaignDetailsScreen extends StatelessWidget {
                   ],
                 ),
                 backgroundColor: Colors.transparent,
+                bottomNavigationBar: BottomNavigationBar(
+                  backgroundColor: Colors.black.withAlpha(50),
+                  type: BottomNavigationBarType.fixed,
+                  fixedColor: AppColors.appLight,
+                  unselectedItemColor: AppColors.appDark,
+                  elevation: 0.1,
+                  unselectedFontSize: 14,
+                  selectedFontSize: 16,
+                  currentIndex: _currentIndex,
+                  onTap: (index) => setState(() => _currentIndex = index),
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.person),
+                      label: 'Gracze',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.book),
+                      label: 'Notatki',
+                    ),
+                  ],
+                ),
                 body: SingleChildScrollView(
                   child: Column(
                     children: [
                       CampaignImage(
                         campaignModel: _campaignModel,
                         controller: _controller,
-                        sessionType: sessionType,
+                        sessionType: widget.sessionType,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "Aktywni gracze",
-                                style: GoogleFonts.rubik(
-                                  textStyle: TextStyle(
-                                    color: AppColors.appLight,
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
+                      _currentIndex == 0
+                          ? CampaignPlayersList()
+                          : CampaignDescription(
+                              campaignModel: _campaignModel,
+                              controller: _controller,
+                              userId: widget.userId,
                             ),
-                            TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "Notatki",
-                                style: GoogleFonts.rubik(
-                                  textStyle: TextStyle(
-                                    color: AppColors.appLight,
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      CampaignDescription(
-                        campaignModel: _campaignModel,
-                        controller: _controller,
-                      ),
                     ],
                   ),
                 ),

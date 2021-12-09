@@ -14,6 +14,7 @@ class CampaignsCardItem extends StatelessWidget {
     required this.controller,
     required this.campaignId,
     required this.sessionType,
+    required this.userId,
   }) : super(key: key);
 
   final String title;
@@ -21,12 +22,14 @@ class CampaignsCardItem extends StatelessWidget {
   final CampaignsScreenController controller;
   final String campaignId;
   final String sessionType;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
     final _campaignDetailsObject = {
       'campaignId': campaignId,
-      'sessionType': sessionType
+      'sessionType': sessionType,
+      'userId': userId,
     };
 
     return GestureDetector(

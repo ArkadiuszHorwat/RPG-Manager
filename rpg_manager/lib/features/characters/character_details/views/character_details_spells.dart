@@ -6,6 +6,7 @@ import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/features/characters/character_details/character_details_controller.dart';
 import 'package:rpg_manager/features/characters/character_details/widgets/statisticCell.dart';
 import 'package:rpg_manager/features/characters/models/character_model.dart';
+import 'package:rpg_manager/widgets/app_loading_screen.dart';
 
 class CharacterDetailsSpells extends StatefulWidget {
   CharacterDetailsSpells({
@@ -155,32 +156,30 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
                     if (snapshot.hasError) {
                       return Text('Something went wrong');
                     }
+                    if (snapshot.data != null) {
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: snapshot.data!.docs
+                              .map((DocumentSnapshot document) {
+                            Map<dynamic, dynamic> data =
+                                document.data()! as Map<dynamic, dynamic>;
 
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Text("Loading");
+                            if (data["characterId"] ==
+                                    widget.characterModel.characterId &&
+                                data["level"] == spellsLvl) {
+                              return _spell(
+                                name: data['name'],
+                                context: context,
+                                description: data["description"],
+                                spellId: document.id,
+                              );
+                            } else
+                              return SizedBox.shrink();
+                          }).toList(),
+                        ),
+                      );
                     }
-
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: snapshot.data!.docs
-                            .map((DocumentSnapshot document) {
-                          Map<dynamic, dynamic> data =
-                              document.data()! as Map<dynamic, dynamic>;
-
-                          if (data["characterId"] ==
-                                  widget.characterModel.characterId &&
-                              data["level"] == spellsLvl) {
-                            return _spell(
-                              name: data['name'],
-                              context: context,
-                              description: data["description"],
-                              spellId: document.id,
-                            );
-                          } else
-                            return SizedBox.shrink();
-                        }).toList(),
-                      ),
-                    );
+                    return SizedBox.shrink();
                   }),
             ),
           ),

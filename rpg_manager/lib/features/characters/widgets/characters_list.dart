@@ -37,8 +37,8 @@ class CharacterList extends StatelessWidget {
               charactersList.add(CharacterListItem(
                 characterName: data['name'],
                 image: data['image'],
-                controller: controller,
-                characterId: document.id,
+                action: () =>
+                    controller.routeToCharacterDetails(context, document.id),
               ));
               return SizedBox.shrink();
             } else

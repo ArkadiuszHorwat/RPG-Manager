@@ -7,7 +7,6 @@ import 'package:rpg_manager/features/characters/character_details/character_deta
 import 'package:rpg_manager/features/characters/character_details/widgets/attacksAndMagicCell.dart';
 import 'package:rpg_manager/features/characters/character_details/widgets/moneyCell.dart';
 import 'package:rpg_manager/features/characters/models/character_model.dart';
-import 'package:rpg_manager/widgets/app_loading_screen.dart';
 
 class CharacterDetailsEquipment extends StatefulWidget {
   CharacterDetailsEquipment({

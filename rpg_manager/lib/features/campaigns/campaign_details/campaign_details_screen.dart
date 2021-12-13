@@ -97,9 +97,12 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                         campaignModel: _campaignModel,
                         controller: _controller,
                         sessionType: widget.sessionType,
+                        userId: widget.userId,
                       ),
                       _currentIndex == 0
-                          ? CampaignPlayersList()
+                          ? CampaignPlayersList(
+                              controller: _controller,
+                            )
                           : CampaignDescription(
                               campaignModel: _campaignModel,
                               controller: _controller,

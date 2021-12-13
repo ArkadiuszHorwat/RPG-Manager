@@ -8,17 +8,20 @@ import 'package:image_picker/image_picker.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/features/campaigns/campaign_details/campaign_details_screen_controller.dart';
 import 'package:rpg_manager/features/campaigns/models/campaign_model.dart';
+import 'package:rpg_manager/features/characters/characters_controller.dart';
 
 class CampaignImage extends StatefulWidget {
   CampaignImage({
     required this.campaignModel,
     required this.controller,
     required this.sessionType,
+    required this.userId,
   });
 
   final CampaignModel campaignModel;
   final CampaignDetailsScreenController controller;
   final String sessionType;
+  final String userId;
 
   @override
   State<CampaignImage> createState() => _CampaignImageState();
@@ -26,6 +29,7 @@ class CampaignImage extends StatefulWidget {
 
 class _CampaignImageState extends State<CampaignImage> {
   final _emailTextController = TextEditingController();
+  final _characterController = CharactersScreenController();
   final formKey = GlobalKey<FormState>();
   var _sessionStatus;
   var _playerStatus = false;
@@ -227,17 +231,16 @@ class _CampaignImageState extends State<CampaignImage> {
                                 : Icon(Icons.login_outlined),
                             onPressed: () {
                               _playerStatus
-                                  ? _playerStatus = false
-                                  : _playerStatus = true;
-                              setState(() {
-                                _playerStatus;
-                              });
-                              // widget.controller.updateSessionStatus(
-                              //     campaignId: widget.campaignModel.campaignId!,
-                              //     sessionStatus: _sessionStatus);
+                                  ? widget.controller.deleteActivePlayer(
+                                      campaignId:
+                                          widget.campaignModel.campaignId!,
+                                      value: '', //TODO: set correct value
+                                    )
+                                  : _addCharacterToCampaign(context);
                             },
                             color: AppColors.appDark,
-                            iconSize: 32),
+                            iconSize: 32,
+                          ),
                   ),
                 ],
               ),
@@ -246,6 +249,113 @@ class _CampaignImageState extends State<CampaignImage> {
         ],
       ),
     );
+  }
+
+  void _addCharacterToCampaign(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, StateSetter setModalState) {
+            return AlertDialog(
+              backgroundColor: AppColors.appLight,
+              title: Column(
+                children: [
+                  Divider(
+                    color: AppColors.appDark,
+                  ),
+                  Text(
+                    'Wybierz postać',
+                    style: GoogleFonts.rubik(
+                      textStyle: TextStyle(
+                        color: AppColors.appDark,
+                        fontSize: 14.0,
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: AppColors.appDark,
+                  ),
+                  StreamBuilder<QuerySnapshot>(
+                      stream: _characterController.charactersSnapshot,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Text('Something went wrong');
+                        }
+
+                        var charactersList = <String>[];
+                        Map<String, dynamic> charactersId = Map();
+
+                        if (snapshot.data != null) {
+                          snapshot.data!.docs
+                              .map<void>((DocumentSnapshot document) {
+                            Map<dynamic, dynamic> data =
+                                document.data()! as Map<dynamic, dynamic>;
+                            if (data["userId"] == widget.userId) {
+                              charactersList.add(data['name']);
+                              charactersId.addAll({
+                                data['name']: document.id,
+                              });
+                            }
+                          }).toList();
+
+                          var _initValue = charactersList.first;
+
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom,
+                            ),
+                            child: DropdownButtonFormField(
+                              icon: Icon(Icons.keyboard_arrow_down),
+                              value: _initValue,
+                              items: charactersList
+                                  .map((item) => DropdownMenuItem(
+                                        value: item,
+                                        child: Text(item),
+                                      ))
+                                  .toList(),
+                              onChanged: (String? newValue) {
+                                setModalState(() {
+                                  _initValue = newValue!;
+
+                                  widget.controller.updateCampaign(
+                                    campaignId:
+                                        widget.campaignModel.campaignId!,
+                                    newValue: charactersId[_initValue],
+                                    updateTargetName: 'activePlayers',
+                                  );
+                                  Navigator.pop(context);
+                                  setState(() {
+                                    _playerStatus = true;
+                                  });
+                                });
+                              },
+                            ),
+                          );
+                        }
+
+                        return SizedBox.shrink();
+                      }),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Wróć',
+                    style: GoogleFonts.rubik(
+                      textStyle: TextStyle(
+                        color: AppColors.appDark,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          });
+        });
   }
 
   void _imageEditHandle(BuildContext context) {

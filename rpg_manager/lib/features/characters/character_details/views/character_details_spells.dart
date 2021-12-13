@@ -6,7 +6,6 @@ import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/features/characters/character_details/character_details_controller.dart';
 import 'package:rpg_manager/features/characters/character_details/widgets/statisticCell.dart';
 import 'package:rpg_manager/features/characters/models/character_model.dart';
-import 'package:rpg_manager/widgets/app_loading_screen.dart';
 
 class CharacterDetailsSpells extends StatefulWidget {
   CharacterDetailsSpells({

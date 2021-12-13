@@ -26,6 +26,7 @@ class CampaignDetailsScreenController {
   }
 
   final campaigns = FirebaseFirestore.instance.collection('campaigns');
+  final characters = FirebaseFirestore.instance.collection('characters');
   final campaignNotes = FirebaseFirestore.instance.collection('campaignNotes');
   final users = FirebaseFirestore.instance.collection('users');
 
@@ -76,11 +77,30 @@ class CampaignDetailsScreenController {
           : campaigns
               .doc(campaignId)
               .update({
-                updateTargetName: newValue,
+                updateTargetName: updateTargetName == 'activePlayers'
+                    ? FieldValue.arrayUnion([newValue])
+                    : newValue,
               })
               .then((value) => print('$updateTargetName was update'))
               .catchError(
                   (error) => print('Failed to update $updateTargetName'));
+    } on Exception catch (e) {
+      print('Coś poszło nie tak: $e');
+    }
+  }
+
+  void deleteActivePlayer({
+    required String campaignId,
+    required String value,
+  }) {
+    try {
+      campaigns
+          .doc(campaignId)
+          .update({
+            'activePlayers': FieldValue.arrayRemove([value]),
+          })
+          .then((value) => print('activePlayers was delete'))
+          .catchError((error) => print('Failed to delete activePlayers'));
     } on Exception catch (e) {
       print('Coś poszło nie tak: $e');
     }

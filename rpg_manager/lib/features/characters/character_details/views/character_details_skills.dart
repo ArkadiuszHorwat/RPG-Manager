@@ -8,7 +8,6 @@ import 'package:rpg_manager/features/characters/character_details/widgets/defens
 import 'package:rpg_manager/features/characters/character_details/widgets/statisticCell.dart';
 import 'package:rpg_manager/features/characters/models/character_model.dart';
 import 'package:rpg_manager/features/characters/models/skills_model.dart';
-import 'package:rpg_manager/widgets/app_loading_screen.dart';
 
 class CharacterDetailsSkills extends StatefulWidget {
   CharacterDetailsSkills({

@@ -7,6 +7,7 @@ import 'package:rpg_manager/features/firebase/config.dart';
 import 'package:rpg_manager/features/home/home_controller.dart';
 import 'package:rpg_manager/features/home/widgets/home_choice.dart';
 import 'package:rpg_manager/widgets/app_background.dart';
+import 'package:rpg_manager/widgets/app_loading_screen.dart';
 import 'package:rpg_manager/widgets/app_nav_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -47,14 +48,17 @@ class HomeScreen extends StatelessWidget {
             return Scaffold(
               backgroundColor: Colors.transparent,
               appBar: AppNavBar(
-                title: "${data['name']}",
-                icon: IconButton(
+                title: "Witaj ${data['name']}!",
+                actions: [
+                  IconButton(
+                    onPressed: () {
+                      _controller.exitLogOutAlert(context);
+                    },
                     icon: Icon(
                       Icons.door_back_door_outlined,
                     ),
-                    onPressed: () {
-                      _controller.exitLogOutAlert(context);
-                    }),
+                  ),
+                ],
               ),
               body: HomeChoice(
                 data: userData,
@@ -63,13 +67,8 @@ class HomeScreen extends StatelessWidget {
             );
           }
 
-          return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: AppColors.appLight,
-              color: AppColors.appDark,
-              value: 0.5,
-              strokeWidth: 4.0,
-            ),
+          return AppLoadingScreen(
+            color: AppColors.appLight,
           );
         },
       ),

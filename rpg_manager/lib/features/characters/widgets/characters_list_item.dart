@@ -4,27 +4,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
-import 'package:rpg_manager/features/characters/characters_controller.dart';
 
 class CharacterListItem extends StatelessWidget {
   CharacterListItem({
     Key? key,
     required this.characterName,
     this.image,
-    required this.controller,
-    required this.characterId,
+    required this.action,
   });
 
   final String characterName;
   final String? image;
-  final CharactersScreenController controller;
-  final String characterId;
+  final VoidCallback action;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () => controller.routeToCharacterDetails(context, characterId),
+      onTap: action,
       child: Container(
         alignment: AlignmentDirectional.bottomCenter,
         decoration: BoxDecoration(

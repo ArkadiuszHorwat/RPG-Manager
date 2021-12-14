@@ -9,6 +9,7 @@ import 'package:rpg_manager/app_assets/localizations/app_local.dart';
 import 'package:rpg_manager/features/campaigns/campaigns_controller.dart';
 import 'package:rpg_manager/features/campaigns/models/campaign_model.dart';
 import 'package:rpg_manager/features/campaigns/widgets/camaigns_card_item.dart';
+import 'package:rpg_manager/widgets/app_loading_screen.dart';
 
 class CampaignsScreen extends StatefulWidget {
   CampaignsScreen({
@@ -41,7 +42,9 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Text("Loading");
+            return AppLoadingScreen(
+              color: AppColors.appLight,
+            );
           }
 
           return Column(
@@ -54,19 +57,38 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                   child: Column(
                     children:
                         snapshot.data!.docs.map((DocumentSnapshot document) {
+                      if (snapshot.hasError) {
+                        return Text('Something went wrong');
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return AppLoadingScreen(
+                          color: AppColors.appLight,
+                        );
+                      }
                       Map<dynamic, dynamic> data =
                           document.data()! as Map<dynamic, dynamic>;
 
-                      for (String id in data['usersId']) {
-                        if (id == widget.userId) {
-                          return data['sessionType'] == widget.sessionType
-                              ? CampaignsCardItem(
-                                  title: data['title'],
-                                  image: data['image'],
-                                )
-                              : SizedBox.shrink();
-                        } else
-                          return SizedBox.shrink();
+                      var _currentPlayerId = null;
+                      final _playersId = data['playersId'] ?? [];
+                      for (String playerId in _playersId) {
+                        playerId == widget.userId
+                            ? _currentPlayerId = playerId
+                            : null;
+                      }
+
+                      if ((data['gameMasterId'] == widget.userId &&
+                              data['sessionType'] == widget.sessionType) ||
+                          (_currentPlayerId != null &&
+                              data['sessionType'] != widget.sessionType)) {
+                        return CampaignsCardItem(
+                          title: data['title'],
+                          image: data['image'],
+                          controller: _controller,
+                          campaignId: document.id,
+                          sessionType: widget.sessionType,
+                          userId: widget.userId,
+                        );
                       }
 
                       return SizedBox.shrink();
@@ -191,12 +213,13 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                               image:
                                   _imageFile != null ? _imageFile!.path : null,
                               sessionType: widget.sessionType,
-                              userId: widget.userId,
+                              gameMasterId: widget.userId,
                               timestamp: Timestamp.now(),
                             );
 
                             _controller.addCampaigns(
                               campaignModel: campaign,
+                              userId: widget.userId,
                             );
 
                             Navigator.pop(context);

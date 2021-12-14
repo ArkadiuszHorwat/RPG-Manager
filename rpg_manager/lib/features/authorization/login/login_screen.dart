@@ -32,13 +32,16 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Scaffold(
         appBar: AppNavBar(
           title: AppLocal.titleStartPage,
-          icon: IconButton(
+          actions: [
+            IconButton(
+              onPressed: () {
+                _controller.exitAlert(context);
+              },
               icon: Icon(
                 Icons.close_outlined,
               ),
-              onPressed: () {
-                _controller.exitAlert(context);
-              }),
+            ),
+          ],
         ),
         backgroundColor: Colors.transparent,
         body: GestureDetector(
@@ -53,8 +56,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.only(top: 40.0),
                     child: Image.asset(
                       'lib/app_assets/images/logo.png',
-                      width: 180,
-                      height: 180,
+                      width: 150,
+                      height: 150,
                       color: AppColors.appLight,
                     ),
                   ),
@@ -62,8 +65,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 40,
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: _loginForm(context),
+                    padding: const EdgeInsets.fromLTRB(50, 30, 50, 0),
+                    child: Center(child: _loginForm(context)),
                   ),
                 ],
               ),
@@ -111,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ],
       ),
-      height: 60.0,
+      height: 50.0,
       child: TextFormField(
         controller: _controller.userEmailController,
         cursorColor: Colors.black,
@@ -177,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ],
       ),
-      height: 60.0,
+      height: 50.0,
       child: TextFormField(
         controller: _controller.userPasswordController,
         obscureText: true,

@@ -155,32 +155,30 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
                     if (snapshot.hasError) {
                       return Text('Something went wrong');
                     }
+                    if (snapshot.data != null) {
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: snapshot.data!.docs
+                              .map((DocumentSnapshot document) {
+                            Map<dynamic, dynamic> data =
+                                document.data()! as Map<dynamic, dynamic>;
 
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Text("Loading");
+                            if (data["characterId"] ==
+                                    widget.characterModel.characterId &&
+                                data["level"] == spellsLvl) {
+                              return _spell(
+                                name: data['name'],
+                                context: context,
+                                description: data["description"],
+                                spellId: document.id,
+                              );
+                            } else
+                              return SizedBox.shrink();
+                          }).toList(),
+                        ),
+                      );
                     }
-
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: snapshot.data!.docs
-                            .map((DocumentSnapshot document) {
-                          Map<dynamic, dynamic> data =
-                              document.data()! as Map<dynamic, dynamic>;
-
-                          if (data["characterId"] ==
-                                  widget.characterModel.characterId &&
-                              data["level"] == spellsLvl) {
-                            return _spell(
-                              name: data['name'],
-                              context: context,
-                              description: data["description"],
-                              spellId: document.id,
-                            );
-                          } else
-                            return SizedBox.shrink();
-                        }).toList(),
-                      ),
-                    );
+                    return SizedBox.shrink();
                   }),
             ),
           ),
@@ -250,7 +248,6 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
   Widget _addSpellBuilder() {
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setModalState) {
-      print(_level);
       return Form(
         key: formKey,
         child: Column(

@@ -99,31 +99,29 @@ class _CharacterDetailsEquipmentState extends State<CharacterDetailsEquipment> {
                                 return Text('Something went wrong');
                               }
 
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Text("Loading");
+                              if (snapshot.data != null) {
+                                return SingleChildScrollView(
+                                  child: Column(
+                                    children: snapshot.data!.docs
+                                        .map((DocumentSnapshot document) {
+                                      Map<dynamic, dynamic> data = document
+                                          .data()! as Map<dynamic, dynamic>;
+
+                                      if (data["characterId"] ==
+                                          widget.characterModel.characterId) {
+                                        return _inventoryElement(
+                                          name: data['name'],
+                                          context: context,
+                                          description: data["description"],
+                                          itemId: document.id,
+                                        );
+                                      } else
+                                        return SizedBox.shrink();
+                                    }).toList(),
+                                  ),
+                                );
                               }
-
-                              return SingleChildScrollView(
-                                child: Column(
-                                  children: snapshot.data!.docs
-                                      .map((DocumentSnapshot document) {
-                                    Map<dynamic, dynamic> data = document
-                                        .data()! as Map<dynamic, dynamic>;
-
-                                    if (data["characterId"] ==
-                                        widget.characterModel.characterId) {
-                                      return _inventoryElement(
-                                        name: data['name'],
-                                        context: context,
-                                        description: data["description"],
-                                        itemId: document.id,
-                                      );
-                                    } else
-                                      return SizedBox.shrink();
-                                  }).toList(),
-                                ),
-                              );
+                              return SizedBox.shrink();
                             }),
                       ),
                     ),
@@ -676,35 +674,34 @@ class _CharacterDetailsEquipmentState extends State<CharacterDetailsEquipment> {
             return Text('Something went wrong');
           }
 
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Text("Loading");
+          if (snapshot.data != null) {
+            return Column(
+              children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                Map<dynamic, dynamic> data =
+                    document.data()! as Map<dynamic, dynamic>;
+
+                if (data["characterId"] == widget.characterModel.characterId) {
+                  return Column(
+                    children: [
+                      _equipElement(
+                        name: data['name'] ?? '',
+                        bonus: data["bonus"] ?? '',
+                        damage: data["damage"] ?? '',
+                        damageType: data["damageType"] ?? '',
+                        context: context,
+                        itemInUseId: document.id,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  );
+                } else
+                  return SizedBox.shrink();
+              }).toList(),
+            );
           }
-
-          return Column(
-            children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              Map<dynamic, dynamic> data =
-                  document.data()! as Map<dynamic, dynamic>;
-
-              if (data["characterId"] == widget.characterModel.characterId) {
-                return Column(
-                  children: [
-                    _equipElement(
-                      name: data['name'] ?? '',
-                      bonus: data["bonus"] ?? '',
-                      damage: data["damage"] ?? '',
-                      damageType: data["damageType"] ?? '',
-                      context: context,
-                      itemInUseId: document.id,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                );
-              } else
-                return SizedBox.shrink();
-            }).toList(),
-          );
+          return SizedBox.shrink();
         });
   }
 

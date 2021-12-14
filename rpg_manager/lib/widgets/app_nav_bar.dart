@@ -28,7 +28,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
       ),
-      centerTitle: true,
+      centerTitle: false,
       leading: icon,
       iconTheme: IconThemeData(
         color: AppColors.appLight,

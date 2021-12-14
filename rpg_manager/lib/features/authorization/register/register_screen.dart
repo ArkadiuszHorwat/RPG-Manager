@@ -60,8 +60,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 40,
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: _registerForm(context),
+                    padding: const EdgeInsets.fromLTRB(50, 10, 50, 10),
+                    child: Center(child: _registerForm(context)),
                   ),
                 ],
               ),
@@ -95,10 +95,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             height: 30,
           ),
           _registerButton(context: context),
-          SizedBox(
-            height: 20,
-          ),
-          _loginButton(context: context),
         ],
       ),
     );
@@ -117,7 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ],
       ),
-      height: 60.0,
+      height: 50.0,
       child: TextFormField(
         controller: _controller.userNameController,
         cursorColor: Colors.black,
@@ -177,7 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ],
       ),
-      height: 60.0,
+      height: 50.0,
       child: TextFormField(
         controller: _controller.userEmailController,
         cursorColor: Colors.black,
@@ -243,7 +239,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ],
       ),
-      height: 60.0,
+      height: 50.0,
       child: TextFormField(
         controller: _controller.userPasswordController,
         obscureText: true,
@@ -303,7 +299,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ],
       ),
-      height: 60.0,
+      height: 50.0,
       child: TextFormField(
         controller: _controller.userConfirmPasswordController,
         obscureText: true,
@@ -375,45 +371,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         onPressed: () => _controller.onRegisterButtonPressed(context: context),
         child: Text(
           AppLocal.registerSignUpButtonText,
-          style: GoogleFonts.rubik(
-            textStyle: TextStyle(
-              color: AppColors.appLight,
-              letterSpacing: 1.5,
-              fontSize: 22.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _loginButton({required BuildContext context}) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: AppColors.appLight,
-          width: 2,
-        ),
-        borderRadius: BorderRadius.circular(30.0),
-      ),
-      child: ElevatedButton(
-        style: ButtonStyle(
-          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-              EdgeInsets.all(15.0)),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-          ),
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-        ),
-        onPressed: () {
-          _controller.routeToLoginScreen(context);
-        },
-        child: Text(
-          AppLocal.registerSignInButtonText,
           style: GoogleFonts.rubik(
             textStyle: TextStyle(
               color: AppColors.appLight,

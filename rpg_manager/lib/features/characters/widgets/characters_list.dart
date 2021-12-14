@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:rpg_manager/app_assets/colors/colors.dart';
 import 'package:rpg_manager/features/characters/characters_controller.dart';
 import 'package:rpg_manager/features/characters/widgets/characters_list_item.dart';
+import 'package:rpg_manager/widgets/app_loading_screen.dart';
 
 class CharacterList extends StatelessWidget {
   CharacterList({
@@ -22,7 +24,9 @@ class CharacterList extends StatelessWidget {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Text("Loading");
+            return AppLoadingScreen(
+              color: AppColors.appLight,
+            );
           }
           var charactersList = <Widget>[];
 
@@ -33,8 +37,8 @@ class CharacterList extends StatelessWidget {
               charactersList.add(CharacterListItem(
                 characterName: data['name'],
                 image: data['image'],
-                controller: controller,
-                characterId: document.id,
+                action: () =>
+                    controller.routeToCharacterDetails(context, document.id),
               ));
               return SizedBox.shrink();
             } else

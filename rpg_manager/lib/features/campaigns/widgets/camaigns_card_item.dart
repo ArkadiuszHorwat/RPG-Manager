@@ -4,22 +4,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
+import 'package:rpg_manager/features/campaigns/campaigns_controller.dart';
 
 class CampaignsCardItem extends StatelessWidget {
   const CampaignsCardItem({
     Key? key,
     required this.title,
     this.image,
+    required this.controller,
+    required this.campaignId,
+    required this.sessionType,
+    required this.userId,
   }) : super(key: key);
 
   final String title;
   final String? image;
+  final CampaignsScreenController controller;
+  final String campaignId;
+  final String sessionType;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
+    final _campaignDetailsObject = {
+      'campaignId': campaignId,
+      'sessionType': sessionType,
+      'userId': userId,
+    };
+
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () {},
+      onTap: () =>
+          controller.routeToCampaignDetails(context, _campaignDetailsObject),
       child: Container(
         alignment: AlignmentDirectional.center,
         margin: EdgeInsets.all(10),

@@ -9,7 +9,7 @@ class CharacterModel {
     this.timestamp,
     this.characterId,
     this.characterPD,
-    this.characterActiveCampaign,
+    this.activeCampaign,
     this.characterLvl,
     this.deathCheck,
     this.lifeCheck,
@@ -50,6 +50,7 @@ class CharacterModel {
     this.defenseThrowsDexterity,
     this.defenseThrowsStrength,
     this.skillsId,
+    this.activeCampaignName,
   });
 
   final String? name;
@@ -60,7 +61,8 @@ class CharacterModel {
 
   final String? characterId;
   final String? characterPD;
-  final String? characterActiveCampaign;
+  final bool? activeCampaign;
+  final String? activeCampaignName;
   final int? characterLvl;
   final int? deathCheck;
   final int? lifeCheck;

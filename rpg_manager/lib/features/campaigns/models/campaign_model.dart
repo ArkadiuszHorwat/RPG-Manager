@@ -11,6 +11,7 @@ class CampaignModel {
     this.timestamp,
     this.sessionNumber,
     this.sessionStatus,
+    this.activePlayers,
   });
 
   final String title;
@@ -22,4 +23,5 @@ class CampaignModel {
   final int? sessionNumber;
   final bool? sessionStatus;
   final Timestamp? timestamp;
+  final List<dynamic>? activePlayers;
 }

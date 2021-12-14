@@ -54,11 +54,40 @@ class CampaignDetailsScreenController {
   void updateCampaign({
     required String campaignId,
     String? userId,
+    bool notesUpdate = false,
     required dynamic newValue,
     required String updateTargetName,
   }) {
     try {
-      userId != null
+      if (updateTargetName == 'activePlayers') {
+        characters
+            .doc(newValue)
+            .update({
+              "activeCampaign": true,
+            })
+            .then((value) => print('active campaign was update'))
+            .catchError((error) => print('Failed to update active campaign'));
+
+        users
+            .doc(userId)
+            .update({
+              "activeUser": true,
+            })
+            .then((value) => print('activeUser was update'))
+            .catchError((error) => print('Failed to update activeUser'));
+      }
+
+      if (updateTargetName == 'sessionStatus' && newValue == false) {
+        campaigns
+            .doc(campaignId)
+            .update({
+              "activePlayers": [],
+            })
+            .then((value) => print('active campaign was update'))
+            .catchError((error) => print('Failed to update active campaign'));
+      }
+
+      notesUpdate
           ? campaignNotes
               .where('campaignId', isEqualTo: campaignId)
               .where('userId', isEqualTo: userId)
@@ -91,16 +120,39 @@ class CampaignDetailsScreenController {
 
   void deleteActivePlayer({
     required String campaignId,
-    required String value,
+    required String userId,
   }) {
     try {
-      campaigns
-          .doc(campaignId)
-          .update({
-            'activePlayers': FieldValue.arrayRemove([value]),
-          })
-          .then((value) => print('activePlayers was delete'))
-          .catchError((error) => print('Failed to delete activePlayers'));
+      characters
+          .where("userId", isEqualTo: userId)
+          .where("activeCampaign", isEqualTo: true)
+          .get()
+          .then((value) {
+        final _characterId = value.docs.single.id;
+        characters
+            .doc(_characterId)
+            .update({
+              "activeCampaign": false,
+            })
+            .then((value) => print('active campaign was update'))
+            .catchError((error) => print('Failed to update active campaign'));
+
+        campaigns
+            .doc(campaignId)
+            .update({
+              'activePlayers': FieldValue.arrayRemove([_characterId]),
+            })
+            .then((value) => print('activePlayers was delete'))
+            .catchError((error) => print('Failed to delete activePlayers'));
+
+        users
+            .doc(userId)
+            .update({
+              "activeUser": false,
+            })
+            .then((value) => print('activeUser was update'))
+            .catchError((error) => print('Failed to update activeUser'));
+      });
     } on Exception catch (e) {
       print('Coś poszło nie tak: $e');
     }
@@ -186,6 +238,7 @@ class CampaignDetailsScreenController {
                   updateCampaign(
                     campaignId: campaignId ?? '',
                     userId: userId ?? '',
+                    notesUpdate: true,
                     updateTargetName: updateTargetName,
                     newValue: textController.text,
                   );

@@ -51,6 +51,7 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                 image: data['image'],
                 sessionNumber: data['sessionNumber'] ?? 0,
                 sessionStatus: data['sessionStatus'],
+                activePlayers: data['activePlayers'],
               );
 
               return Scaffold(
@@ -102,6 +103,7 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                       _currentIndex == 0
                           ? CampaignPlayersList(
                               controller: _controller,
+                              charactersIds: _campaignModel.activePlayers ?? [],
                             )
                           : CampaignDescription(
                               campaignModel: _campaignModel,

@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
 
 class CharacterDetailsScreenController {
-  Stream<DocumentSnapshot<Map<String, dynamic>>> getCharacterDetails(
+  Stream<DocumentSnapshot<Map<dynamic, dynamic>>> getCharacterDetails(
       {required String characterId}) {
     return FirebaseFirestore.instance
         .collection('characters')

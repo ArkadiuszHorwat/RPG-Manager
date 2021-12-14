@@ -101,7 +101,7 @@ class CharacterInfo extends StatelessWidget {
                     ),
                     _infoCell(
                       title: 'Aktualna przygoda',
-                      infoType: characterModel.characterActiveCampaign ?? '',
+                      infoType: characterModel.activeCampaignName ?? '',
                       action: () {},
                     ),
                     Divider(

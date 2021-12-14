@@ -31,223 +31,234 @@ class _CampaignImageState extends State<CampaignImage> {
   final _emailTextController = TextEditingController();
   final _characterController = CharactersScreenController();
   final formKey = GlobalKey<FormState>();
-  var _sessionStatus;
-  var _playerStatus = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _sessionStatus = widget.campaignModel.sessionStatus ?? false;
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 350,
-      padding: EdgeInsetsDirectional.all(10),
-      child: Stack(
-        children: [
-          GestureDetector(
-            onTap: widget.sessionType == 'game master'
-                ? () {
-                    _imageEditHandle(context);
-                  }
-                : () {},
-            child: Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 3,
-                    spreadRadius: 1,
-                  ),
-                ],
-                borderRadius: BorderRadiusDirectional.all(Radius.circular(10)),
-                image: widget.campaignModel.image == null ||
-                        !File(widget.campaignModel.image!).existsSync()
-                    ? DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage(
-                          'lib/app_assets/images/campaigns-img.jpg',
-                        ),
-                      )
-                    : DecorationImage(
-                        fit: BoxFit.cover,
-                        image: FileImage(File(widget.campaignModel.image!)),
-                      ),
-              ),
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: widget.sessionType == 'game master'
-                        ? () => _sessionNumberInfo(context)
-                        : () {},
-                    child: Container(
-                      margin: EdgeInsetsDirectional.only(
-                        top: 10,
-                        start: 10,
-                      ),
-                      clipBehavior: Clip.none,
-                      height: 65,
-                      width: 65,
-                      decoration: BoxDecoration(
-                        color: AppColors.appLight,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black,
-                            blurRadius: 3,
-                            spreadRadius: 0.5,
-                          ),
-                        ],
-                        borderRadius:
-                            BorderRadiusDirectional.all(Radius.circular(10)),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Sesja',
-                            style: GoogleFonts.rubik(
-                              textStyle: TextStyle(
-                                color: AppColors.appDark,
-                                fontSize: 14.0,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            widget.campaignModel.sessionNumber.toString(),
-                            style: GoogleFonts.rubik(
-                              textStyle: TextStyle(
-                                color: AppColors.appDark,
-                                fontSize: 28.0,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    clipBehavior: Clip.none,
-                    width: 155,
-                    padding: EdgeInsetsDirectional.all(5),
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      stream: widget.controller.users.doc(widget.userId).snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.data != null) {
+          Map<String, dynamic> data =
+              snapshot.data!.data() as Map<String, dynamic>;
+
+          return Container(
+            height: 350,
+            padding: EdgeInsetsDirectional.all(10),
+            child: Stack(
+              children: [
+                GestureDetector(
+                  onTap: widget.sessionType == 'game master'
+                      ? () {
+                          _imageEditHandle(context);
+                        }
+                      : () {},
+                  child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.appLight,
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black,
                           blurRadius: 3,
-                          spreadRadius: 0.5,
-                        ),
-                      ],
-                      borderRadius: BorderRadiusDirectional.only(
-                        bottomStart: Radius.circular(5),
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'System',
-                          style: GoogleFonts.rubik(
-                            textStyle: TextStyle(
-                              color: AppColors.appDark,
-                              fontSize: 14.0,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          widget.campaignModel.system,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.rubik(
-                            textStyle: TextStyle(
-                              color: AppColors.appDark,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  widget.sessionType == 'game master'
-                      ? _addPlayer(context, 'Dodaj gracza')
-                      : SizedBox.shrink(),
-                  Container(
-                    margin: EdgeInsetsDirectional.only(
-                      bottom: 10,
-                      end: 10,
-                    ),
-                    clipBehavior: Clip.none,
-                    height: 65,
-                    width: 65,
-                    decoration: BoxDecoration(
-                      color: AppColors.appLight,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black,
-                          blurRadius: 3,
-                          spreadRadius: 0.5,
+                          spreadRadius: 1,
                         ),
                       ],
                       borderRadius:
                           BorderRadiusDirectional.all(Radius.circular(10)),
+                      image: widget.campaignModel.image == null ||
+                              !File(widget.campaignModel.image!).existsSync()
+                          ? DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage(
+                                'lib/app_assets/images/campaigns-img.jpg',
+                              ),
+                            )
+                          : DecorationImage(
+                              fit: BoxFit.cover,
+                              image:
+                                  FileImage(File(widget.campaignModel.image!)),
+                            ),
                     ),
-                    child: widget.sessionType == 'game master'
-                        ? IconButton(
-                            icon: _sessionStatus
-                                ? Icon(Icons.logout_outlined)
-                                : Icon(Icons.login_outlined),
-                            onPressed: () {
-                              _sessionStatus
-                                  ? _sessionStatus = false
-                                  : _sessionStatus = true;
-                              widget.controller.updateCampaign(
-                                campaignId: widget.campaignModel.campaignId!,
-                                newValue: _sessionStatus,
-                                updateTargetName: 'sessionStatus',
-                              );
-                            },
-                            color: AppColors.appDark,
-                            iconSize: 32,
-                          )
-                        : IconButton(
-                            icon: _playerStatus
-                                ? Icon(Icons.logout_outlined)
-                                : Icon(Icons.login_outlined),
-                            onPressed: () {
-                              _playerStatus
-                                  ? widget.controller.deleteActivePlayer(
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: widget.sessionType == 'game master'
+                              ? () => _sessionNumberInfo(context)
+                              : () {},
+                          child: Container(
+                            margin: EdgeInsetsDirectional.only(
+                              top: 10,
+                              start: 10,
+                            ),
+                            clipBehavior: Clip.none,
+                            height: 65,
+                            width: 65,
+                            decoration: BoxDecoration(
+                              color: AppColors.appLight,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black,
+                                  blurRadius: 3,
+                                  spreadRadius: 0.5,
+                                ),
+                              ],
+                              borderRadius: BorderRadiusDirectional.all(
+                                  Radius.circular(10)),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Sesja',
+                                  style: GoogleFonts.rubik(
+                                    textStyle: TextStyle(
+                                      color: AppColors.appDark,
+                                      fontSize: 14.0,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  widget.campaignModel.sessionNumber.toString(),
+                                  style: GoogleFonts.rubik(
+                                    textStyle: TextStyle(
+                                      color: AppColors.appDark,
+                                      fontSize: 28.0,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          clipBehavior: Clip.none,
+                          width: 155,
+                          padding: EdgeInsetsDirectional.all(5),
+                          decoration: BoxDecoration(
+                            color: AppColors.appLight,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black,
+                                blurRadius: 3,
+                                spreadRadius: 0.5,
+                              ),
+                            ],
+                            borderRadius: BorderRadiusDirectional.only(
+                              bottomStart: Radius.circular(5),
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'System',
+                                style: GoogleFonts.rubik(
+                                  textStyle: TextStyle(
+                                    color: AppColors.appDark,
+                                    fontSize: 14.0,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                widget.campaignModel.system,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.rubik(
+                                  textStyle: TextStyle(
+                                    color: AppColors.appDark,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        widget.sessionType == 'game master'
+                            ? _addPlayer(context, 'Dodaj gracza')
+                            : SizedBox.shrink(),
+                        Container(
+                          margin: EdgeInsetsDirectional.only(
+                            bottom: 10,
+                            end: 10,
+                          ),
+                          clipBehavior: Clip.none,
+                          height: 65,
+                          width: 65,
+                          decoration: BoxDecoration(
+                            color: AppColors.appLight,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black,
+                                blurRadius: 3,
+                                spreadRadius: 0.5,
+                              ),
+                            ],
+                            borderRadius: BorderRadiusDirectional.all(
+                                Radius.circular(10)),
+                          ),
+                          child: widget.sessionType == 'game master'
+                              ? IconButton(
+                                  icon: widget.campaignModel.sessionStatus ??
+                                          false
+                                      ? Icon(Icons.logout_outlined)
+                                      : Icon(Icons.login_outlined),
+                                  onPressed: () {
+                                    widget.controller.updateCampaign(
                                       campaignId:
                                           widget.campaignModel.campaignId!,
-                                      value: '', //TODO: set correct value
+                                      newValue:
+                                          widget.campaignModel.sessionStatus ??
+                                                  false
+                                              ? false
+                                              : true,
+                                      updateTargetName: 'sessionStatus',
+                                    );
+                                  },
+                                  color: AppColors.appDark,
+                                  iconSize: 32,
+                                )
+                              : widget.campaignModel.sessionStatus ?? false
+                                  ? IconButton(
+                                      icon: data['activeUser'] ?? false
+                                          ? Icon(Icons.logout_outlined)
+                                          : Icon(Icons.login_outlined),
+                                      onPressed: () {
+                                        data['activeUser'] ?? false
+                                            ? widget.controller
+                                                .deleteActivePlayer(
+                                                campaignId: widget
+                                                    .campaignModel.campaignId!,
+                                                userId: widget.userId,
+                                              )
+                                            : _addCharacterToCampaign(context);
+                                      },
+                                      color: AppColors.appDark,
+                                      iconSize: 32,
                                     )
-                                  : _addCharacterToCampaign(context);
-                            },
-                            color: AppColors.appDark,
-                            iconSize: 32,
-                          ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
+                                  : SizedBox.shrink(),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        }
+        return SizedBox.shrink();
+      },
     );
   }
 
@@ -322,11 +333,9 @@ class _CampaignImageState extends State<CampaignImage> {
                                         widget.campaignModel.campaignId!,
                                     newValue: charactersId[_initValue],
                                     updateTargetName: 'activePlayers',
+                                    userId: widget.userId,
                                   );
                                   Navigator.pop(context);
-                                  setState(() {
-                                    _playerStatus = true;
-                                  });
                                 });
                               },
                             ),

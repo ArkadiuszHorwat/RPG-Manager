@@ -33,19 +33,20 @@ class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
         _controller.getCharacterDetails(characterId: widget.characterId);
 
     return AppBackground(
-      child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      child: StreamBuilder<DocumentSnapshot<Map<dynamic, dynamic>>>(
           stream: _characterDetails,
           builder: (context, snapshot) {
             if (snapshot.data != null) {
-              Map<String, dynamic> data =
-                  snapshot.data!.data() as Map<String, dynamic>;
+              Map<dynamic, dynamic> data =
+                  snapshot.data!.data() as Map<dynamic, dynamic>;
 
               final characterModel = CharacterModel(
                 image: data['image'] ?? null,
                 system: data['system'],
                 characterId: widget.characterId,
                 characterPD: data['characterPD'] ?? '0',
-                characterActiveCampaign: data['activeCampaign'] ?? '',
+                activeCampaign: data['activeCampaign'],
+                activeCampaignName: data['activeCampaignName'] ?? '',
                 characterLvl: data['level'] ?? 0,
                 lifeCheck: data['lifeCheck'] ?? 0,
                 deathCheck: data['deathCheck'] ?? 0,

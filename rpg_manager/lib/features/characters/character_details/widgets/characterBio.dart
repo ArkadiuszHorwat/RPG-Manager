@@ -9,9 +9,13 @@ class CharacterBio extends StatelessWidget {
     required this.characterId,
     required this.characterBio,
     required this.controller,
+    required this.userId,
+    required this.characterUserId,
   });
 
   final String characterId;
+  final String userId;
+  final String characterUserId;
   final String characterBio;
   final CharacterDetailsScreenController controller;
 
@@ -23,17 +27,19 @@ class CharacterBio extends StatelessWidget {
           height: 10,
         ),
         GestureDetector(
-          onTap: () {
-            controller.atributeEditHandle(
-              context,
-              title: 'Edytuj biografie',
-              updateTargetName: 'bio',
-              characterId: characterId,
-              characterMultiText: characterBio,
-              atributeType: 'string',
-              pathName: 'character',
-            );
-          },
+          onTap: userId == characterUserId
+              ? () {
+                  controller.atributeEditHandle(
+                    context,
+                    title: 'Edytuj biografie',
+                    updateTargetName: 'bio',
+                    characterId: characterId,
+                    characterMultiText: characterBio,
+                    atributeType: 'string',
+                    pathName: 'character',
+                  );
+                }
+              : () {},
           child: Container(
             height: 200,
             decoration: BoxDecoration(

@@ -61,9 +61,10 @@ class RoutesSetup {
         });
       case RoutePageName.characterDetailsPage:
         return MaterialPageRoute(builder: (_) {
-          args as String;
+          args as Map<String, dynamic>;
           return CharacterDetailsScreen(
-            characterId: args,
+            characterId: args['characterId'],
+            userId: args['userId'],
           );
         });
       case RoutePageName.campaignDetailsPage:

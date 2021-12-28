@@ -104,6 +104,7 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                           ? CampaignPlayersList(
                               controller: _controller,
                               charactersIds: _campaignModel.activePlayers ?? [],
+                              userId: widget.userId,
                             )
                           : CampaignDescription(
                               campaignModel: _campaignModel,

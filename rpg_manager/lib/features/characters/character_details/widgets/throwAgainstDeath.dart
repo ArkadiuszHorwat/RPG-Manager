@@ -10,9 +10,13 @@ class ThrowAgainstDeath extends StatefulWidget {
     required this.characterId,
     required this.deathCheck,
     required this.lifeCheck,
+    required this.userId,
+    required this.characterUserId,
   });
 
   final String characterId;
+  final String userId;
+  final String characterUserId;
   final int deathCheck;
   final int lifeCheck;
 
@@ -35,7 +39,9 @@ class _ThrowAgainstDeathState extends State<ThrowAgainstDeath> {
           height: 10,
         ),
         GestureDetector(
-          onTap: () => _throwAgainstDeathChoose(context),
+          onTap: widget.userId == widget.characterUserId
+              ? () => _throwAgainstDeathChoose(context)
+              : () {},
           child: Container(
             height: 100,
             decoration: BoxDecoration(

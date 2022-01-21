@@ -37,17 +37,47 @@ class _CalendarScreenState extends State<CalendarScreen> {
               height: 15,
             ),
             _addEvent(context),
-            ..._getEventsFromDay(_selectedDay).map(
-              (CalendarEvent event) => ListTile(
-                title: Text(
-                  event.title,
+            SizedBox(
+              height: 15,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Wydarzenia:",
                   style: GoogleFonts.rubik(
                     textStyle: TextStyle(
                       color: AppColors.appLight,
-                      fontSize: 16.0,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
+                Divider(
+                  color: AppColors.appLight,
+                  thickness: 0.6,
+                ),
+              ],
+            ),
+            ..._getEventsFromDay(_selectedDay).map(
+              (CalendarEvent event) => Column(
+                children: [
+                  ListTile(
+                    title: Text(
+                      event.title,
+                      style: GoogleFonts.rubik(
+                        textStyle: TextStyle(
+                          color: AppColors.appLight,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: AppColors.appLight,
+                    thickness: 0.6,
+                  ),
+                ],
               ),
             ),
           ],

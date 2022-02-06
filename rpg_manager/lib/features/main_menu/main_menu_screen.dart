@@ -37,7 +37,10 @@ class _MainMenuState extends State<MainMenu> {
                 snapshot.data!.data() as Map<String, dynamic>;
 
             final _pages = <Widget>[
-              CalendarScreen(),
+              CalendarScreen(
+                sessionType: data['userSessionType'],
+                userId: widget.userData.id,
+              ),
               CampaignsScreen(
                 sessionType: data['userSessionType'],
                 userId: widget.userData.id,

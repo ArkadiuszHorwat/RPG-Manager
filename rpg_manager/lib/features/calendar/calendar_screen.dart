@@ -2,15 +2,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rpg_manager/app_assets/colors/colors.dart';
+import 'package:rpg_manager/features/calendar/calendar_controller.dart';
 import 'package:rpg_manager/features/calendar/calendar_event.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarScreen extends StatefulWidget {
+  CalendarScreen({
+    required this.sessionType,
+    required this.userId,
+  });
+
+  final String sessionType;
+  final String userId;
+
   @override
   _CalendarScreenState createState() => _CalendarScreenState();
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
+  final _controller = CalendarController();
   late Map<DateTime, List<CalendarEvent>> selectedEvents;
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
@@ -257,6 +267,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         CalendarEvent(title: textController.text),
                       ];
                     }
+                    _controller.addEvent(
+                      event: CalendarEvent(title: textController.text),
+                      sessionType: widget.sessionType,
+                      selectedDay: _selectedDay,
+                      userId: widget.userId,
+                    );
                   }
                   Navigator.pop(context);
                   textController.clear();

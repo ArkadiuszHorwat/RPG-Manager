@@ -57,7 +57,12 @@ class RoutesSetup {
           );
         });
       case RoutePageName.playersListPage:
-        return MaterialPageRoute(builder: (_) => NotificationsScreen());
+        return MaterialPageRoute(builder: (_) {
+          args as String;
+          return NotificationsScreen(
+            userId: args,
+          );
+        });
       case RoutePageName.charactersListPage:
         return MaterialPageRoute(builder: (_) {
           args as String;

@@ -49,7 +49,9 @@ class _MainMenuState extends State<MainMenu> {
                   ? CharactersScreen(
                       userId: widget.userData.id,
                     )
-                  : NotificationsScreen(),
+                  : NotificationsScreen(
+                      userId: widget.userData.id,
+                    ),
             ];
 
             return Scaffold(

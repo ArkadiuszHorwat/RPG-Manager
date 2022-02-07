@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -37,63 +38,87 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            _calendar(),
-            SizedBox(
-              height: 15,
-            ),
-            _addEvent(context),
-            SizedBox(
-              height: 15,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Wydarzenia:",
-                  style: GoogleFonts.rubik(
-                    textStyle: TextStyle(
-                      color: AppColors.appLight,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Divider(
-                  color: AppColors.appLight,
-                  thickness: 0.6,
-                ),
-              ],
-            ),
-            ..._getEventsFromDay(_selectedDay).map(
-              (CalendarEvent event) => Column(
+    return FutureBuilder<QuerySnapshot>(
+        future: _controller.events.get(),
+        builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            snapshot.data!.docs.map((document) {
+              final data = document.data() as Map<String, dynamic>;
+              if (widget.userId == data['userId'] &&
+                  widget.sessionType == data['userSessionType']) {
+                print(data['date'].toDate());
+                DateTime _date = data['date'].toDate();
+                if (selectedEvents[_date] != null) {
+                  selectedEvents[_date]!.add(
+                    CalendarEvent(title: data['title']),
+                  );
+                } else {
+                  selectedEvents[_date] = [
+                    CalendarEvent(title: data['title']),
+                  ];
+                }
+              }
+            }).toList();
+          }
+
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
                 children: [
-                  ListTile(
-                    title: Text(
-                      event.title,
-                      style: GoogleFonts.rubik(
-                        textStyle: TextStyle(
-                          color: AppColors.appLight,
-                          fontSize: 16.0,
+                  _calendar(),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  _addEvent(context),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Wydarzenia:",
+                        style: GoogleFonts.rubik(
+                          textStyle: TextStyle(
+                            color: AppColors.appLight,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
+                      Divider(
+                        color: AppColors.appLight,
+                        thickness: 0.6,
+                      ),
+                    ],
                   ),
-                  Divider(
-                    color: AppColors.appLight,
-                    thickness: 0.6,
+                  ..._getEventsFromDay(_selectedDay).map(
+                    (CalendarEvent event) => Column(
+                      children: [
+                        ListTile(
+                          title: Text(
+                            event.title,
+                            style: GoogleFonts.rubik(
+                              textStyle: TextStyle(
+                                color: AppColors.appLight,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Divider(
+                          color: AppColors.appLight,
+                          thickness: 0.6,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          );
+        });
   }
 
   Widget _calendar() {

@@ -46,17 +46,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
               final data = document.data() as Map<String, dynamic>;
               if (widget.userId == data['userId'] &&
                   widget.sessionType == data['userSessionType']) {
-                print(data['date'].toDate());
-                DateTime _date = data['date'].toDate();
-                if (selectedEvents[_date] != null) {
-                  selectedEvents[_date]!.add(
-                    CalendarEvent(title: data['title']),
-                  );
-                } else {
-                  selectedEvents[_date] = [
-                    CalendarEvent(title: data['title']),
-                  ];
-                }
+                DateTime _date = DateTime.parse(data['date']
+                    .toDate()
+                    .toString()
+                    .replaceAll('01:00:00.000', '00:00:00.000Z'));
+
+                print(_date);
+
+                selectedEvents[_date] = [
+                  CalendarEvent(title: data['title']),
+                ];
               }
             }).toList();
           }
@@ -283,15 +282,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   if (textController.text.isEmpty) {
                     print("Zła wartość");
                   } else {
-                    if (selectedEvents[_selectedDay] != null) {
-                      selectedEvents[_selectedDay]!.add(
-                        CalendarEvent(title: textController.text),
-                      );
-                    } else {
-                      selectedEvents[_selectedDay] = [
-                        CalendarEvent(title: textController.text),
-                      ];
-                    }
+                    selectedEvents[_selectedDay] = [
+                      CalendarEvent(title: textController.text),
+                    ];
+
                     _controller.addEvent(
                       event: CalendarEvent(title: textController.text),
                       sessionType: widget.sessionType,

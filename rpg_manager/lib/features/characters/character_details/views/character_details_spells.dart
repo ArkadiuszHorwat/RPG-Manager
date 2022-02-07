@@ -11,10 +11,12 @@ class CharacterDetailsSpells extends StatefulWidget {
   CharacterDetailsSpells({
     required this.controller,
     required this.characterModel,
+    required this.userId,
   });
 
   final CharacterDetailsScreenController controller;
   final CharacterModel characterModel;
+  final String userId;
 
   @override
   State<CharacterDetailsSpells> createState() => _CharacterDetailsSpellsState();
@@ -49,38 +51,47 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
                 StatisticCell(
                   info: 'Cecha bazowa',
                   value: widget.characterModel.spellBaseAttribute ?? '',
-                  action: () => widget.controller.atributeEditHandle(
-                    context,
-                    title: 'Edytuj cechę bazową:',
-                    updateTargetName: 'spellBaseAttribute',
-                    characterId: widget.characterModel.characterId ?? '',
-                    atributeType: "text",
-                    pathName: 'character',
-                  ),
+                  action: widget.userId == widget.characterModel.userId
+                      ? () => widget.controller.atributeEditHandle(
+                            context,
+                            title: 'Edytuj cechę bazową:',
+                            updateTargetName: 'spellBaseAttribute',
+                            characterId:
+                                widget.characterModel.characterId ?? '',
+                            atributeType: "text",
+                            pathName: 'character',
+                          )
+                      : () {},
                 ),
                 StatisticCell(
                   info: 'Komórki czarów',
                   value: widget.characterModel.countSpellCells ?? '',
-                  action: () => widget.controller.atributeEditHandle(
-                    context,
-                    title: 'Edytuj maksymalną ilość komórek:',
-                    updateTargetName: 'countSpellCells',
-                    characterId: widget.characterModel.characterId ?? '',
-                    atributeType: "number",
-                    pathName: 'character',
-                  ),
+                  action: widget.userId == widget.characterModel.userId
+                      ? () => widget.controller.atributeEditHandle(
+                            context,
+                            title: 'Edytuj maksymalną ilość komórek:',
+                            updateTargetName: 'countSpellCells',
+                            characterId:
+                                widget.characterModel.characterId ?? '',
+                            atributeType: "number",
+                            pathName: 'character',
+                          )
+                      : () {},
                 ),
                 StatisticCell(
                   info: 'Zużyte komórki',
                   value: widget.characterModel.spellCellsUsed ?? '',
-                  action: () => widget.controller.atributeEditHandle(
-                    context,
-                    title: 'Edytuj zużyte komórki:',
-                    updateTargetName: 'spellCellsUsed',
-                    characterId: widget.characterModel.characterId ?? '',
-                    atributeType: "number",
-                    pathName: 'character',
-                  ),
+                  action: widget.userId == widget.characterModel.userId
+                      ? () => widget.controller.atributeEditHandle(
+                            context,
+                            title: 'Edytuj zużyte komórki:',
+                            updateTargetName: 'spellCellsUsed',
+                            characterId:
+                                widget.characterModel.characterId ?? '',
+                            atributeType: "number",
+                            pathName: 'character',
+                          )
+                      : () {},
                 ),
               ],
             ),
@@ -90,26 +101,32 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
                 StatisticCell(
                   info: 'St rzutu przeciw czarom',
                   value: widget.characterModel.throwAgainstSpells ?? '',
-                  action: () => widget.controller.atributeEditHandle(
-                    context,
-                    title: 'Edytuj rzut przeciw czarom:',
-                    updateTargetName: 'throwAgainstSpells',
-                    characterId: widget.characterModel.characterId ?? '',
-                    atributeType: "number",
-                    pathName: 'character',
-                  ),
+                  action: widget.userId == widget.characterModel.userId
+                      ? () => widget.controller.atributeEditHandle(
+                            context,
+                            title: 'Edytuj rzut przeciw czarom:',
+                            updateTargetName: 'throwAgainstSpells',
+                            characterId:
+                                widget.characterModel.characterId ?? '',
+                            atributeType: "number",
+                            pathName: 'character',
+                          )
+                      : () {},
                 ),
                 StatisticCell(
                   info: 'Premia do ataku czarem',
                   value: widget.characterModel.magicAttackBonus ?? '',
-                  action: () => widget.controller.atributeEditHandle(
-                    context,
-                    title: 'Edytuj premię do ataku czarem:',
-                    updateTargetName: 'magicAttackBonus',
-                    characterId: widget.characterModel.characterId ?? '',
-                    atributeType: "number",
-                    pathName: 'character',
-                  ),
+                  action: widget.userId == widget.characterModel.userId
+                      ? () => widget.controller.atributeEditHandle(
+                            context,
+                            title: 'Edytuj premię do ataku czarem:',
+                            updateTargetName: 'magicAttackBonus',
+                            characterId:
+                                widget.characterModel.characterId ?? '',
+                            atributeType: "number",
+                            pathName: 'character',
+                          )
+                      : () {},
                 ),
               ],
             ),
@@ -142,7 +159,9 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _addSpell(context),
+              widget.userId == widget.characterModel.userId
+                  ? _addSpell(context)
+                  : SizedBox.shrink(),
               _spellListHeader(context: context),
             ],
           ),
@@ -451,12 +470,14 @@ class _CharacterDetailsSpellsState extends State<CharacterDetailsSpells> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {
-                    widget.controller.delete(context,
-                        id: spellId,
-                        collectionName: 'spells',
-                        title: 'Czy na pewno chcesz usunąć ten czar?');
-                  },
+                  onPressed: widget.userId == widget.characterModel.userId
+                      ? () {
+                          widget.controller.delete(context,
+                              id: spellId,
+                              collectionName: 'spells',
+                              title: 'Czy na pewno chcesz usunąć ten czar?');
+                        }
+                      : () {},
                   icon: Icon(Icons.cancel_outlined),
                   color: AppColors.appDark,
                   padding: EdgeInsets.zero,

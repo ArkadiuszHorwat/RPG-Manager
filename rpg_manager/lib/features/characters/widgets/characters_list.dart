@@ -34,11 +34,14 @@ class CharacterList extends StatelessWidget {
             Map<dynamic, dynamic> data =
                 document.data()! as Map<dynamic, dynamic>;
             if (data["userId"] == userId) {
+              final _ids = {
+                'characterId': document.id,
+                'userId': userId,
+              };
               charactersList.add(CharacterListItem(
                 characterName: data['name'],
                 image: data['image'],
-                action: () =>
-                    controller.routeToCharacterDetails(context, document.id),
+                action: () => controller.routeToCharacterDetails(context, _ids),
               ));
               return SizedBox.shrink();
             } else

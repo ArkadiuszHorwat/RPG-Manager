@@ -13,10 +13,14 @@ class CharacterImage extends StatelessWidget {
     required this.characterId,
     this.characterPD,
     required this.characterLvl,
+    required this.userId,
+    required this.characterUserId,
   });
 
   final String? image;
   final String characterId;
+  final String userId;
+  final String characterUserId;
   final String? characterPD;
   final int characterLvl;
 
@@ -27,9 +31,11 @@ class CharacterImage extends StatelessWidget {
       child: Stack(
         children: [
           GestureDetector(
-            onTap: () {
-              _imageEditHandle(context);
-            },
+            onTap: userId == characterUserId
+                ? () {
+                    _imageEditHandle(context);
+                  }
+                : () {},
             child: Container(
               decoration: BoxDecoration(
                 boxShadow: [
@@ -57,7 +63,9 @@ class CharacterImage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: GestureDetector(
-              onTap: () => _experiencePointsInfo(context),
+              onTap: userId == characterUserId
+                  ? () => _experiencePointsInfo(context)
+                  : () {},
               child: Container(
                 clipBehavior: Clip.none,
                 height: 55,

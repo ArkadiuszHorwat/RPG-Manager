@@ -9,25 +9,31 @@ class AttacksAndMagicCell extends StatelessWidget {
     required this.controller,
     required this.characterId,
     this.multiTextValue,
+    required this.characterUserId,
+    required this.userId,
   });
 
   final CharacterDetailsScreenController controller;
   final String characterId;
+  final String characterUserId;
+  final String userId;
   final String? multiTextValue;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () => controller.atributeEditHandle(
-        context,
-        title: 'Edytuj swoje ataki oraz magię:',
-        updateTargetName: 'attacksAndMagic',
-        characterId: characterId,
-        characterMultiText: multiTextValue,
-        atributeType: 'text',
-        pathName: 'character',
-      ),
+      onTap: userId == characterUserId
+          ? () => controller.atributeEditHandle(
+                context,
+                title: 'Edytuj swoje ataki oraz magię:',
+                updateTargetName: 'attacksAndMagic',
+                characterId: characterId,
+                characterMultiText: multiTextValue,
+                atributeType: 'text',
+                pathName: 'character',
+              )
+          : () {},
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

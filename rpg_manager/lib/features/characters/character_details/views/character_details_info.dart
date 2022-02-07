@@ -12,9 +12,11 @@ class CharacterDetailsInfo extends StatefulWidget {
   CharacterDetailsInfo({
     required this.characterModel,
     required this.controller,
+    required this.userId,
   });
 
   final CharacterModel characterModel;
+  final String userId;
   final CharacterDetailsScreenController controller;
 
   @override
@@ -40,6 +42,7 @@ class _CharacterDetailsInfoState extends State<CharacterDetailsInfo> {
                   CharacterInfo(
                     characterModel: widget.characterModel,
                     controller: widget.controller,
+                    userId: widget.userId,
                   ),
                   SizedBox(
                     width: 10,
@@ -49,6 +52,8 @@ class _CharacterDetailsInfoState extends State<CharacterDetailsInfo> {
                     characterId: widget.characterModel.characterId ?? '',
                     characterPD: widget.characterModel.characterPD ?? '',
                     characterLvl: widget.characterModel.characterLvl ?? 0,
+                    characterUserId: widget.characterModel.userId ?? '',
+                    userId: widget.userId,
                   ),
                 ],
               ),
@@ -57,6 +62,8 @@ class _CharacterDetailsInfoState extends State<CharacterDetailsInfo> {
               characterId: widget.characterModel.characterId ?? '',
               characterBio: widget.characterModel.characterBio ?? '',
               controller: widget.controller,
+              characterUserId: widget.characterModel.userId ?? '',
+              userId: widget.userId,
             ),
             SizedBox(
               height: 20,
@@ -72,80 +79,98 @@ class _CharacterDetailsInfoState extends State<CharacterDetailsInfo> {
                   AtributeCell(
                     atribute: 'S',
                     count: widget.characterModel.characterStrength ?? '',
-                    action: () => widget.controller.atributeEditHandle(
-                      context,
-                      title: 'Edytuj siłę',
-                      hintText: 'Siła',
-                      updateTargetName: 'strength',
-                      characterId: widget.characterModel.characterId ?? '',
-                      atributeType: 'number',
-                      pathName: 'character',
-                    ),
+                    action: widget.userId == widget.characterModel.userId
+                        ? () => widget.controller.atributeEditHandle(
+                              context,
+                              title: 'Edytuj siłę',
+                              hintText: 'Siła',
+                              updateTargetName: 'strength',
+                              characterId:
+                                  widget.characterModel.characterId ?? '',
+                              atributeType: 'number',
+                              pathName: 'character',
+                            )
+                        : () {},
                   ),
                   AtributeCell(
                     atribute: 'ZR',
                     count: widget.characterModel.characterDexterity ?? '',
-                    action: () => widget.controller.atributeEditHandle(
-                      context,
-                      title: 'Edytuj zręczność',
-                      hintText: 'Zręczność',
-                      updateTargetName: 'dexterity',
-                      characterId: widget.characterModel.characterId ?? '',
-                      atributeType: 'number',
-                      pathName: 'character',
-                    ),
+                    action: widget.userId == widget.characterModel.userId
+                        ? () => widget.controller.atributeEditHandle(
+                              context,
+                              title: 'Edytuj zręczność',
+                              hintText: 'Zręczność',
+                              updateTargetName: 'dexterity',
+                              characterId:
+                                  widget.characterModel.characterId ?? '',
+                              atributeType: 'number',
+                              pathName: 'character',
+                            )
+                        : () {},
                   ),
                   AtributeCell(
                     atribute: 'K',
                     count: widget.characterModel.characterConstitution ?? '',
-                    action: () => widget.controller.atributeEditHandle(
-                      context,
-                      title: 'Edytuj Kondycję',
-                      hintText: 'Kondycja',
-                      updateTargetName: 'constitution',
-                      characterId: widget.characterModel.characterId ?? '',
-                      atributeType: 'number',
-                      pathName: 'character',
-                    ),
+                    action: widget.userId == widget.characterModel.userId
+                        ? () => widget.controller.atributeEditHandle(
+                              context,
+                              title: 'Edytuj Kondycję',
+                              hintText: 'Kondycja',
+                              updateTargetName: 'constitution',
+                              characterId:
+                                  widget.characterModel.characterId ?? '',
+                              atributeType: 'number',
+                              pathName: 'character',
+                            )
+                        : () {},
                   ),
                   AtributeCell(
                     atribute: 'INT',
                     count: widget.characterModel.characterIntelligence ?? '',
-                    action: () => widget.controller.atributeEditHandle(
-                      context,
-                      title: 'Edytuj inteligencje',
-                      hintText: 'Inteligencja',
-                      updateTargetName: 'intelligence',
-                      characterId: widget.characterModel.characterId ?? '',
-                      atributeType: 'number',
-                      pathName: 'character',
-                    ),
+                    action: widget.userId == widget.characterModel.userId
+                        ? () => widget.controller.atributeEditHandle(
+                              context,
+                              title: 'Edytuj inteligencje',
+                              hintText: 'Inteligencja',
+                              updateTargetName: 'intelligence',
+                              characterId:
+                                  widget.characterModel.characterId ?? '',
+                              atributeType: 'number',
+                              pathName: 'character',
+                            )
+                        : () {},
                   ),
                   AtributeCell(
                     atribute: 'M',
                     count: widget.characterModel.characterWisdom ?? '',
-                    action: () => widget.controller.atributeEditHandle(
-                      context,
-                      title: 'Edytuj mądrość',
-                      hintText: 'Mądrość',
-                      updateTargetName: 'wisdom',
-                      characterId: widget.characterModel.characterId ?? '',
-                      atributeType: 'number',
-                      pathName: 'character',
-                    ),
+                    action: widget.userId == widget.characterModel.userId
+                        ? () => widget.controller.atributeEditHandle(
+                              context,
+                              title: 'Edytuj mądrość',
+                              hintText: 'Mądrość',
+                              updateTargetName: 'wisdom',
+                              characterId:
+                                  widget.characterModel.characterId ?? '',
+                              atributeType: 'number',
+                              pathName: 'character',
+                            )
+                        : () {},
                   ),
                   AtributeCell(
                     atribute: 'CH',
                     count: widget.characterModel.characterCharisma ?? '',
-                    action: () => widget.controller.atributeEditHandle(
-                      context,
-                      title: 'Edytuj charyzme',
-                      hintText: 'Charyzma',
-                      updateTargetName: 'charisma',
-                      characterId: widget.characterModel.characterId ?? '',
-                      atributeType: 'number',
-                      pathName: 'character',
-                    ),
+                    action: widget.userId == widget.characterModel.userId
+                        ? () => widget.controller.atributeEditHandle(
+                              context,
+                              title: 'Edytuj charyzme',
+                              hintText: 'Charyzma',
+                              updateTargetName: 'charisma',
+                              characterId:
+                                  widget.characterModel.characterId ?? '',
+                              atributeType: 'number',
+                              pathName: 'character',
+                            )
+                        : () {},
                   ),
                 ],
               ),
@@ -154,6 +179,8 @@ class _CharacterDetailsInfoState extends State<CharacterDetailsInfo> {
               characterId: widget.characterModel.characterId ?? '',
               deathCheck: widget.characterModel.deathCheck ?? 0,
               lifeCheck: widget.characterModel.lifeCheck ?? 0,
+              characterUserId: widget.characterModel.userId ?? '',
+              userId: widget.userId,
             ),
           ],
         ),

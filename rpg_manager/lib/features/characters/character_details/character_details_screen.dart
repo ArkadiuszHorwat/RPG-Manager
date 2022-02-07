@@ -15,9 +15,11 @@ class CharacterDetailsScreen extends StatefulWidget {
   CharacterDetailsScreen({
     Key? key,
     required this.characterId,
+    required this.userId,
   }) : super(key: key);
 
   final String characterId;
+  final String userId;
 
   @override
   State<CharacterDetailsScreen> createState() => _CharacterDetailsScreenState();
@@ -87,39 +89,46 @@ class _CharacterDetailsScreenState extends State<CharacterDetailsScreen> {
                 defenseThrowsDexterity: data['defenseThrowsDexterity'],
                 defenseThrowsStrength: data['defenseThrowsStrength'],
                 skillsId: data['skillsId'],
+                userId: data['userId'],
               );
 
               final _pages = <Widget>[
                 CharacterDetailsInfo(
                   characterModel: characterModel,
                   controller: _controller,
+                  userId: widget.userId,
                 ),
                 CharacterDetailsSkills(
                   characterModel: characterModel,
                   controller: _controller,
+                  userId: widget.userId,
                 ),
                 CharacterDetailsEquipment(
                   characterModel: characterModel,
                   controller: _controller,
+                  userId: widget.userId,
                 ),
                 CharacterDetailsSpells(
                   characterModel: characterModel,
                   controller: _controller,
+                  userId: widget.userId,
                 ),
               ];
 
               return Scaffold(
                 appBar: AppNavBar(
                   title: '${data['name']}',
-                  actions: [
-                    IconButton(
-                      onPressed: () {
-                        _controller.characterDelete(context,
-                            characterId: widget.characterId);
-                      },
-                      icon: Icon(Icons.person_off),
-                    ),
-                  ],
+                  actions: widget.userId == characterModel.userId
+                      ? [
+                          IconButton(
+                            onPressed: () {
+                              _controller.characterDelete(context,
+                                  characterId: widget.characterId);
+                            },
+                            icon: Icon(Icons.person_off),
+                          ),
+                        ]
+                      : [],
                 ),
                 backgroundColor: Colors.transparent,
                 body: _pages[_currentIndex],

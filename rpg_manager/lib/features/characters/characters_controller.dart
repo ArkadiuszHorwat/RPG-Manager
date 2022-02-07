@@ -49,10 +49,10 @@ class CharactersScreenController {
     });
   }
 
-  void routeToCharacterDetails(BuildContext context, String characterId) {
+  void routeToCharacterDetails(BuildContext context, Map<String, dynamic> ids) {
     Navigator.of(context).pushNamed(
       RoutePageName.characterDetailsPage,
-      arguments: characterId,
+      arguments: ids,
     );
   }
 }

@@ -41,7 +41,13 @@ class RoutesSetup {
           );
         });
       case RoutePageName.calendarPage:
-        return MaterialPageRoute(builder: (_) => CalendarScreen());
+        return MaterialPageRoute(builder: (_) {
+          args as String;
+          return CalendarScreen(
+            sessionType: args,
+            userId: args,
+          );
+        });
       case RoutePageName.campaignsPage:
         return MaterialPageRoute(builder: (_) {
           args as String;
@@ -66,9 +72,10 @@ class RoutesSetup {
         });
       case RoutePageName.characterDetailsPage:
         return MaterialPageRoute(builder: (_) {
-          args as String;
+          args as Map<String, dynamic>;
           return CharacterDetailsScreen(
-            characterId: args,
+            characterId: args['characterId'],
+            userId: args['userId'],
           );
         });
       case RoutePageName.campaignDetailsPage:

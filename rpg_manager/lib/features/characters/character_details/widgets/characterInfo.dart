@@ -9,9 +9,11 @@ class CharacterInfo extends StatelessWidget {
   CharacterInfo({
     required this.characterModel,
     required this.controller,
+    required this.userId,
   });
 
   final CharacterModel characterModel;
+  final String userId;
   final CharacterDetailsScreenController controller;
 
   @override
@@ -54,15 +56,17 @@ class CharacterInfo extends StatelessWidget {
                     _infoCell(
                       title: 'Rasa',
                       infoType: characterModel.characterRace ?? '',
-                      action: () => controller.atributeEditHandle(
-                        context,
-                        title: 'Edytuj rase',
-                        hintText: 'Rasa',
-                        updateTargetName: 'race',
-                        atributeType: 'string',
-                        characterId: characterModel.characterId ?? '',
-                        pathName: 'character',
-                      ),
+                      action: userId == characterModel.userId
+                          ? () => controller.atributeEditHandle(
+                                context,
+                                title: 'Edytuj rase',
+                                hintText: 'Rasa',
+                                updateTargetName: 'race',
+                                atributeType: 'string',
+                                characterId: characterModel.characterId ?? '',
+                                pathName: 'character',
+                              )
+                          : () {},
                     ),
                     Divider(
                       color: AppColors.appDark,
@@ -70,15 +74,17 @@ class CharacterInfo extends StatelessWidget {
                     _infoCell(
                       title: 'Klasa',
                       infoType: characterModel.characterClass ?? '',
-                      action: () => controller.atributeEditHandle(
-                        context,
-                        title: 'Edytuj klase',
-                        hintText: 'Klasa',
-                        updateTargetName: 'class',
-                        atributeType: 'string',
-                        characterId: characterModel.characterId ?? '',
-                        pathName: 'character',
-                      ),
+                      action: userId == characterModel.userId
+                          ? () => controller.atributeEditHandle(
+                                context,
+                                title: 'Edytuj klase',
+                                hintText: 'Klasa',
+                                updateTargetName: 'class',
+                                atributeType: 'string',
+                                characterId: characterModel.characterId ?? '',
+                                pathName: 'character',
+                              )
+                          : () {},
                     ),
                     Divider(
                       color: AppColors.appDark,
@@ -86,15 +92,17 @@ class CharacterInfo extends StatelessWidget {
                     _infoCell(
                       title: 'Charakter',
                       infoType: characterModel.characterAlignment ?? '',
-                      action: () => controller.atributeEditHandle(
-                        context,
-                        title: 'Edytuj charakter',
-                        hintText: 'Charakter',
-                        updateTargetName: 'alignment',
-                        atributeType: 'string',
-                        characterId: characterModel.characterId ?? '',
-                        pathName: 'character',
-                      ),
+                      action: userId == characterModel.userId
+                          ? () => controller.atributeEditHandle(
+                                context,
+                                title: 'Edytuj charakter',
+                                hintText: 'Charakter',
+                                updateTargetName: 'alignment',
+                                atributeType: 'string',
+                                characterId: characterModel.characterId ?? '',
+                                pathName: 'character',
+                              )
+                          : () {},
                     ),
                     Divider(
                       color: AppColors.appDark,

@@ -12,9 +12,11 @@ class CharacterDetailsEquipment extends StatefulWidget {
   CharacterDetailsEquipment({
     required this.characterModel,
     required this.controller,
+    required this.userId,
   });
 
   final CharacterModel characterModel;
+  final String userId;
   final CharacterDetailsScreenController controller;
 
   @override
@@ -78,11 +80,13 @@ class _CharacterDetailsEquipmentState extends State<CharacterDetailsEquipment> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        _addItem(
-                          context,
-                          title: 'Dodaj przedmiot',
-                          type: 'item',
-                        ),
+                        widget.userId == widget.characterModel.userId
+                            ? _addItem(
+                                context,
+                                title: 'Dodaj przedmiot',
+                                type: 'item',
+                              )
+                            : SizedBox.shrink(),
                       ],
                     ),
                     SizedBox(
@@ -138,62 +142,77 @@ class _CharacterDetailsEquipmentState extends State<CharacterDetailsEquipment> {
                   children: [
                     MoneyCell(
                       title: 'SM',
-                      action: () => widget.controller.atributeEditHandle(
-                        context,
-                        title: 'Sztuki miedzi',
-                        updateTargetName: 'SM',
-                        characterId: widget.characterModel.characterId ?? '',
-                        atributeType: 'number',
-                        pathName: 'character',
-                      ),
+                      action: widget.userId == widget.characterModel.userId
+                          ? () => widget.controller.atributeEditHandle(
+                                context,
+                                title: 'Sztuki miedzi',
+                                updateTargetName: 'SM',
+                                characterId:
+                                    widget.characterModel.characterId ?? '',
+                                atributeType: 'number',
+                                pathName: 'character',
+                              )
+                          : () {},
                       value: widget.characterModel.sM,
                     ),
                     MoneyCell(
                       title: 'SS',
-                      action: () => widget.controller.atributeEditHandle(
-                        context,
-                        title: 'Sztuki srebra',
-                        updateTargetName: 'SS',
-                        characterId: widget.characterModel.characterId ?? '',
-                        atributeType: 'number',
-                        pathName: 'character',
-                      ),
+                      action: widget.userId == widget.characterModel.userId
+                          ? () => widget.controller.atributeEditHandle(
+                                context,
+                                title: 'Sztuki srebra',
+                                updateTargetName: 'SS',
+                                characterId:
+                                    widget.characterModel.characterId ?? '',
+                                atributeType: 'number',
+                                pathName: 'character',
+                              )
+                          : () {},
                       value: widget.characterModel.sS,
                     ),
                     MoneyCell(
                       title: 'SE',
-                      action: () => widget.controller.atributeEditHandle(
-                        context,
-                        title: 'Sztuki eledium',
-                        updateTargetName: 'SE',
-                        characterId: widget.characterModel.characterId ?? '',
-                        atributeType: 'number',
-                        pathName: 'character',
-                      ),
+                      action: widget.userId == widget.characterModel.userId
+                          ? () => widget.controller.atributeEditHandle(
+                                context,
+                                title: 'Sztuki eledium',
+                                updateTargetName: 'SE',
+                                characterId:
+                                    widget.characterModel.characterId ?? '',
+                                atributeType: 'number',
+                                pathName: 'character',
+                              )
+                          : () {},
                       value: widget.characterModel.sE,
                     ),
                     MoneyCell(
                       title: 'SZ',
-                      action: () => widget.controller.atributeEditHandle(
-                        context,
-                        title: 'Sztuki złota',
-                        updateTargetName: 'SZ',
-                        characterId: widget.characterModel.characterId ?? '',
-                        atributeType: 'number',
-                        pathName: 'character',
-                      ),
+                      action: widget.userId == widget.characterModel.userId
+                          ? () => widget.controller.atributeEditHandle(
+                                context,
+                                title: 'Sztuki złota',
+                                updateTargetName: 'SZ',
+                                characterId:
+                                    widget.characterModel.characterId ?? '',
+                                atributeType: 'number',
+                                pathName: 'character',
+                              )
+                          : () {},
                       value: widget.characterModel.sZ,
                     ),
                     MoneyCell(
                       title: 'SP',
-                      action: () => widget.controller.atributeEditHandle(
-                        context,
-                        title: 'Sztuki platyny',
-                        updateTargetName: 'SP',
-                        characterId: widget.characterModel.characterId ?? '',
-                        atributeType: 'number',
-                        pathName: 'character',
-                      ),
+                      action: widget.userId == widget.characterModel.userId
+                          ? () => widget.controller.atributeEditHandle(
+                                context,
+                                title: 'Sztuki platyny',
+                                updateTargetName: 'SP',
+                                characterId:
+                                    widget.characterModel.characterId ?? '',
+                                atributeType: 'number',
+                                pathName: 'character',
+                              )
+                          : () {},
                       value: widget.characterModel.sP,
                     ),
                   ],
@@ -587,10 +606,12 @@ class _CharacterDetailsEquipmentState extends State<CharacterDetailsEquipment> {
                           ),
                         ),
                       ),
-                      _addItem(
-                        context,
-                        type: 'inUseItem',
-                      ),
+                      widget.userId == widget.characterModel.userId
+                          ? _addItem(
+                              context,
+                              type: 'inUseItem',
+                            )
+                          : SizedBox.shrink(),
                     ],
                   ),
                   Divider(
@@ -656,6 +677,8 @@ class _CharacterDetailsEquipmentState extends State<CharacterDetailsEquipment> {
                     controller: widget.controller,
                     characterId: widget.characterModel.characterId ?? '',
                     multiTextValue: widget.characterModel.attacksAndMagic,
+                    characterUserId: widget.characterModel.userId ?? '',
+                    userId: widget.userId,
                   ),
                 ],
               ),
@@ -738,12 +761,14 @@ class _CharacterDetailsEquipmentState extends State<CharacterDetailsEquipment> {
                 ),
               ),
               IconButton(
-                onPressed: () {
-                  widget.controller.delete(context,
-                      id: itemId,
-                      collectionName: 'items',
-                      title: 'Czy na pewno chcesz usunąć ten przedmiot?');
-                },
+                onPressed: widget.userId == widget.characterModel.userId
+                    ? () {
+                        widget.controller.delete(context,
+                            id: itemId,
+                            collectionName: 'items',
+                            title: 'Czy na pewno chcesz usunąć ten przedmiot?');
+                      }
+                    : () {},
                 icon: Icon(Icons.cancel_outlined),
                 color: AppColors.appDark,
                 padding: EdgeInsets.zero,
@@ -831,14 +856,16 @@ class _CharacterDetailsEquipmentState extends State<CharacterDetailsEquipment> {
         Expanded(
           flex: 2,
           child: GestureDetector(
-            onTap: () => widget.controller.itemInUseEditHandle(
-              context,
-              title: 'Edytuj nazwę broni',
-              updateTargetName: 'name',
-              itemInUseId: itemInUseId,
-              hintText: 'Nazwa broni',
-              characterId: widget.characterModel.characterId ?? '',
-            ),
+            onTap: widget.userId == widget.characterModel.userId
+                ? () => widget.controller.itemInUseEditHandle(
+                      context,
+                      title: 'Edytuj nazwę broni',
+                      updateTargetName: 'name',
+                      itemInUseId: itemInUseId,
+                      hintText: 'Nazwa broni',
+                      characterId: widget.characterModel.characterId ?? '',
+                    )
+                : () {},
             child: Container(
               alignment: AlignmentDirectional.center,
               decoration: BoxDecoration(
@@ -871,14 +898,16 @@ class _CharacterDetailsEquipmentState extends State<CharacterDetailsEquipment> {
         Expanded(
           flex: 1,
           child: GestureDetector(
-            onTap: () => widget.controller.itemInUseEditHandle(
-              context,
-              title: 'Edytuj premię do ataku',
-              updateTargetName: 'bonus',
-              itemInUseId: itemInUseId,
-              hintText: 'Premia do ataku',
-              characterId: widget.characterModel.characterId ?? '',
-            ),
+            onTap: widget.userId == widget.characterModel.userId
+                ? () => widget.controller.itemInUseEditHandle(
+                      context,
+                      title: 'Edytuj premię do ataku',
+                      updateTargetName: 'bonus',
+                      itemInUseId: itemInUseId,
+                      hintText: 'Premia do ataku',
+                      characterId: widget.characterModel.characterId ?? '',
+                    )
+                : () {},
             child: Container(
               alignment: AlignmentDirectional.center,
               decoration: BoxDecoration(
@@ -911,16 +940,18 @@ class _CharacterDetailsEquipmentState extends State<CharacterDetailsEquipment> {
         Expanded(
           flex: 2,
           child: GestureDetector(
-            onTap: () => widget.controller.itemInUseEditHandle(
-              context,
-              title: 'Edytuj obrażenia oraz ich typ',
-              updateTargetName: 'damage',
-              updateTargetNameSecond: 'damagaType',
-              itemInUseId: itemInUseId,
-              hintText: 'Obrażenia',
-              hintTextSecond: 'Typ obrażeń',
-              characterId: widget.characterModel.characterId ?? '',
-            ),
+            onTap: widget.userId == widget.characterModel.userId
+                ? () => widget.controller.itemInUseEditHandle(
+                      context,
+                      title: 'Edytuj obrażenia oraz ich typ',
+                      updateTargetName: 'damage',
+                      updateTargetNameSecond: 'damagaType',
+                      itemInUseId: itemInUseId,
+                      hintText: 'Obrażenia',
+                      hintTextSecond: 'Typ obrażeń',
+                      characterId: widget.characterModel.characterId ?? '',
+                    )
+                : () {},
             child: Container(
               alignment: AlignmentDirectional.center,
               decoration: BoxDecoration(
@@ -951,12 +982,14 @@ class _CharacterDetailsEquipmentState extends State<CharacterDetailsEquipment> {
           width: 5,
         ),
         IconButton(
-          onPressed: () {
-            widget.controller.delete(context,
-                id: itemInUseId,
-                collectionName: 'inUseItems',
-                title: 'Czy na pewno chcesz usunąć ten przedmiot?');
-          },
+          onPressed: widget.userId == widget.characterModel.userId
+              ? () {
+                  widget.controller.delete(context,
+                      id: itemInUseId,
+                      collectionName: 'inUseItems',
+                      title: 'Czy na pewno chcesz usunąć ten przedmiot?');
+                }
+              : () {},
           icon: Icon(Icons.cancel_outlined),
           color: AppColors.appDark,
           padding: EdgeInsets.zero,

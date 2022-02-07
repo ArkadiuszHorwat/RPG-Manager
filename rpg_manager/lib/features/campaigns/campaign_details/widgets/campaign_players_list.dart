@@ -14,10 +14,12 @@ class CampaignPlayersList extends StatelessWidget {
     Key? key,
     required this.controller,
     required this.charactersIds,
+    required this.userId,
   });
 
   final CampaignDetailsScreenController controller;
   final List<dynamic> charactersIds;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -82,21 +84,30 @@ class CampaignPlayersList extends StatelessWidget {
 
                 return CarouselSlider.builder(
                   itemCount: _activeCharactersList.length,
-                  itemBuilder: (context, item, pageIndex) => Container(
-                    padding: EdgeInsetsDirectional.all(5),
-                    height: double.infinity,
-                    width: 180,
-                    child: CharacterListItem(
-                      characterName:
-                          _activeCharactersList.elementAt(item).name ?? '',
-                      image: _activeCharactersList.elementAt(item).image ?? '',
-                      action: () =>
-                          _characterController.routeToCharacterDetails(
-                        context,
-                        _activeCharactersList.elementAt(item).characterId ?? '',
+                  itemBuilder: (context, item, pageIndex) {
+                    final _ids = {
+                      'characterId':
+                          _activeCharactersList.elementAt(item).characterId ??
+                              '',
+                      'userId': userId,
+                    };
+                    return Container(
+                      padding: EdgeInsetsDirectional.all(5),
+                      height: double.infinity,
+                      width: 180,
+                      child: CharacterListItem(
+                        characterName:
+                            _activeCharactersList.elementAt(item).name ?? '',
+                        image:
+                            _activeCharactersList.elementAt(item).image ?? '',
+                        action: () =>
+                            _characterController.routeToCharacterDetails(
+                          context,
+                          _ids,
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                   options: CarouselOptions(
                     height: 280,
                     autoPlay: false,
